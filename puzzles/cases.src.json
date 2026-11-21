@@ -1,5 +1,433 @@
 [
  {
+  "id": "kite",
+  "title": "The Tangled Kite",
+  "theme": "park",
+  "roles": [],
+  "level": 1,
+  "kinds": [
+   "deadend",
+   "crossroads",
+   "nextto",
+   "notat",
+   "farspot"
+  ],
+  "story": "A kite got tangled in the Oak Tree, and three friends saw it happen. Nobody is lying in this case: everyone tells the truth. Work out where each friend was standing.",
+  "spots": [
+   {
+    "id": "swings",
+    "name": "Swings",
+    "icon": "🛝",
+    "x": 12,
+    "y": 14
+   },
+   {
+    "id": "slide",
+    "name": "Slide",
+    "icon": "🎢",
+    "x": 46,
+    "y": 8
+   },
+   {
+    "id": "sand",
+    "name": "Sandpit",
+    "icon": "🏖️",
+    "x": 82,
+    "y": 18
+   },
+   {
+    "id": "lawn",
+    "name": "Picnic Lawn",
+    "icon": "🧺",
+    "x": 46,
+    "y": 48
+   },
+   {
+    "id": "pond",
+    "name": "Pond",
+    "icon": "🦢",
+    "x": 12,
+    "y": 70
+   },
+   {
+    "id": "oak",
+    "name": "Oak Tree",
+    "icon": "🌳",
+    "x": 76,
+    "y": 62
+   },
+   {
+    "id": "cart",
+    "name": "Ice Cream Cart",
+    "icon": "🍦",
+    "x": 50,
+    "y": 92
+   }
+  ],
+  "paths": [
+   [
+    "swings",
+    "slide"
+   ],
+   [
+    "slide",
+    "sand"
+   ],
+   [
+    "swings",
+    "lawn"
+   ],
+   [
+    "sand",
+    "lawn"
+   ],
+   [
+    "lawn",
+    "pond"
+   ],
+   [
+    "lawn",
+    "oak"
+   ],
+   [
+    "oak",
+    "cart"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Tess",
+    "color": "#e4572e"
+   },
+   {
+    "name": "Leo",
+    "color": "#2e86de"
+   },
+   {
+    "name": "Ruth",
+    "color": "#27ae60"
+   }
+  ],
+  "evidence": [
+   {
+    "type": "occupied",
+    "spot": "sand",
+    "icon": "👣",
+    "text": "Fresh footprints in the Sandpit: someone was there."
+   },
+   {
+    "type": "empty",
+    "spot": "pond",
+    "icon": "🦢",
+    "text": "The swans were sleeping: nobody was at the Pond."
+   }
+  ]
+ },
+ {
+  "id": "bike",
+  "title": "The Borrowed Bicycle",
+  "theme": "village",
+  "roles": [],
+  "level": 2,
+  "kinds": [
+   "deadend",
+   "crossroads",
+   "nextto",
+   "notat",
+   "farspot",
+   "near",
+   "two",
+   "far"
+  ],
+  "story": "Someone moved the mayor's bicycle from the Bike Rack, but it turned up safe. Everyone tells the truth here. Work out where the four neighbours were.",
+  "spots": [
+   {
+    "id": "bakery",
+    "name": "Bakery",
+    "icon": "🥐",
+    "x": 10,
+    "y": 12
+   },
+   {
+    "id": "post",
+    "name": "Post Office",
+    "icon": "📮",
+    "x": 42,
+    "y": 6
+   },
+   {
+    "id": "clock",
+    "name": "Clock Tower",
+    "icon": "🕰️",
+    "x": 80,
+    "y": 14
+   },
+   {
+    "id": "fountain",
+    "name": "Fountain",
+    "icon": "⛲",
+    "x": 44,
+    "y": 44
+   },
+   {
+    "id": "rack",
+    "name": "Bike Rack",
+    "icon": "🚲",
+    "x": 88,
+    "y": 50
+   },
+   {
+    "id": "library",
+    "name": "Library",
+    "icon": "📚",
+    "x": 8,
+    "y": 56
+   },
+   {
+    "id": "florist",
+    "name": "Florist",
+    "icon": "💐",
+    "x": 30,
+    "y": 90
+   },
+   {
+    "id": "cafe",
+    "name": "Café",
+    "icon": "☕",
+    "x": 70,
+    "y": 86
+   }
+  ],
+  "paths": [
+   [
+    "bakery",
+    "post"
+   ],
+   [
+    "post",
+    "clock"
+   ],
+   [
+    "post",
+    "fountain"
+   ],
+   [
+    "bakery",
+    "library"
+   ],
+   [
+    "library",
+    "fountain"
+   ],
+   [
+    "fountain",
+    "cafe"
+   ],
+   [
+    "clock",
+    "rack"
+   ],
+   [
+    "cafe",
+    "rack"
+   ],
+   [
+    "library",
+    "florist"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Gus",
+    "color": "#e4572e"
+   },
+   {
+    "name": "Hana",
+    "color": "#2e86de"
+   },
+   {
+    "name": "Ivy",
+    "color": "#9b59b6"
+   },
+   {
+    "name": "Jonah",
+    "color": "#27ae60"
+   }
+  ],
+  "evidence": [
+   {
+    "type": "empty",
+    "spot": "rack",
+    "icon": "🚲",
+    "text": "The bike was gone when the mayor looked: nobody was at the Bike Rack."
+   },
+   {
+    "type": "occupied",
+    "spot": "florist",
+    "icon": "🌼",
+    "text": "A fresh bouquet was sold: someone was at the Florist."
+   }
+  ]
+ },
+ {
+  "id": "hens",
+  "title": "The Open Hen House",
+  "theme": "farm",
+  "roles": [
+   "fibber"
+  ],
+  "level": 2,
+  "kinds": [
+   "deadend",
+   "crossroads",
+   "nextto",
+   "notat",
+   "farspot",
+   "near",
+   "two",
+   "far"
+  ],
+  "story": "Someone left the hen house door open and the hens wandered off. The Fibber did it, and every one of their statements is false. Everyone else tells the truth.",
+  "spots": [
+   {
+    "id": "house",
+    "name": "Farmhouse",
+    "icon": "🏠",
+    "x": 14,
+    "y": 16
+   },
+   {
+    "id": "barn",
+    "name": "Barn",
+    "icon": "🛖",
+    "x": 52,
+    "y": 10
+   },
+   {
+    "id": "hens",
+    "name": "Hen House",
+    "icon": "🐔",
+    "x": 88,
+    "y": 18
+   },
+   {
+    "id": "well",
+    "name": "Well",
+    "icon": "🪣",
+    "x": 32,
+    "y": 46
+   },
+   {
+    "id": "hay",
+    "name": "Haystack",
+    "icon": "🌾",
+    "x": 70,
+    "y": 50
+   },
+   {
+    "id": "veg",
+    "name": "Vegetable Patch",
+    "icon": "🥕",
+    "x": 10,
+    "y": 82
+   },
+   {
+    "id": "orchard",
+    "name": "Orchard",
+    "icon": "🍎",
+    "x": 50,
+    "y": 88
+   },
+   {
+    "id": "pond",
+    "name": "Duck Pond",
+    "icon": "🦆",
+    "x": 90,
+    "y": 84
+   }
+  ],
+  "paths": [
+   [
+    "house",
+    "barn"
+   ],
+   [
+    "barn",
+    "hens"
+   ],
+   [
+    "house",
+    "well"
+   ],
+   [
+    "barn",
+    "well"
+   ],
+   [
+    "hens",
+    "hay"
+   ],
+   [
+    "well",
+    "hay"
+   ],
+   [
+    "well",
+    "veg"
+   ],
+   [
+    "veg",
+    "orchard"
+   ],
+   [
+    "orchard",
+    "hay"
+   ],
+   [
+    "hay",
+    "pond"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Ada",
+    "color": "#e4572e"
+   },
+   {
+    "name": "Bo",
+    "color": "#2e86de"
+   },
+   {
+    "name": "Cora",
+    "color": "#9b59b6"
+   },
+   {
+    "name": "Dex",
+    "color": "#27ae60"
+   }
+  ],
+  "evidence": [
+   {
+    "type": "occupied",
+    "spot": "veg",
+    "icon": "🥕",
+    "text": "A carrot was freshly pulled: someone was at the Vegetable Patch."
+   },
+   {
+    "type": "empty",
+    "spot": "pond",
+    "icon": "🦆",
+    "text": "The ducks were undisturbed: nobody was at the Duck Pond."
+   },
+   {
+    "type": "culprit_near",
+    "spot": "hens",
+    "icon": "🪶",
+    "text": "Feathers on someone's sleeve: the Fibber was at the Hen House or right next to it."
+   }
+  ]
+ },
+ {
   "id": "jam",
   "title": "The Missing Prize Jam",
   "story": "The blue-ribbon jam vanished from the village fair. One suspect is the Fibber who took it: every one of their statements is false. Everyone else tells the truth.",
@@ -362,7 +790,81 @@
     "icon": "🔨",
     "text": "A tiny hammer was left by the Gallery door: the Fibber was right next to the Painting Gallery."
    }
-  ]
+  ],
+  "statements": {
+   "Ines": [
+    {
+     "text": "I was closer to the Gift Shop than Ravi was.",
+     "t": "closer",
+     "who": "Ravi",
+     "spot": "shop"
+    },
+    {
+     "text": "I was far from the Gem Vault (3 or more paths).",
+     "t": "farspot",
+     "spot": "gems"
+    }
+   ],
+   "Hugo": [
+    {
+     "text": "Nobody was right next to me.",
+     "t": "alone"
+    },
+    {
+     "text": "I was closer to the Lobby than Ravi was.",
+     "t": "closer",
+     "who": "Ravi",
+     "spot": "lobby"
+    }
+   ],
+   "Lotte": [
+    {
+     "text": "I was closer to the Roof Garden than Hugo was.",
+     "t": "closer",
+     "who": "Hugo",
+     "spot": "roof"
+    },
+    {
+     "text": "I was at a crossroads (3 or more paths).",
+     "t": "crossroads"
+    }
+   ],
+   "Ravi": [
+    {
+     "text": "Exactly one person was right next to me.",
+     "t": "onenear"
+    },
+    {
+     "text": "Sunny and I were exactly two paths apart.",
+     "t": "two",
+     "who": "Sunny"
+    }
+   ],
+   "Sunny": [
+    {
+     "text": "I was closer to the Gem Vault than Ravi was.",
+     "t": "closer",
+     "who": "Ravi",
+     "spot": "gems"
+    },
+    {
+     "text": "Ravi was right next to me.",
+     "t": "near",
+     "who": "Ravi"
+    }
+   ]
+  },
+  "solution": {
+   "positions": {
+    "Ines": "shop",
+    "Hugo": "cafe",
+    "Lotte": "egypt",
+    "Ravi": "dino",
+    "Sunny": "roof"
+   },
+   "fibber": "Sunny",
+   "muddler": null
+  }
  },
  {
   "id": "orchid",
@@ -540,6 +1042,76 @@
     "icon": "🌸",
     "text": "Orchid petals floating on the Lily Pond: the Fibber was at the pond or right next to it."
    }
-  ]
+  ],
+  "statements": {
+   "Amos": [
+    {
+     "text": "I was right next to the Lily Pond.",
+     "t": "nextto",
+     "spot": "pond"
+    },
+    {
+     "text": "Edie and I were exactly two paths apart.",
+     "t": "two",
+     "who": "Edie"
+    }
+   ],
+   "Bea": [
+    {
+     "text": "Amos was right next to me.",
+     "t": "near",
+     "who": "Amos"
+    },
+    {
+     "text": "Cyril was far from me (3 or more paths).",
+     "t": "far",
+     "who": "Cyril"
+    }
+   ],
+   "Cyril": [
+    {
+     "text": "Exactly one person was right next to me.",
+     "t": "onenear"
+    },
+    {
+     "text": "Amos and I were exactly two paths apart.",
+     "t": "two",
+     "who": "Amos"
+    }
+   ],
+   "Dot": [
+    {
+     "text": "I was far from the Lily Pond (3 or more paths).",
+     "t": "farspot",
+     "spot": "pond"
+    },
+    {
+     "text": "I was at a crossroads (3 or more paths).",
+     "t": "crossroads"
+    }
+   ],
+   "Edie": [
+    {
+     "text": "Nobody was right next to me.",
+     "t": "alone"
+    },
+    {
+     "text": "I was far from the Front Gate (3 or more paths).",
+     "t": "farspot",
+     "spot": "gate"
+    }
+   ]
+  },
+  "solution": {
+   "positions": {
+    "Amos": "bridge",
+    "Bea": "pond",
+    "Cyril": "maze",
+    "Dot": "bees",
+    "Edie": "fountain"
+   },
+   "fibber": "Edie",
+   "muddler": "Dot"
+  }
  }
 ]

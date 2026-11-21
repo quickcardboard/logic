@@ -9,7 +9,7 @@
 <body>
 <header>
   <h1>Who Was Where?</h1>
-  <p class="tag">Place every suspect on the map. Find the Fibber.</p>
+  <p class="tag" id="tag">Place every suspect on the map. Find the Fibber.</p>
   <nav id="cases"></nav>
 </header>
 
@@ -34,9 +34,11 @@
         <li>Each suspect stood on a <b>different</b> spot.</li>
         <li><b>Right next to</b> means joined by one path. <b>Two paths apart</b> and <b>far (3 or more)</b> count the fewest paths between two spots.</li>
         <li><b>Dead end</b> means one path leaves that spot. A <b>crossroads</b> has three or more.</li>
-        <li>Honest suspects tell the truth. The <b>Fibber</b>'s statements are all false.</li>
+        <li>Honest suspects tell the truth.</li>
+        <li id="fibberRule">The <b>Fibber</b>'s statements are all false.</li>
         <li id="muddlerRule">The <b>Muddler</b> is honest but forgetful: exactly one of their statements is false.</li>
         <li>The evidence is always true.</li>
+        <li><b>Where to start:</b> look for statements about a person's own spot, like "I was at a dead end". Pencil in the few spots that fit, then use statements about other people.</li>
         <li>Select a suspect, then <b>tap</b> a spot to pencil them in as a maybe, or <b>press and hold</b> to place them. Hold a placed suspect's spot to pick them back up.</li>
         <li>Tap a statement to mark it true ✓ or false ✗ as you work. That's just for your notes.</li>
       </ul>
@@ -51,13 +53,14 @@
     <div class="actions">
       <button id="check" class="primary">Close the case</button>
       <button id="reset">Start over</button>
+      <button id="hintBtn">💡 Hint</button>
       <button id="solve">Show solution</button>
     </div>
     <p id="verdict" class="verdict" aria-live="polite"></p>
   </section>
 </main>
 
-<footer>Prototype. Every case has exactly one solution.</footer>
+<footer>Prototype. Every case has exactly one solution. ★ easy, ★★ medium, ★★★ hard.</footer>
 
 <script src="puzzles/cases.js"></script>
 <script src="app.js"></script>

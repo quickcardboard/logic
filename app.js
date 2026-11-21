@@ -42,6 +42,8 @@
       case "onenear": return near === 1;
       case "nextto": return D[here][stmt.spot] === 1;
       case "atornext": return D[here][stmt.spot] <= 1;
+      case "at": return here === stmt.spot;
+      case "notat": return here !== stmt.spot;
       case "farspot": return D[here][stmt.spot] >= 3;
       case "closer": return D[here][stmt.spot] < D[pos[stmt.who]][stmt.spot];
     }
@@ -54,7 +56,9 @@
     const nav = $("cases"); nav.innerHTML = "";
     CASES.forEach((c, i) => {
       const b = document.createElement("button");
-      b.textContent = `Case ${i + 1}`;
+      const lv = c.level || 3;
+      b.textContent = `${i + 1} ${"★".repeat(lv)}`;
+      b.title = `${c.title} (${["", "easy", "medium", "hard"][lv]})`;
       b.title = c.title;
       if (i === ci) b.classList.add("on");
       b.onclick = () => load(i);
@@ -125,11 +129,13 @@
     $("title").textContent = c.title;
     $("story").textContent = c.story;
     $("muddlerRule").style.display = c.roles.includes("muddler") ? "" : "none";
+    $("fibberRule").style.display = c.roles.includes("fibber") ? "" : "none";
+    $("tag").textContent = c.roles.length ? "Place every suspect on the map. Find the Fibber." : "Place everyone on the map. Everyone tells the truth.";
     const ev = $("evidence"); ev.innerHTML = "";
     c.evidence.forEach(e => { const li = document.createElement("li"); li.textContent = `${e.icon} ${e.text}`; ev.appendChild(li); });
 
     const box = $("suspects"); box.innerHTML = "";
-    const roleList = ["honest", ...c.roles];
+    const roleList = c.roles.length ? ["honest", ...c.roles] : [];
     const roleLabel = { honest: "Honest", fibber: "Fibber", muddler: "Muddler" };
     for (const p of c.suspects) {
       const card = document.createElement("div");
@@ -145,7 +151,7 @@
         b.onclick = (e) => { e.stopPropagation(); st.role[p.name] = st.role[p.name] === r ? "" : r; save(); renderSide(); };
         roles.appendChild(b);
       });
-      card.appendChild(roles);
+      if (roleList.length) card.appendChild(roles);
       const ul = document.createElement("ul"); ul.className = "stmts";
       c.statements[p.name].forEach((s, k) => {
         const li = document.createElement("li");
@@ -197,6 +203,37 @@
     save(); renderMap(); renderSide();
   }
 
+  // Hint: the suspect whose own statements (about their own spot) narrow them down the most.
+  function hint() {
+    const c = CASES[ci], net = distances(c), v = $("verdict");
+    const names = c.suspects.map(p => p.name);
+    const name = id => c.spots.find(s => s.id === id).name;
+    const empty = new Set(c.evidence.filter(e => e.type === "empty").map(e => e.spot));
+    const selfOnly = s => !("who" in s) && s.t !== "alone" && s.t !== "onenear";
+    let best = null;
+    for (const n of names) {
+      if (st.pos[n]) continue;
+      const sts = c.statements[n].filter(selfOnly);
+      if (!sts.length) continue;
+      const ok = c.spots.map(s => s.id).filter(id => !empty.has(id) &&
+        sts.every(x => truth(c, net, x, n, { ...Object.fromEntries(names.map(m => [m, id])), [n]: id })));
+      if (!best || ok.length < best.ok.length) best = { n, ok, sts };
+    }
+    v.className = "verdict";
+    if (!best) { v.textContent = "Hint: look for two people whose statements can't both be true."; return; }
+    if (!best.ok.length) {
+      v.textContent = c.roles.length
+        ? `💡 Hint: no open spot fits what ${best.n} says about their own spot. So ${best.n} can't be honest!`
+        : `💡 Hint: something's off. Check ${best.n}'s statements again.`;
+      return;
+    }
+    const list = best.ok.map(name);
+    const where = list.length === 1 ? `the ${list[0]}` : list.slice(0, -1).map(x => "the " + x).join(", ") + ` or the ${list.at(-1)}`;
+    const lead = c.roles.length ? `If ${best.n} is honest, ` : "";
+    v.textContent = `💡 Hint: ${lead}${best.n} can only have been at ${where}. ` +
+      (list.length === 1 && !c.roles.length ? `Select ${best.n} and press and hold that spot to place them.` : `Select ${best.n} and tap ${list.length === 1 ? "that spot" : "those spots"} to pencil them in.`);
+  }
+
   let solArmed = false;
   function showSolution() {
     const b = $("solve");
@@ -213,7 +250,7 @@
     if (sol.muddler) st.role[sol.muddler] = "muddler";
     selected = null; save(); render();
     const v = $("verdict"); v.className = "verdict win";
-    v.textContent = `Solution: ${sol.fibber} was the Fibber` + (sol.muddler ? ` and ${sol.muddler} was the Muddler.` : ".");
+    v.textContent = sol.fibber ? `Solution: ${sol.fibber} was the Fibber` + (sol.muddler ? ` and ${sol.muddler} was the Muddler.` : ".") : "Solution shown.";
   }
 
   function setTool(t) {
@@ -249,9 +286,9 @@
     for (const e of c.evidence) {
       if (e.type === "occupied" && !occ.has(e.spot)) ok = false;
       if (e.type === "empty" && occ.has(e.spot)) ok = false;
-      if (e.type === "culprit_near" && net.D[st.pos[fib]][e.spot] > 1) ok = false;
+      if (e.type === "culprit_near" && fib && net.D[st.pos[fib]][e.spot] > 1) ok = false;
     }
-    if (ok) { v.className = "verdict win"; v.textContent = `🎉 Case closed! ${fib} was the Fibber. Every statement checks out.`; }
+    if (ok) { v.className = "verdict win"; v.textContent = fib ? `🎉 Case closed! ${fib} was the Fibber. Every statement checks out.` : "🎉 Case closed! Everyone is in the right place."; }
     else v.textContent = "Something doesn't add up. Keep investigating.";
   }
 
@@ -267,6 +304,7 @@
   $("toolCross").onclick = () => { selected = null; setTool("cross"); renderSide(); };
   $("check").onclick = check;
   $("solve").onclick = showSolution;
+  $("hintBtn").onclick = hint;
   $("reset").onclick = () => { st = blank(); selected = null; save(); $("verdict").textContent = ""; render(); };
 
   const last = store.get("wwW:last");
