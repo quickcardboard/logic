@@ -1,0 +1,558 @@
+[
+ {
+  "id": "book1",
+  "title": "Chapter 1: The Bell That Wouldn't Ring",
+  "theme": "harbour",
+  "roles": [],
+  "level": 1,
+  "kinds": [
+   "deadend",
+   "crossroads",
+   "nextto",
+   "notat"
+  ],
+  "story": "At noon the harbour bell stayed silent. Three people were by the water. Everyone tells the truth.",
+  "spots": [
+   {
+    "id": "lighthouse",
+    "name": "Lighthouse",
+    "icon": "🗼",
+    "x": 12,
+    "y": 12
+   },
+   {
+    "id": "bell",
+    "name": "Bell Tower",
+    "icon": "🔔",
+    "x": 50,
+    "y": 8
+   },
+   {
+    "id": "fish",
+    "name": "Fish Stall",
+    "icon": "🐟",
+    "x": 86,
+    "y": 16
+   },
+   {
+    "id": "steps",
+    "name": "Harbour Steps",
+    "icon": "🪜",
+    "x": 32,
+    "y": 46
+   },
+   {
+    "id": "dock",
+    "name": "Ferry Dock",
+    "icon": "⛴️",
+    "x": 76,
+    "y": 52
+   },
+   {
+    "id": "pools",
+    "name": "Rock Pools",
+    "icon": "🦀",
+    "x": 10,
+    "y": 82
+   },
+   {
+    "id": "icecream",
+    "name": "Ice Cream Hut",
+    "icon": "🍦",
+    "x": 52,
+    "y": 88
+   }
+  ],
+  "paths": [
+   [
+    "lighthouse",
+    "bell"
+   ],
+   [
+    "bell",
+    "fish"
+   ],
+   [
+    "lighthouse",
+    "steps"
+   ],
+   [
+    "bell",
+    "steps"
+   ],
+   [
+    "steps",
+    "dock"
+   ],
+   [
+    "fish",
+    "dock"
+   ],
+   [
+    "steps",
+    "pools"
+   ],
+   [
+    "dock",
+    "icecream"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Captain Lu",
+    "color": "#2e86de"
+   },
+   {
+    "name": "Grandpa Ike",
+    "color": "#e4572e"
+   },
+   {
+    "name": "Rosie",
+    "color": "#27ae60"
+   }
+  ],
+  "evidence": [
+   {
+    "type": "empty",
+    "spot": "bell",
+    "icon": "🔒",
+    "text": "The Bell Tower door was locked: nobody was inside."
+   },
+   {
+    "type": "occupied",
+    "spot": "pools",
+    "icon": "👣",
+    "text": "Mustard found wet boot prints at the Rock Pools: someone was there."
+   }
+  ],
+  "statements": {
+   "Captain Lu": [
+    {
+     "text": "I was right next to the Fish Stall.",
+     "t": "nextto",
+     "spot": "fish"
+    }
+   ],
+   "Grandpa Ike": [
+    {
+     "text": "I was at a crossroads (3 or more paths).",
+     "t": "crossroads"
+    }
+   ],
+   "Rosie": [
+    {
+     "text": "I wasn't at the Ferry Dock.",
+     "t": "notat",
+     "spot": "dock"
+    }
+   ]
+  },
+  "solution": {
+   "positions": {
+    "Captain Lu": "dock",
+    "Grandpa Ike": "steps",
+    "Rosie": "pools"
+   },
+   "fibber": null,
+   "muddler": null
+  }
+ },
+ {
+  "id": "book2",
+  "title": "Chapter 2: Sticky Fingers at the Market",
+  "theme": "market",
+  "roles": [],
+  "level": 2,
+  "kinds": [
+   "deadend",
+   "crossroads",
+   "nextto",
+   "notat",
+   "farspot",
+   "near",
+   "two",
+   "far"
+  ],
+  "story": "The second gear turned up stuck to a toffee apple. Four people were at the market. Everyone tells the truth.",
+  "spots": [
+   {
+    "id": "bakery",
+    "name": "Bakery",
+    "icon": "🥖",
+    "x": 10,
+    "y": 10
+   },
+   {
+    "id": "library",
+    "name": "Library",
+    "icon": "📚",
+    "x": 48,
+    "y": 6
+   },
+   {
+    "id": "hall",
+    "name": "Town Hall",
+    "icon": "🏛️",
+    "x": 88,
+    "y": 14
+   },
+   {
+    "id": "fountain",
+    "name": "Fountain",
+    "icon": "⛲",
+    "x": 40,
+    "y": 44
+   },
+   {
+    "id": "toffee",
+    "name": "Toffee Stall",
+    "icon": "🍎",
+    "x": 80,
+    "y": 50
+   },
+   {
+    "id": "post",
+    "name": "Post Office",
+    "icon": "📮",
+    "x": 10,
+    "y": 62
+   },
+   {
+    "id": "flowers",
+    "name": "Flower Cart",
+    "icon": "💐",
+    "x": 40,
+    "y": 90
+   },
+   {
+    "id": "bus",
+    "name": "Bus Stop",
+    "icon": "🚏",
+    "x": 86,
+    "y": 88
+   }
+  ],
+  "paths": [
+   [
+    "bakery",
+    "library"
+   ],
+   [
+    "library",
+    "hall"
+   ],
+   [
+    "bakery",
+    "fountain"
+   ],
+   [
+    "library",
+    "fountain"
+   ],
+   [
+    "fountain",
+    "toffee"
+   ],
+   [
+    "hall",
+    "toffee"
+   ],
+   [
+    "fountain",
+    "post"
+   ],
+   [
+    "post",
+    "flowers"
+   ],
+   [
+    "flowers",
+    "bus"
+   ],
+   [
+    "toffee",
+    "bus"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Mr. Bramble",
+    "color": "#e4572e"
+   },
+   {
+    "name": "Ms. Patel",
+    "color": "#9b59b6"
+   },
+   {
+    "name": "Rosie",
+    "color": "#27ae60"
+   },
+   {
+    "name": "Grandpa Ike",
+    "color": "#2e86de"
+   }
+  ],
+  "evidence": [
+   {
+    "type": "occupied",
+    "spot": "flowers",
+    "icon": "🌼",
+    "text": "A daisy was missing from the Flower Cart: someone was there."
+   },
+   {
+    "type": "empty",
+    "spot": "hall",
+    "icon": "🔒",
+    "text": "The Town Hall was closed for lunch: nobody was there."
+   }
+  ],
+  "statements": {
+   "Mr. Bramble": [
+    {
+     "text": "Rosie was right next to me.",
+     "t": "near",
+     "who": "Rosie"
+    }
+   ],
+   "Ms. Patel": [
+    {
+     "text": "Rosie was far from me (3 or more paths).",
+     "t": "far",
+     "who": "Rosie"
+    }
+   ],
+   "Rosie": [
+    {
+     "text": "I was right next to the Bakery.",
+     "t": "nextto",
+     "spot": "bakery"
+    }
+   ],
+   "Grandpa Ike": [
+    {
+     "text": "I was right next to the Library.",
+     "t": "nextto",
+     "spot": "library"
+    },
+    {
+     "text": "I wasn't at the Fountain.",
+     "t": "notat",
+     "spot": "fountain"
+    }
+   ]
+  },
+  "solution": {
+   "positions": {
+    "Mr. Bramble": "fountain",
+    "Ms. Patel": "flowers",
+    "Rosie": "library",
+    "Grandpa Ike": "bakery"
+   },
+   "fibber": null,
+   "muddler": null
+  }
+ },
+ {
+  "id": "book3",
+  "title": "Chapter 3: The Scarecrow's Missing Hat",
+  "theme": "farm",
+  "roles": [
+   "fibber"
+  ],
+  "level": 2,
+  "kinds": [
+   "deadend",
+   "crossroads",
+   "nextto",
+   "notat",
+   "farspot",
+   "near",
+   "two",
+   "far"
+  ],
+  "story": "The third gear was hidden in the scarecrow's hat, and now the hat is gone. One person is fibbing, so all of their words are untrue. Everyone else tells the truth.",
+  "spots": [
+   {
+    "id": "barn",
+    "name": "Barn",
+    "icon": "🛖",
+    "x": 14,
+    "y": 10
+   },
+   {
+    "id": "pies",
+    "name": "Pie Stand",
+    "icon": "🥧",
+    "x": 52,
+    "y": 8
+   },
+   {
+    "id": "tractor",
+    "name": "Tractor Rides",
+    "icon": "🚜",
+    "x": 88,
+    "y": 18
+   },
+   {
+    "id": "scarecrow",
+    "name": "Scarecrow",
+    "icon": "🧑‍🌾",
+    "x": 30,
+    "y": 46
+   },
+   {
+    "id": "maze",
+    "name": "Hay Maze",
+    "icon": "🌾",
+    "x": 70,
+    "y": 50
+   },
+   {
+    "id": "pumpkins",
+    "name": "Pumpkin Patch",
+    "icon": "🎃",
+    "x": 10,
+    "y": 84
+   },
+   {
+    "id": "pond",
+    "name": "Duck Pond",
+    "icon": "🦆",
+    "x": 50,
+    "y": 88
+   },
+   {
+    "id": "orchard",
+    "name": "Orchard",
+    "icon": "🍎",
+    "x": 90,
+    "y": 84
+   }
+  ],
+  "paths": [
+   [
+    "barn",
+    "pies"
+   ],
+   [
+    "pies",
+    "tractor"
+   ],
+   [
+    "barn",
+    "scarecrow"
+   ],
+   [
+    "pies",
+    "scarecrow"
+   ],
+   [
+    "scarecrow",
+    "maze"
+   ],
+   [
+    "tractor",
+    "maze"
+   ],
+   [
+    "scarecrow",
+    "pumpkins"
+   ],
+   [
+    "pumpkins",
+    "pond"
+   ],
+   [
+    "maze",
+    "orchard"
+   ],
+   [
+    "pond",
+    "orchard"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Nell",
+    "color": "#e4572e"
+   },
+   {
+    "name": "Ned",
+    "color": "#2e86de"
+   },
+   {
+    "name": "Farmer Hattie",
+    "color": "#27ae60"
+   },
+   {
+    "name": "Mr. Bramble",
+    "color": "#9b59b6"
+   }
+  ],
+  "evidence": [
+   {
+    "type": "culprit_near",
+    "spot": "scarecrow",
+    "icon": "🎩",
+    "text": "Straw on someone's sleeve: the Fibber was at the Scarecrow or right next to it."
+   },
+   {
+    "type": "empty",
+    "spot": "pond",
+    "icon": "🦆",
+    "text": "The ducks were napping: nobody was at the Duck Pond."
+   },
+   {
+    "type": "occupied",
+    "spot": "tractor",
+    "icon": "🚜",
+    "text": "The tractor's horn honked: someone was at Tractor Rides."
+   }
+  ],
+  "want_fibber": "Ned",
+  "statements": {
+   "Nell": [
+    {
+     "text": "I was right next to the Duck Pond.",
+     "t": "nextto",
+     "spot": "pond"
+    }
+   ],
+   "Ned": [
+    {
+     "text": "I was right next to the Pumpkin Patch.",
+     "t": "nextto",
+     "spot": "pumpkins"
+    }
+   ],
+   "Farmer Hattie": [
+    {
+     "text": "I was at a crossroads (3 or more paths).",
+     "t": "crossroads"
+    },
+    {
+     "text": "Ned was right next to me.",
+     "t": "near",
+     "who": "Ned"
+    }
+   ],
+   "Mr. Bramble": [
+    {
+     "text": "Ned was far from me (3 or more paths).",
+     "t": "far",
+     "who": "Ned"
+    }
+   ]
+  },
+  "solution": {
+   "positions": {
+    "Nell": "orchard",
+    "Ned": "pumpkins",
+    "Farmer Hattie": "scarecrow",
+    "Mr. Bramble": "tractor"
+   },
+   "fibber": "Ned",
+   "muddler": null
+  }
+ }
+]

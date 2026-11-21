@@ -9,6 +9,7 @@ false statement. Evidence is always true. A case with "roles": [] has no liar.
 Each case in the source file may set:
   "level": 1, 2 or 3 (see tools/grade.py). Default 3.
   "kinds": statement kinds the generator may use.
+  "want_fibber": the name the story needs to be the Fibber.
   "statements" + "solution": a hand-written case, kept as is.
 
 Usage: python3 tools/generate.py puzzles/cases.src.json
@@ -90,17 +91,28 @@ def build(case, seed, tries=20000):
         if len(sols) != 1: continue
         if case["roles"] and honest_ok: continue
         pos, f, u = sols[0]
+        if case.get("want_fibber") and f != case["want_fibber"]: continue
         if f:   # the Fibber's statements must not contradict each other on their face
             if not any(all(truth(s, f, p, *network(case), names) for s in st[f])
                        for p in (dict(zip(names, pr)) for pr in itertools.permutations([s["id"] for s in case["spots"]], len(names)))):
                 continue
         lv, _ = grade(trial)
         if lv != want: continue
-        # every statement must matter: dropping any one of them must break uniqueness
-        def drop(n, k):
+        # every statement must matter: drop any statement the case can do without
+        # (each person keeps at least one), as long as the difficulty stays the same
+        for n in names:
+            for x in list(st[n]):
+                if len(st[n]) == 1: break
+                st2 = dict(st); st2[n] = [y for y in st[n] if y is not x]
+                t2 = dict(case, statements=st2)
+                s2, h2 = solutions(t2)
+                if len(s2) == 1 and not (case["roles"] and h2) and s2[0][1] == f and grade(t2)[0] == want:
+                    st = st2
+        trial = dict(case, statements=st)
+        def needed(n, k):
             st2 = {m: [x for j, x in enumerate(v) if not (m == n and j == k)] for m, v in st.items()}
-            return len(solutions(dict(case, statements=st2))[0]) == 1
-        if any(drop(n, k) for n in names for k in range(per)): continue
+            return len(solutions(dict(case, statements=st2))[0]) != 1
+        if not all(needed(n, k) for n in names for k in range(len(st[n])) if len(st[n]) > 1): continue
         trial["solution"] = {"positions": pos, "fibber": f, "muddler": u}
         return trial
     return None
