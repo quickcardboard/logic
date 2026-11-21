@@ -40,6 +40,7 @@
       case "alone": return near === 0;
       case "onenear": return near === 1;
       case "nextto": return D[here][stmt.spot] === 1;
+      case "atornext": return D[here][stmt.spot] <= 1;
       case "farspot": return D[here][stmt.spot] >= 3;
       case "closer": return D[here][stmt.spot] < D[pos[stmt.who]][stmt.spot];
     }

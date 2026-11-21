@@ -145,57 +145,59 @@ window.CASES = [
   "statements": {
    "Mabel": [
     {
-     "text": "Priya was right next to me.",
-     "t": "near",
-     "who": "Priya"
+     "text": "I could hear the band. I was at or right next to the Bandstand.",
+     "t": "atornext",
+     "spot": "band"
     },
     {
-     "text": "Exactly one person was right next to me.",
-     "t": "onenear"
+     "text": "Priya was far from me (3 or more paths).",
+     "t": "far",
+     "who": "Priya"
     }
    ],
    "Otis": [
     {
-     "text": "I was right next to the Bake Tent.",
-     "t": "nextto",
-     "spot": "bake"
+     "text": "Priya and I were exactly two paths apart.",
+     "t": "two",
+     "who": "Priya"
     },
     {
-     "text": "Wendell and I were exactly two paths apart.",
-     "t": "two",
-     "who": "Wendell"
+     "text": "I was right next to the Duck Pond.",
+     "t": "nextto",
+     "spot": "pond"
     }
    ],
    "Priya": [
     {
-     "text": "Mabel and I were exactly two paths apart.",
-     "t": "two",
-     "who": "Mabel"
+     "text": "Wendell was far from me (3 or more paths).",
+     "t": "far",
+     "who": "Wendell"
     },
     {
-     "text": "I was at a dead end.",
-     "t": "deadend"
+     "text": "I was right next to the Flower Show.",
+     "t": "nextto",
+     "spot": "flower"
     }
    ],
    "Wendell": [
     {
-     "text": "I was far from the Ferris Wheel (3 or more paths).",
-     "t": "farspot",
-     "spot": "ferris"
+     "text": "Otis was far from me (3 or more paths).",
+     "t": "far",
+     "who": "Otis"
     },
     {
-     "text": "Priya and I were exactly two paths apart.",
-     "t": "two",
+     "text": "Priya was right next to me.",
+     "t": "near",
      "who": "Priya"
     }
    ]
   },
   "solution": {
    "positions": {
-    "Mabel": "gate",
-    "Otis": "flower",
-    "Priya": "tea",
-    "Wendell": "pond"
+    "Mabel": "pond",
+    "Otis": "band",
+    "Priya": "gate",
+    "Wendell": "ferris"
    },
    "fibber": "Priya",
    "muddler": null

@@ -117,6 +117,8 @@ if __name__ == "__main__":
     cases = json.load(open(sys.argv[1]))
     result = []
     for c in cases:
+        if "statements" in c:   # hand-written case: keep as is (verify.py checks it)
+            result.append(c); print(c["title"], "hand-written, kept", file=sys.stderr); continue
         for seed in range(50):
             r = build(c, seed)
             if r:

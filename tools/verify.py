@@ -22,6 +22,7 @@ def truth(st, me, pos, adj, D, names):
     if t=="alone": return len(near)==0
     if t=="onenear": return len(near)==1
     if t=="nextto": return D[here][st["spot"]]==1
+    if t=="atornext": return D[here][st["spot"]]<=1
     if t=="farspot": return D[here][st["spot"]]>=3
     if t=="closer": return D[here][st["spot"]] < D[pos[st["who"]]][st["spot"]]
     d=D[here][pos[st["who"]]]
