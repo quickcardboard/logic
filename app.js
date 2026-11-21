@@ -13,7 +13,8 @@
     get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
   };
-  const blank = () => ({ pos: {}, role: {}, marks: {}, crossed: {} });
+  const blank = () => ({ pos: {}, role: {}, marks: {}, crossed: {}, notes: {} });
+  const LONG_MS = 450;
   const key = () => "wwW:" + CASES[ci].id;
   const save = () => store.set(key(), st);
 
@@ -80,7 +81,13 @@
       const g = el("g", { class: "spot", transform: `translate(${s.x} ${s.y})`, tabindex: 0, role: "button", "aria-label": s.name }, svg);
       el("circle", { r: R, class: "base" }, g);
       const icon = el("text", { class: "icon", y: -0.3 }, g); icon.textContent = s.icon;
-      const lab = el("text", { class: "label", y: R + 4.2 }, g); lab.textContent = s.name;
+      const lab = el("text", { class: "label", y: R + 6.2 }, g); lab.textContent = s.name;
+      const notes = (st.notes[s.id] || []).filter(n => !who[s.id]);
+      notes.forEach((n, k) => {
+        const x = (k - (notes.length - 1) / 2) * 4.3;
+        el("circle", { cx: x, cy: R + 0.6, r: 2.05, fill: color[n], class: "note" }, g);
+        const t = el("text", { x, y: R + 0.7, class: "notetxt" }, g); t.textContent = n[0];
+      });
       (evAt[s.id] || []).forEach((ic, k) => {
         el("circle", { cx: -R + 0.5 - k * 5, cy: -R + 0.5, r: 2.8, fill: "var(--paper)", stroke: "var(--line)", "stroke-width": .5 }, g);
         const t = el("text", { class: "badge", x: -R + 0.5 - k * 5, y: -R + 0.7 }, g); t.textContent = ic;
@@ -94,9 +101,21 @@
         el("circle", { r: 3.6, fill: color[who[s.id]] }, tk);
         const t = el("text", {}, tk); t.textContent = who[s.id][0];
       }
-      const act = () => clickSpot(s.id);
-      g.addEventListener("click", act);
-      g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(); } });
+      // Short tap = pencil note for the selected suspect. Long press = place them here.
+      let timer = null, fired = false;
+      const cancel = () => { clearTimeout(timer); timer = null; g.classList.remove("pressing"); };
+      g.addEventListener("pointerdown", e => {
+        if (e.button > 0) return;
+        fired = false; g.classList.add("pressing");
+        timer = setTimeout(() => { fired = true; cancel(); try { navigator.vibrate && navigator.vibrate(15); } catch {} placeAt(s.id); }, LONG_MS);
+      });
+      g.addEventListener("pointerup", () => { if (timer && !fired) { cancel(); tapSpot(s.id); } });
+      g.addEventListener("pointerleave", cancel);
+      g.addEventListener("pointercancel", cancel);
+      g.addEventListener("contextmenu", e => e.preventDefault());
+      g.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.shiftKey ? placeAt(s.id) : tapSpot(s.id); }
+      });
     }
   }
 
@@ -117,7 +136,7 @@
       card.className = "card" + (selected === p.name ? " sel" : "");
       card.style.setProperty("--c", p.color);
       card.innerHTML = `<div class="top"><span class="dot">${p.name[0]}</span><span class="name">${p.name}</span>
-        <span class="where">${st.pos[p.name] ? "at the " + spotName[st.pos[p.name]] : (selected === p.name ? "now tap a spot" : "tap to place")}</span></div>`;
+        <span class="where">${st.pos[p.name] ? "at the " + spotName[st.pos[p.name]] : (selected === p.name ? "selected" : "tap to select")}</span></div>`;
       const roles = document.createElement("div"); roles.className = "roles";
       roleList.forEach(r => {
         const b = document.createElement("button");
@@ -145,22 +164,56 @@
   function render() { renderNav(); renderMap(); renderSide(); }
 
   // ---------- interaction ----------
-  function clickSpot(id) {
-    $("verdict").textContent = ""; $("verdict").className = "verdict";
-    const occupant = Object.keys(st.pos).find(n => st.pos[n] === id);
+  function clearVerdict() { $("verdict").textContent = ""; $("verdict").className = "verdict"; }
+  const occupantOf = id => Object.keys(st.pos).find(n => st.pos[n] === id);
+
+  function tapSpot(id) {
+    clearVerdict();
     if (tool === "cross") {
-      if (!occupant) st.crossed[id] = !st.crossed[id];
+      if (!occupantOf(id)) st.crossed[id] = !st.crossed[id];
     } else if (selected) {
+      const list = st.notes[id] || (st.notes[id] = []);
+      const k = list.indexOf(selected);
+      if (k >= 0) list.splice(k, 1); else list.push(selected);
+      const order = CASES[ci].suspects.map(p => p.name);
+      list.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+    } else {
+      $("hint").textContent = "Select a suspect card first. Then tap a spot for a pencil note, or press and hold to place them.";
+    }
+    save(); renderMap(); renderSide();
+  }
+
+  function placeAt(id) {
+    clearVerdict();
+    const occupant = occupantOf(id);
+    if (selected) {
       if (occupant && occupant !== selected) delete st.pos[occupant];
       if (occupant === selected) delete st.pos[selected];
       else { st.pos[selected] = id; st.crossed[id] = false; }
       selected = null;
     } else if (occupant) {
       delete st.pos[occupant];
-    } else {
-      $("hint").textContent = "Pick a suspect card first, then tap the spot where they stood.";
     }
     save(); renderMap(); renderSide();
+  }
+
+  let solArmed = false;
+  function showSolution() {
+    const b = $("solve");
+    if (!solArmed) {
+      solArmed = true; b.textContent = "Sure? Tap again";
+      setTimeout(() => { solArmed = false; b.textContent = "Show solution"; }, 3000);
+      return;
+    }
+    solArmed = false; b.textContent = "Show solution";
+    const sol = CASES[ci].solution;
+    st.pos = { ...sol.positions }; st.role = {};
+    for (const p of CASES[ci].suspects) st.role[p.name] = "honest";
+    st.role[sol.fibber] = "fibber";
+    if (sol.muddler) st.role[sol.muddler] = "muddler";
+    selected = null; save(); render();
+    const v = $("verdict"); v.className = "verdict win";
+    v.textContent = `Solution: ${sol.fibber} was the Fibber` + (sol.muddler ? ` and ${sol.muddler} was the Muddler.` : ".");
   }
 
   function setTool(t) {
@@ -169,7 +222,7 @@
     $("toolCross").classList.toggle("on", t === "cross");
     $("hint").textContent = t === "cross"
       ? "Tap spots you're sure were empty to cross them out. Tap again to undo."
-      : "Tap a suspect card, then tap a spot to put them there. Tap a spot again to clear it.";
+      : "Select a suspect card. Tap a spot to pencil them in as a maybe. Press and hold a spot to place them there.";
   }
 
   function check() {
@@ -213,6 +266,7 @@
   $("toolPlace").onclick = () => setTool("place");
   $("toolCross").onclick = () => { selected = null; setTool("cross"); renderSide(); };
   $("check").onclick = check;
+  $("solve").onclick = showSolution;
   $("reset").onclick = () => { st = blank(); selected = null; save(); $("verdict").textContent = ""; render(); };
 
   const last = store.get("wwW:last");

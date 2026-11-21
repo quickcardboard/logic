@@ -49,7 +49,11 @@ svg#map { width: 100%; height: auto; display: block; margin-top: 8px; touch-acti
 .hint { color: var(--muted); font-size: .9rem; margin: 6px 0 0; }
 
 .path { stroke: var(--path); stroke-width: 1.6; stroke-dasharray: 2.4 1.6; stroke-linecap: round; }
-.spot { cursor: pointer; }
+.spot { cursor: pointer; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.spot circle.base { transition: stroke-width .45s linear, stroke .2s; }
+.spot.pressing circle.base { stroke: var(--ink); stroke-width: 2.2; }
+.spot .note { stroke: var(--paper); stroke-width: .35; pointer-events: none; }
+.spot .notetxt { font: bold 2.5px system-ui, sans-serif; fill: #fff; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
 .spot circle.base { fill: var(--spot); stroke: var(--line); stroke-width: .8; }
 .spot:hover circle.base { stroke: var(--ink); }
 .spot .icon { font-size: 6.5px; text-anchor: middle; dominant-baseline: central; pointer-events: none; }

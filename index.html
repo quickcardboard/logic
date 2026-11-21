@@ -18,12 +18,12 @@
     <div class="maphead">
       <h2 id="title"></h2>
       <div class="tools">
-        <button id="toolPlace" class="tool on" title="Tap a suspect, then tap a spot">✋ Place</button>
+        <button id="toolPlace" class="tool on" title="Tap a spot for a note, hold to place">✋ Notes &amp; place</button>
         <button id="toolCross" class="tool" title="Cross out a spot you know is empty">✕ Cross out</button>
       </div>
     </div>
     <svg id="map" viewBox="-8 -10 116 118" role="img" aria-label="Map of the case"></svg>
-    <p class="hint" id="hint">Tap a suspect card, then tap a spot to put them there. Tap a spot again to clear it.</p>
+    <p class="hint" id="hint">Select a suspect card. Tap a spot to pencil them in as a maybe. Press and hold a spot to place them there.</p>
   </section>
 
   <section class="side">
@@ -37,6 +37,7 @@
         <li>Honest suspects tell the truth. The <b>Fibber</b>'s statements are all false.</li>
         <li id="muddlerRule">The <b>Muddler</b> is honest but forgetful: exactly one of their statements is false.</li>
         <li>The evidence is always true.</li>
+        <li>Select a suspect, then <b>tap</b> a spot to pencil them in as a maybe, or <b>press and hold</b> to place them. Hold a placed suspect's spot to pick them back up.</li>
         <li>Tap a statement to mark it true ✓ or false ✗ as you work. That's just for your notes.</li>
       </ul>
     </details>
@@ -50,6 +51,7 @@
     <div class="actions">
       <button id="check" class="primary">Close the case</button>
       <button id="reset">Start over</button>
+      <button id="solve">Show solution</button>
     </div>
     <p id="verdict" class="verdict" aria-live="polite"></p>
   </section>
