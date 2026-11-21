@@ -1,5 +1,7 @@
 (() => {
-  const CASES = window.CASES || [];
+  const SETS = { puzzles: window.CASES || [], book: window.BOOK || [] };
+  let set = "puzzles";
+  let CASES = SETS[set];
   const $ = (id) => document.getElementById(id);
   const svgNS = "http://www.w3.org/2000/svg";
   const R = 7; // spot radius in map units
@@ -52,12 +54,21 @@
   }
 
   // ---------- rendering ----------
+  function renderSets() {
+    for (const k of Object.keys(SETS)) $("set-" + k).classList.toggle("on", k === set);
+  }
+  function chooseSet(k) {
+    set = k; CASES = SETS[k]; store.set("wwW:set", k);
+    const last = store.get("wwW:last:" + k);
+    load(Number.isInteger(last) && last < CASES.length ? last : 0);
+  }
+
   function renderNav() {
     const nav = $("cases"); nav.innerHTML = "";
     CASES.forEach((c, i) => {
       const b = document.createElement("button");
       const lv = c.level || 3;
-      b.textContent = `${i + 1} ${"★".repeat(lv)}`;
+      b.textContent = set === "book" ? `Chapter ${i + 1}` : `${i + 1} ${"★".repeat(lv)}`;
       b.title = `${c.title} (${["", "easy", "medium", "hard"][lv]})`;
       b.title = c.title;
       if (i === ci) b.classList.add("on");
@@ -167,7 +178,7 @@
     }
   }
 
-  function render() { renderNav(); renderMap(); renderSide(); }
+  function render() { renderSets(); renderNav(); renderMap(); renderSide(); }
 
   // ---------- interaction ----------
   function clearVerdict() { $("verdict").textContent = ""; $("verdict").className = "verdict"; }
@@ -295,7 +306,7 @@
   function load(i) {
     ci = i; selected = null;
     st = Object.assign(blank(), store.get(key()) || {});
-    store.set("wwW:last", i);
+    store.set("wwW:last:" + set, i);
     $("verdict").textContent = "";
     setTool("place"); render();
   }
@@ -307,6 +318,7 @@
   $("hintBtn").onclick = hint;
   $("reset").onclick = () => { st = blank(); selected = null; save(); $("verdict").textContent = ""; render(); };
 
-  const last = store.get("wwW:last");
-  load(Number.isInteger(last) && last < CASES.length ? last : 0);
+  for (const k of Object.keys(SETS)) $("set-" + k).onclick = () => chooseSet(k);
+  const saved = store.get("wwW:set");
+  chooseSet(saved in SETS && SETS[saved].length ? saved : "puzzles");
 })();

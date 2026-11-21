@@ -25,6 +25,10 @@ body {
 header { text-align: center; padding: 20px 16px 8px; }
 h1 { margin: 0; font-size: 2rem; letter-spacing: .02em; }
 .tag { margin: 4px 0 12px; color: var(--muted); font-style: italic; }
+.sets { display: flex; gap: 0; justify-content: center; margin-bottom: 10px; }
+.sets button { border-radius: 0; }
+.sets button:first-child { border-radius: 999px 0 0 999px; }
+.sets button:last-child { border-radius: 0 999px 999px 0; border-left: 0; }
 nav { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 nav button { font: inherit; }
 button {
