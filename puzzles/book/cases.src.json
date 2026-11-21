@@ -1,8 +1,8 @@
 [
  {
-  "id": "book1",
-  "title": "Chapter 1: The Bell That Wouldn't Ring",
-  "theme": "harbour",
+  "id": "duck1",
+  "title": "Chapter 1: The Great Bathtub Splash",
+  "theme": "playground",
   "roles": [],
   "level": 1,
   "kinds": [
@@ -11,118 +11,118 @@
    "nextto",
    "notat"
   ],
-  "story": "At noon the harbour bell stayed silent. Three people were by the water. Everyone tells the truth.",
+  "story": "At 10:15 a bathtub of rubber ducks tipped off the Bike Shed roof onto Principal Plumpton. Three grown-ups were on playground duty. Everyone tells the truth. Who was right next to the Bike Shed?",
   "spots": [
    {
-    "id": "lighthouse",
-    "name": "Lighthouse",
-    "icon": "🗼",
+    "id": "bikeshed",
+    "name": "Bike Shed",
+    "icon": "🚲",
     "x": 12,
     "y": 12
    },
    {
-    "id": "bell",
-    "name": "Bell Tower",
+    "id": "bellbox",
+    "name": "Bell Cupboard",
     "icon": "🔔",
     "x": 50,
     "y": 8
    },
    {
-    "id": "fish",
-    "name": "Fish Stall",
-    "icon": "🐟",
+    "id": "garden",
+    "name": "Vegetable Garden",
+    "icon": "🥕",
     "x": 86,
     "y": 16
    },
    {
-    "id": "steps",
-    "name": "Harbour Steps",
-    "icon": "🪜",
+    "id": "frame",
+    "name": "Climbing Frame",
+    "icon": "🧗",
     "x": 32,
     "y": 46
    },
    {
-    "id": "dock",
-    "name": "Ferry Dock",
-    "icon": "⛴️",
+    "id": "fountain",
+    "name": "Water Fountain",
+    "icon": "🚰",
     "x": 76,
     "y": 52
    },
    {
-    "id": "pools",
-    "name": "Rock Pools",
-    "icon": "🦀",
+    "id": "mud",
+    "name": "Mud Patch",
+    "icon": "🟤",
     "x": 10,
     "y": 82
    },
    {
-    "id": "icecream",
-    "name": "Ice Cream Hut",
-    "icon": "🍦",
+    "id": "hopscotch",
+    "name": "Hopscotch",
+    "icon": "🔢",
     "x": 52,
     "y": 88
    }
   ],
   "paths": [
    [
-    "lighthouse",
-    "bell"
+    "bikeshed",
+    "bellbox"
    ],
    [
-    "bell",
-    "fish"
+    "bellbox",
+    "garden"
    ],
    [
-    "lighthouse",
-    "steps"
+    "bikeshed",
+    "frame"
    ],
    [
-    "bell",
-    "steps"
+    "bellbox",
+    "frame"
    ],
    [
-    "steps",
-    "dock"
+    "frame",
+    "fountain"
    ],
    [
-    "fish",
-    "dock"
+    "garden",
+    "fountain"
    ],
    [
-    "steps",
-    "pools"
+    "frame",
+    "mud"
    ],
    [
-    "dock",
-    "icecream"
+    "fountain",
+    "hopscotch"
    ]
   ],
   "suspects": [
    {
-    "name": "Captain Lu",
+    "name": "Coach Kowalski",
     "color": "#2e86de"
    },
    {
-    "name": "Grandpa Ike",
+    "name": "Mr. Bolt",
     "color": "#e4572e"
    },
    {
-    "name": "Rosie",
+    "name": "Ms. Fig",
     "color": "#27ae60"
    }
   ],
   "evidence": [
    {
     "type": "empty",
-    "spot": "bell",
+    "spot": "bellbox",
     "icon": "🔒",
-    "text": "The Bell Tower door was locked: nobody was inside."
+    "text": "The Bell Cupboard was locked: nobody was inside."
    },
    {
     "type": "occupied",
-    "spot": "pools",
+    "spot": "mud",
     "icon": "👣",
-    "text": "Mustard found wet boot prints at the Rock Pools: someone was there."
+    "text": "Fresh grown-up footprints in the Mud Patch: someone was there."
    }
   ]
  },
