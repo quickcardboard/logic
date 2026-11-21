@@ -10,6 +10,8 @@ Each case in the source file may set:
   "level": 1, 2 or 3 (see tools/grade.py). Default 3.
   "kinds": statement kinds the generator may use.
   "want_fibber": the name the story needs to be the Fibber.
+  "want_at": {name: spot id} where the story needs someone to end up.
+  "hide_spots": spot ids no statement may name (the spot the chapter's question asks about).
   "statements" + "solution": a hand-written case, kept as is.
 
 Usage: python3 tools/generate.py puzzles/cases.src.json
@@ -32,6 +34,7 @@ def library(case, kinds):
         add("alone", "Nobody was right next to me.")
         add("onenear", "Exactly one person was right next to me.")
         for s in spots:
+            if s["id"] in case.get("hide_spots", []): continue   # the question's spot: don't give the answer away
             add("nextto", f"I was right next to the {s['name']}.", spot=s["id"])
             add("notat", f"I wasn't at the {s['name']}.", spot=s["id"])
             add("farspot", f"I was far from the {s['name']} (3 or more paths).", spot=s["id"])
@@ -92,6 +95,7 @@ def build(case, seed, tries=20000):
         if case["roles"] and honest_ok: continue
         pos, f, u = sols[0]
         if case.get("want_fibber") and f != case["want_fibber"]: continue
+        if any(pos[n] != s for n, s in case.get("want_at", {}).items()): continue
         if f:   # the Fibber's statements must not contradict each other on their face
             if not any(all(truth(s, f, p, *network(case), names) for s in st[f])
                        for p in (dict(zip(names, pr)) for pr in itertools.permutations([s["id"] for s in case["spots"]], len(names)))):

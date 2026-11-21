@@ -159,9 +159,9 @@ window.BOOK = [
   }
  },
  {
-  "id": "book2",
-  "title": "Chapter 2: Sticky Fingers at the Market",
-  "theme": "market",
+  "id": "duck2",
+  "title": "Chapter 2: The Flag Fiasco",
+  "theme": "school",
   "roles": [],
   "level": 2,
   "kinds": [
@@ -169,390 +169,202 @@ window.BOOK = [
    "crossroads",
    "nextto",
    "notat",
-   "farspot",
    "near",
-   "two",
-   "far"
+   "two"
   ],
-  "story": "The second gear turned up stuck to a toffee apple. Four people were at the market. Everyone tells the truth.",
+  "story": "At 9:00 the fire alarm rang, and a giant duck flag shot up the flagpole. Four grown-ups were inside the school. Everyone tells the truth. Who was right next to the Flagpole?",
   "spots": [
    {
-    "id": "bakery",
-    "name": "Bakery",
-    "icon": "🥖",
-    "x": 10,
-    "y": 10
+    "id": "flagpole",
+    "name": "Flagpole",
+    "icon": "🚩",
+    "x": 72,
+    "y": 4
+   },
+   {
+    "id": "hall",
+    "name": "Hall",
+    "icon": "🎭",
+    "x": 46,
+    "y": 28
+   },
+   {
+    "id": "office",
+    "name": "Office",
+    "icon": "🗄️",
+    "x": 12,
+    "y": 20
    },
    {
     "id": "library",
     "name": "Library",
     "icon": "📚",
-    "x": 48,
-    "y": 6
-   },
-   {
-    "id": "hall",
-    "name": "Town Hall",
-    "icon": "🏛️",
     "x": 88,
-    "y": 14
-   },
-   {
-    "id": "fountain",
-    "name": "Fountain",
-    "icon": "⛲",
-    "x": 40,
-    "y": 44
-   },
-   {
-    "id": "toffee",
-    "name": "Toffee Stall",
-    "icon": "🍎",
-    "x": 80,
-    "y": 50
-   },
-   {
-    "id": "post",
-    "name": "Post Office",
-    "icon": "📮",
-    "x": 10,
     "y": 62
    },
    {
-    "id": "flowers",
-    "name": "Flower Cart",
-    "icon": "💐",
-    "x": 40,
+    "id": "door",
+    "name": "Front Door",
+    "icon": "🚪",
+    "x": 12,
+    "y": 56
+   },
+   {
+    "id": "kitchen",
+    "name": "Kitchen",
+    "icon": "🍳",
+    "x": 90,
+    "y": 26
+   },
+   {
+    "id": "staff",
+    "name": "Staff Room",
+    "icon": "☕",
+    "x": 50,
+    "y": 60
+   },
+   {
+    "id": "class",
+    "name": "Year 4 Classroom",
+    "icon": "✏️",
+    "x": 26,
     "y": 90
    },
    {
-    "id": "bus",
-    "name": "Bus Stop",
-    "icon": "🚏",
-    "x": 86,
-    "y": 88
+    "id": "toilets",
+    "name": "Toilets",
+    "icon": "🚽",
+    "x": 74,
+    "y": 90
    }
   ],
   "paths": [
    [
-    "bakery",
-    "library"
-   ],
-   [
-    "library",
+    "flagpole",
     "hall"
    ],
    [
-    "bakery",
-    "fountain"
-   ],
-   [
-    "library",
-    "fountain"
-   ],
-   [
-    "fountain",
-    "toffee"
+    "flagpole",
+    "kitchen"
    ],
    [
     "hall",
-    "toffee"
+    "office"
    ],
    [
-    "fountain",
-    "post"
+    "hall",
+    "kitchen"
    ],
    [
-    "post",
-    "flowers"
+    "hall",
+    "staff"
    ],
    [
-    "flowers",
-    "bus"
+    "office",
+    "door"
    ],
    [
-    "toffee",
-    "bus"
+    "door",
+    "staff"
+   ],
+   [
+    "library",
+    "staff"
+   ],
+   [
+    "library",
+    "toilets"
+   ],
+   [
+    "staff",
+    "class"
+   ],
+   [
+    "staff",
+    "toilets"
    ]
   ],
   "suspects": [
    {
-    "name": "Mr. Bramble",
+    "name": "Coach Kowalski",
     "color": "#e4572e"
    },
    {
-    "name": "Ms. Patel",
+    "name": "Mr. Bolt",
+    "color": "#2e86de"
+   },
+   {
+    "name": "Ms. Fig",
     "color": "#9b59b6"
    },
    {
-    "name": "Rosie",
+    "name": "Gloria",
     "color": "#27ae60"
-   },
-   {
-    "name": "Grandpa Ike",
-    "color": "#2e86de"
    }
   ],
   "evidence": [
    {
-    "type": "occupied",
-    "spot": "flowers",
-    "icon": "🌼",
-    "text": "A daisy was missing from the Flower Cart: someone was there."
+    "type": "empty",
+    "spot": "flagpole",
+    "icon": "🌱",
+    "text": "The grass round the Flagpole was wet with dew, with no footprints. Nobody was standing at the Flagpole."
    },
    {
     "type": "empty",
     "spot": "hall",
-    "icon": "🔒",
-    "text": "The Town Hall was closed for lunch: nobody was there."
-   }
-  ],
-  "statements": {
-   "Mr. Bramble": [
-    {
-     "text": "Rosie was right next to me.",
-     "t": "near",
-     "who": "Rosie"
-    }
-   ],
-   "Ms. Patel": [
-    {
-     "text": "Rosie was far from me (3 or more paths).",
-     "t": "far",
-     "who": "Rosie"
-    }
-   ],
-   "Rosie": [
-    {
-     "text": "I was right next to the Bakery.",
-     "t": "nextto",
-     "spot": "bakery"
-    }
-   ],
-   "Grandpa Ike": [
-    {
-     "text": "I was right next to the Library.",
-     "t": "nextto",
-     "spot": "library"
-    },
-    {
-     "text": "I wasn't at the Fountain.",
-     "t": "notat",
-     "spot": "fountain"
-    }
-   ]
-  },
-  "solution": {
-   "positions": {
-    "Mr. Bramble": "fountain",
-    "Ms. Patel": "flowers",
-    "Rosie": "library",
-    "Grandpa Ike": "bakery"
-   },
-   "fibber": null,
-   "muddler": null
-  }
- },
- {
-  "id": "book3",
-  "title": "Chapter 3: The Scarecrow's Missing Hat",
-  "theme": "farm",
-  "roles": [
-   "fibber"
-  ],
-  "level": 2,
-  "kinds": [
-   "deadend",
-   "crossroads",
-   "nextto",
-   "notat",
-   "farspot",
-   "near",
-   "two",
-   "far"
-  ],
-  "story": "The third gear was hidden in the scarecrow's hat, and now the hat is gone. One person is fibbing, so all of their words are untrue. Everyone else tells the truth.",
-  "spots": [
-   {
-    "id": "barn",
-    "name": "Barn",
-    "icon": "🛖",
-    "x": 14,
-    "y": 10
-   },
-   {
-    "id": "pies",
-    "name": "Pie Stand",
-    "icon": "🥧",
-    "x": 52,
-    "y": 8
-   },
-   {
-    "id": "tractor",
-    "name": "Tractor Rides",
-    "icon": "🚜",
-    "x": 88,
-    "y": 18
-   },
-   {
-    "id": "scarecrow",
-    "name": "Scarecrow",
-    "icon": "🧑‍🌾",
-    "x": 30,
-    "y": 46
-   },
-   {
-    "id": "maze",
-    "name": "Hay Maze",
-    "icon": "🌾",
-    "x": 70,
-    "y": 50
-   },
-   {
-    "id": "pumpkins",
-    "name": "Pumpkin Patch",
-    "icon": "🎃",
-    "x": 10,
-    "y": 84
-   },
-   {
-    "id": "pond",
-    "name": "Duck Pond",
-    "icon": "🦆",
-    "x": 50,
-    "y": 88
-   },
-   {
-    "id": "orchard",
-    "name": "Orchard",
-    "icon": "🍎",
-    "x": 90,
-    "y": 84
-   }
-  ],
-  "paths": [
-   [
-    "barn",
-    "pies"
-   ],
-   [
-    "pies",
-    "tractor"
-   ],
-   [
-    "barn",
-    "scarecrow"
-   ],
-   [
-    "pies",
-    "scarecrow"
-   ],
-   [
-    "scarecrow",
-    "maze"
-   ],
-   [
-    "tractor",
-    "maze"
-   ],
-   [
-    "scarecrow",
-    "pumpkins"
-   ],
-   [
-    "pumpkins",
-    "pond"
-   ],
-   [
-    "maze",
-    "orchard"
-   ],
-   [
-    "pond",
-    "orchard"
-   ]
-  ],
-  "suspects": [
-   {
-    "name": "Nell",
-    "color": "#e4572e"
-   },
-   {
-    "name": "Ned",
-    "color": "#2e86de"
-   },
-   {
-    "name": "Farmer Hattie",
-    "color": "#27ae60"
-   },
-   {
-    "name": "Mr. Bramble",
-    "color": "#9b59b6"
-   }
-  ],
-  "evidence": [
-   {
-    "type": "culprit_near",
-    "spot": "scarecrow",
-    "icon": "🎩",
-    "text": "Straw on someone's sleeve: the Fibber was at the Scarecrow or right next to it."
-   },
-   {
-    "type": "empty",
-    "spot": "pond",
-    "icon": "🦆",
-    "text": "The ducks were napping: nobody was at the Duck Pond."
+    "icon": "🧹",
+    "text": "The Hall floor had just been mopped, with no footprints. Nobody was in the Hall."
    },
    {
     "type": "occupied",
-    "spot": "tractor",
-    "icon": "🚜",
-    "text": "The tractor's horn honked: someone was at Tractor Rides."
+    "spot": "toilets",
+    "icon": "🧻",
+    "text": "The toilet roll was still spinning. Someone was in the Toilets."
    }
   ],
-  "want_fibber": "Ned",
+  "want_at": {
+   "Gloria": "kitchen"
+  },
+  "hide_spots": [
+   "flagpole"
+  ],
   "statements": {
-   "Nell": [
+   "Coach Kowalski": [
     {
-     "text": "I was right next to the Duck Pond.",
-     "t": "nextto",
-     "spot": "pond"
+     "text": "Mr. Bolt was right next to me.",
+     "t": "near",
+     "who": "Mr. Bolt"
     }
    ],
-   "Ned": [
-    {
-     "text": "I was right next to the Pumpkin Patch.",
-     "t": "nextto",
-     "spot": "pumpkins"
-    }
-   ],
-   "Farmer Hattie": [
+   "Mr. Bolt": [
     {
      "text": "I was at a crossroads (3 or more paths).",
      "t": "crossroads"
-    },
-    {
-     "text": "Ned was right next to me.",
-     "t": "near",
-     "who": "Ned"
     }
    ],
-   "Mr. Bramble": [
+   "Ms. Fig": [
     {
-     "text": "Ned was far from me (3 or more paths).",
-     "t": "far",
-     "who": "Ned"
+     "text": "I was right next to the Front Door.",
+     "t": "nextto",
+     "spot": "door"
+    }
+   ],
+   "Gloria": [
+    {
+     "text": "Ms. Fig and I were exactly two paths apart.",
+     "t": "two",
+     "who": "Ms. Fig"
     }
    ]
   },
   "solution": {
    "positions": {
-    "Nell": "orchard",
-    "Ned": "pumpkins",
-    "Farmer Hattie": "scarecrow",
-    "Mr. Bramble": "tractor"
+    "Coach Kowalski": "toilets",
+    "Mr. Bolt": "staff",
+    "Ms. Fig": "office",
+    "Gloria": "kitchen"
    },
-   "fibber": "Ned",
+   "fibber": null,
    "muddler": null
   }
  }
