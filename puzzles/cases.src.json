@@ -1,0 +1,77 @@
+[
+ {
+  "id": "jam",
+  "title": "The Missing Prize Jam",
+  "story": "The blue-ribbon jam vanished from the village fair. One suspect is the Fibber who took it: every one of their statements is false. Everyone else tells the truth.",
+  "theme": "fair",
+  "roles": ["fibber"],
+  "spots": [
+   {"id":"ferris","name":"Ferris Wheel","icon":"🎡","x":12,"y":15},
+   {"id":"gate","name":"Gate","icon":"🚪","x":38,"y":15},
+   {"id":"tea","name":"Tea Stall","icon":"🫖","x":64,"y":15},
+   {"id":"bake","name":"Bake Tent","icon":"🥧","x":90,"y":15},
+   {"id":"band","name":"Bandstand","icon":"🎺","x":64,"y":48},
+   {"id":"flower","name":"Flower Show","icon":"🌷","x":90,"y":85},
+   {"id":"pond","name":"Duck Pond","icon":"🦆","x":34,"y":55},
+   {"id":"zoo","name":"Petting Zoo","icon":"🐐","x":12,"y":85}
+  ],
+  "paths": [["gate","tea"],["gate","ferris"],["tea","bake"],["tea","band"],["bake","flower"],["band","pond"],["band","flower"],["flower","zoo"],["ferris","zoo"]],
+  "suspects": [{"name":"Mabel","color":"#e4572e"},{"name":"Otis","color":"#2e86de"},{"name":"Priya","color":"#9b59b6"},{"name":"Wendell","color":"#27ae60"}],
+  "evidence": [
+   {"type":"occupied","spot":"pond","icon":"👣","text":"Wet footprints at the Duck Pond: someone was there."},
+   {"type":"empty","spot":"zoo","icon":"🐐","text":"The goats were calm: nobody was at the Petting Zoo."},
+   {"type":"culprit_near","spot":"tea","icon":"🍯","text":"Jam on the Tea Stall bench: the Fibber was at the Tea Stall or right next to it."}
+  ]
+ },
+ {
+  "id": "painting",
+  "title": "The Upside-Down Painting",
+  "story": "Someone hung the museum's prized painting upside down before the gala. The Fibber did it, and every one of their statements is false. Everyone else tells the truth.",
+  "theme": "museum",
+  "roles": ["fibber"],
+  "spots": [
+   {"id":"lobby","name":"Lobby","icon":"🏛️","x":50,"y":88},
+   {"id":"shop","name":"Gift Shop","icon":"🛍️","x":15,"y":88},
+   {"id":"cafe","name":"Café","icon":"☕","x":85,"y":88},
+   {"id":"egypt","name":"Egypt Hall","icon":"🏺","x":10,"y":56},
+   {"id":"atrium","name":"Atrium","icon":"⛲","x":52,"y":46},
+   {"id":"gems","name":"Gem Vault","icon":"💎","x":90,"y":58},
+   {"id":"dino","name":"Dinosaur Hall","icon":"🦖","x":18,"y":12},
+   {"id":"gallery","name":"Painting Gallery","icon":"🖼️","x":50,"y":8},
+   {"id":"roof","name":"Roof Garden","icon":"🌿","x":84,"y":20}
+  ],
+  "paths": [["lobby","shop"],["lobby","cafe"],["lobby","atrium"],["shop","egypt"],["atrium","egypt"],["atrium","gems"],["atrium","gallery"],["egypt","dino"],["dino","gallery"],["gallery","roof"],["cafe","gems"]],
+  "suspects": [{"name":"Ines","color":"#e4572e"},{"name":"Hugo","color":"#2e86de"},{"name":"Lotte","color":"#9b59b6"},{"name":"Ravi","color":"#27ae60"},{"name":"Sunny","color":"#f39c12"}],
+  "evidence": [
+   {"type":"empty","spot":"gallery","icon":"📷","text":"The camera in the Painting Gallery saw nobody: the room was empty."},
+   {"type":"occupied","spot":"roof","icon":"🌂","text":"A wet umbrella in the Roof Garden: someone was there."},
+   {"type":"culprit_near","spot":"gallery","icon":"🔨","text":"A tiny hammer was left by the Gallery door: the Fibber was right next to the Painting Gallery."}
+  ]
+ },
+ {
+  "id": "orchid",
+  "title": "The Missing Orchid",
+  "story": "The rare moon orchid vanished from the botanical garden. The Fibber took it: all of their statements are false. The Muddler is honest but forgetful: exactly one of their statements is wrong. Everyone else tells the truth.",
+  "theme": "garden",
+  "roles": ["fibber","muddler"],
+  "spots": [
+   {"id":"gate","name":"Front Gate","icon":"🚪","x":50,"y":90},
+   {"id":"roses","name":"Rose Walk","icon":"🌹","x":18,"y":72},
+   {"id":"fountain","name":"Fountain","icon":"⛲","x":50,"y":62},
+   {"id":"cacti","name":"Cactus House","icon":"🌵","x":84,"y":72},
+   {"id":"maze","name":"Hedge Maze","icon":"🌳","x":12,"y":38},
+   {"id":"bees","name":"Beehives","icon":"🐝","x":34,"y":34},
+   {"id":"pond","name":"Lily Pond","icon":"🪷","x":66,"y":36},
+   {"id":"glass","name":"Glasshouse","icon":"🏡","x":88,"y":36},
+   {"id":"shed","name":"Potting Shed","icon":"🪴","x":30,"y":8},
+   {"id":"bridge","name":"Red Bridge","icon":"🌉","x":70,"y":8}
+  ],
+  "paths": [["gate","roses"],["gate","fountain"],["gate","cacti"],["roses","maze"],["fountain","bees"],["fountain","pond"],["cacti","glass"],["maze","bees"],["maze","shed"],["bees","shed"],["pond","glass"],["pond","bridge"],["shed","bridge"]],
+  "suspects": [{"name":"Amos","color":"#e4572e"},{"name":"Bea","color":"#2e86de"},{"name":"Cyril","color":"#9b59b6"},{"name":"Dot","color":"#27ae60"},{"name":"Edie","color":"#f39c12"}],
+  "evidence": [
+   {"type":"empty","spot":"glass","icon":"🔒","text":"The Glasshouse was locked: nobody was inside."},
+   {"type":"occupied","spot":"bees","icon":"🐝","text":"The bees were buzzing angrily: someone was at the Beehives."},
+   {"type":"culprit_near","spot":"pond","icon":"🌸","text":"Orchid petals floating on the Lily Pond: the Fibber was at the pond or right next to it."}
+  ]
+ }
+]

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who Was Where</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Who Was Where?</h1>
+  <p class="tag">Place every suspect on the map. Find the Fibber.</p>
+  <nav id="cases"></nav>
+</header>
+
+<main>
+  <section class="board">
+    <div class="maphead">
+      <h2 id="title"></h2>
+      <div class="tools">
+        <button id="toolPlace" class="tool on" title="Tap a suspect, then tap a spot">✋ Place</button>
+        <button id="toolCross" class="tool" title="Cross out a spot you know is empty">✕ Cross out</button>
+      </div>
+    </div>
+    <svg id="map" viewBox="-8 -10 116 118" role="img" aria-label="Map of the case"></svg>
+    <p class="hint" id="hint">Tap a suspect card, then tap a spot to put them there. Tap a spot again to clear it.</p>
+  </section>
+
+  <section class="side">
+    <p id="story" class="story"></p>
+    <details class="rules">
+      <summary>How to play</summary>
+      <ul>
+        <li>Each suspect stood on a <b>different</b> spot.</li>
+        <li><b>Right next to</b> means joined by one path. <b>Two paths apart</b> and <b>far (3 or more)</b> count the fewest paths between two spots.</li>
+        <li><b>Dead end</b> means one path leaves that spot. A <b>crossroads</b> has three or more.</li>
+        <li>Honest suspects tell the truth. The <b>Fibber</b>'s statements are all false.</li>
+        <li id="muddlerRule">The <b>Muddler</b> is honest but forgetful: exactly one of their statements is false.</li>
+        <li>The evidence is always true.</li>
+        <li>Tap a statement to mark it true ✓ or false ✗ as you work. That's just for your notes.</li>
+      </ul>
+    </details>
+
+    <h3>Evidence</h3>
+    <ul id="evidence" class="evidence"></ul>
+
+    <h3>Suspects</h3>
+    <div id="suspects"></div>
+
+    <div class="actions">
+      <button id="check" class="primary">Close the case</button>
+      <button id="reset">Start over</button>
+    </div>
+    <p id="verdict" class="verdict" aria-live="polite"></p>
+  </section>
+</main>
+
+<footer>Prototype. Every case has exactly one solution.</footer>
+
+<script src="puzzles/cases.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
