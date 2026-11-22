@@ -19,3 +19,7 @@ pip install numpy
 python3 tools/generate.py puzzles/cases.src.json
 python3 tools/verify.py
 ```
+
+## Art
+
+Place drawings (`art/places.py`) and suspect portraits (`art/characters.py`) are built into `art.js` with `python3 tools/build_art.py`. Spots without a drawing fall back to their emoji; suspects without a portrait show a coloured initial.

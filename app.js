@@ -95,7 +95,13 @@
     for (const s of c.spots) {
       const g = el("g", { class: "spot", transform: `translate(${s.x} ${s.y})`, tabindex: 0, role: "button", "aria-label": s.name }, svg);
       el("circle", { r: R, class: "base" }, g);
-      const icon = el("text", { class: "icon", y: -0.3 }, g); icon.textContent = s.icon;
+      const art = window.ART && ART.places[s.id];
+      if (art) {   // vector drawing of the place, fitted inside the spot circle
+        const pic = el("svg", { x: -6.3, y: -5.4, width: 12.6, height: 10.2, viewBox: ART.placeBox, class: "placeart" }, g);
+        pic.innerHTML = art;
+      } else {
+        const icon = el("text", { class: "icon", y: -0.3 }, g); icon.textContent = s.icon;
+      }
       const lab = el("text", { class: "label", y: R + 6.2 }, g); lab.textContent = s.name;
       const notes = (st.notes[s.id] || []).filter(n => !who[s.id]);
       notes.forEach((n, k) => {
@@ -134,6 +140,11 @@
     }
   }
 
+  function portrait(name) {
+    const art = window.ART && ART.portraits[name];
+    return art ? `<svg class="portrait" viewBox="${ART.portraitBox}" aria-hidden="true">${art}</svg>` : "";
+  }
+
   function renderSide() {
     const c = CASES[ci];
     const spotName = Object.fromEntries(c.spots.map(s => [s.id, s.name]));
@@ -152,7 +163,7 @@
       const card = document.createElement("div");
       card.className = "card" + (selected === p.name ? " sel" : "");
       card.style.setProperty("--c", p.color);
-      card.innerHTML = `<div class="top"><span class="dot">${p.name[0]}</span><span class="name">${p.name}</span>
+      card.innerHTML = `<div class="top">${portrait(p.name) || `<span class="dot">${p.name[0]}</span>`}<span class="name">${p.name}</span>
         <span class="where">${st.pos[p.name] ? "at the " + spotName[st.pos[p.name]] : (selected === p.name ? "selected" : "tap to select")}</span></div>`;
       const roles = document.createElement("div"); roles.className = "roles";
       roleList.forEach(r => {
