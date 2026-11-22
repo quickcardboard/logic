@@ -2,189 +2,28 @@
 window.BOOK = [
  {
   "id": "duck1",
-  "title": "Chapter 1: The Great Bathtub Splash",
-  "theme": "playground",
+  "title": "Chapter 1: 8:30, The Polished Glass",
+  "theme": "school",
   "roles": [],
   "level": 1,
   "kinds": [
-   "deadend",
    "crossroads",
    "nextto",
    "notat"
   ],
-  "story": "At 10:15 a bathtub of rubber ducks tipped off the Bike Shed roof onto Principal Plumpton. Three grown-ups were on playground duty. Who was right next to the Bike Shed?",
+  "story": "When did anyone last see the real Golden Duck? At 8:30 the grown-ups were getting ready for the race. Who was at the Trophy Cabinet?",
   "spots": [
    {
-    "id": "bikeshed",
-    "name": "Bike Shed",
-    "icon": "🚲",
-    "x": 12,
-    "y": 12
-   },
-   {
-    "id": "bellbox",
-    "name": "Bell Cupboard",
-    "icon": "🔔",
-    "x": 50,
-    "y": 8
-   },
-   {
-    "id": "garden",
-    "name": "Vegetable Garden",
-    "icon": "🥕",
-    "x": 86,
-    "y": 16
-   },
-   {
-    "id": "frame",
-    "name": "Climbing Frame",
-    "icon": "🧗",
-    "x": 32,
-    "y": 46
-   },
-   {
-    "id": "fountain",
-    "name": "Water Fountain",
-    "icon": "🚰",
-    "x": 76,
-    "y": 52
-   },
-   {
-    "id": "mud",
-    "name": "Mud Patch",
-    "icon": "🟤",
-    "x": 10,
-    "y": 82
-   },
-   {
-    "id": "hopscotch",
-    "name": "Hopscotch",
-    "icon": "🔢",
-    "x": 52,
-    "y": 88
-   }
-  ],
-  "paths": [
-   [
-    "bikeshed",
-    "bellbox"
-   ],
-   [
-    "bellbox",
-    "garden"
-   ],
-   [
-    "bikeshed",
-    "frame"
-   ],
-   [
-    "bellbox",
-    "frame"
-   ],
-   [
-    "frame",
-    "fountain"
-   ],
-   [
-    "garden",
-    "fountain"
-   ],
-   [
-    "frame",
-    "mud"
-   ],
-   [
-    "fountain",
-    "hopscotch"
-   ]
-  ],
-  "suspects": [
-   {
-    "name": "Coach Cherry",
-    "color": "#ef4444"
-   },
-   {
-    "name": "Mr. Blueberry",
-    "color": "#3b82f6"
-   },
-   {
-    "name": "Ms. Peapod",
-    "color": "#22c55e"
-   }
-  ],
-  "evidence": [
-   {
-    "type": "empty",
-    "spot": "bellbox",
-    "icon": "🔒",
-    "text": "The Bell Cupboard was locked: nobody was inside."
-   },
-   {
-    "type": "occupied",
-    "spot": "mud",
-    "icon": "👣",
-    "text": "Fresh grown-up footprints in the Mud Patch: someone was there."
-   }
-  ],
-  "statements": {
-   "Coach Cherry": [
-    {
-     "text": "I was right next to the Vegetable Garden.",
-     "t": "nextto",
-     "spot": "garden"
-    }
-   ],
-   "Mr. Blueberry": [
-    {
-     "text": "I was at a crossroads (3 or more paths).",
-     "t": "crossroads"
-    }
-   ],
-   "Ms. Peapod": [
-    {
-     "text": "I wasn't at the Water Fountain.",
-     "t": "notat",
-     "spot": "fountain"
-    }
-   ]
-  },
-  "solution": {
-   "positions": {
-    "Coach Cherry": "fountain",
-    "Mr. Blueberry": "frame",
-    "Ms. Peapod": "mud"
-   },
-   "fibber": null,
-   "muddler": null
-  }
- },
- {
-  "id": "duck2",
-  "title": "Chapter 2: The Flag Fiasco",
-  "theme": "school",
-  "roles": [],
-  "level": 2,
-  "kinds": [
-   "deadend",
-   "crossroads",
-   "nextto",
-   "notat",
-   "near",
-   "two"
-  ],
-  "story": "At 9:00 the fire alarm rang, and a giant duck flag shot up the flagpole. Four grown-ups were inside the school. Who was right next to the Flagpole?",
-  "spots": [
-   {
-    "id": "flagpole",
-    "name": "Flagpole",
-    "icon": "🚩",
+    "id": "cabinet",
+    "name": "Trophy Cabinet",
+    "icon": "🏆",
     "x": 72,
-    "y": 4
+    "y": 6
    },
    {
     "id": "hall",
     "name": "Hall",
-    "icon": "🎭",
+    "icon": "🪑",
     "x": 46,
     "y": 28
    },
@@ -196,11 +35,11 @@ window.BOOK = [
     "y": 20
    },
    {
-    "id": "library",
-    "name": "Library",
-    "icon": "📚",
-    "x": 88,
-    "y": 62
+    "id": "kitchen",
+    "name": "Kitchen",
+    "icon": "🍳",
+    "x": 90,
+    "y": 26
    },
    {
     "id": "door",
@@ -210,18 +49,18 @@ window.BOOK = [
     "y": 56
    },
    {
-    "id": "kitchen",
-    "name": "Kitchen",
-    "icon": "🍳",
-    "x": 90,
-    "y": 26
-   },
-   {
     "id": "staff",
     "name": "Staff Room",
     "icon": "☕",
     "x": 50,
     "y": 60
+   },
+   {
+    "id": "library",
+    "name": "Library",
+    "icon": "📚",
+    "x": 88,
+    "y": 62
    },
    {
     "id": "class",
@@ -240,11 +79,11 @@ window.BOOK = [
   ],
   "paths": [
    [
-    "flagpole",
+    "cabinet",
     "hall"
    ],
    [
-    "flagpole",
+    "cabinet",
     "kitchen"
    ],
    [
@@ -304,64 +143,273 @@ window.BOOK = [
   ],
   "evidence": [
    {
-    "type": "empty",
-    "spot": "flagpole",
-    "icon": "🌱",
-    "text": "The grass round the Flagpole was wet with dew, with no footprints. Nobody was standing at the Flagpole."
-   },
-   {
-    "type": "empty",
-    "spot": "hall",
-    "icon": "🧹",
-    "text": "The Hall floor had just been mopped, with no footprints. Nobody was in the Hall."
-   },
-   {
     "type": "occupied",
-    "spot": "toilets",
-    "icon": "🧻",
-    "text": "The toilet roll was still spinning. Someone was in the Toilets."
+    "spot": "cabinet",
+    "text": "Kevin saw a grown-up polishing the glass at 8:30. Someone was at the Trophy Cabinet.",
+    "icon": "🚌"
+   },
+   {
+    "type": "empty",
+    "spot": "office",
+    "text": "The Office is locked until 9:00. Nobody was in the Office.",
+    "icon": "🔒"
    }
   ],
-  "want_at": {
-   "Mrs. Lavender": "kitchen"
-  },
   "hide_spots": [
-   "flagpole"
+   "cabinet"
   ],
   "statements": {
    "Coach Cherry": [
+    {
+     "text": "I was at a place with three or more paths.",
+     "t": "crossroads"
+    },
+    {
+     "text": "I wasn't at the Hall.",
+     "t": "notat",
+     "spot": "hall"
+    }
+   ],
+   "Mr. Blueberry": [
+    {
+     "text": "I wasn't at the Kitchen.",
+     "t": "notat",
+     "spot": "kitchen"
+    },
+    {
+     "text": "I was right next to the Hall.",
+     "t": "nextto",
+     "spot": "hall"
+    }
+   ],
+   "Ms. Peapod": [
+    {
+     "text": "I was right next to the Toilets.",
+     "t": "nextto",
+     "spot": "toilets"
+    }
+   ],
+   "Mrs. Lavender": [
+    {
+     "text": "I was right next to the Hall.",
+     "t": "nextto",
+     "spot": "hall"
+    }
+   ]
+  },
+  "solution": {
+   "positions": {
+    "Coach Cherry": "staff",
+    "Mr. Blueberry": "cabinet",
+    "Ms. Peapod": "library",
+    "Mrs. Lavender": "kitchen"
+   },
+   "fibber": null,
+   "muddler": null
+  }
+ },
+ {
+  "id": "duck2",
+  "title": "Chapter 2: 10:15, The Key on the Hook",
+  "theme": "playground",
+  "roles": [],
+  "level": 2,
+  "kinds": [
+   "crossroads",
+   "near",
+   "nextto"
+  ],
+  "story": "The cabinet key hangs on a hook in the Office. At recess the Office was empty. Who was right next to the Office?",
+  "spots": [
+   {
+    "id": "office",
+    "name": "Office",
+    "icon": "🗄️",
+    "x": 14,
+    "y": 10
+   },
+   {
+    "id": "kitchen",
+    "name": "Kitchen",
+    "icon": "🍳",
+    "x": 46,
+    "y": 8
+   },
+   {
+    "id": "steps",
+    "name": "Front Steps",
+    "icon": "🪜",
+    "x": 14,
+    "y": 44
+   },
+   {
+    "id": "bikeshed",
+    "name": "Bike Shed",
+    "icon": "🚲",
+    "x": 84,
+    "y": 12
+   },
+   {
+    "id": "frame",
+    "name": "Climbing Frame",
+    "icon": "🧗",
+    "x": 48,
+    "y": 44
+   },
+   {
+    "id": "garden",
+    "name": "Vegetable Garden",
+    "icon": "🥕",
+    "x": 86,
+    "y": 48
+   },
+   {
+    "id": "mud",
+    "name": "Mud Patch",
+    "icon": "🟤",
+    "x": 12,
+    "y": 84
+   },
+   {
+    "id": "hopscotch",
+    "name": "Hopscotch",
+    "icon": "🔢",
+    "x": 50,
+    "y": 88
+   },
+   {
+    "id": "fountain",
+    "name": "Water Fountain",
+    "icon": "🚰",
+    "x": 88,
+    "y": 86
+   }
+  ],
+  "paths": [
+   [
+    "office",
+    "kitchen"
+   ],
+   [
+    "office",
+    "steps"
+   ],
+   [
+    "kitchen",
+    "bikeshed"
+   ],
+   [
+    "kitchen",
+    "frame"
+   ],
+   [
+    "steps",
+    "frame"
+   ],
+   [
+    "steps",
+    "mud"
+   ],
+   [
+    "bikeshed",
+    "garden"
+   ],
+   [
+    "frame",
+    "garden"
+   ],
+   [
+    "frame",
+    "hopscotch"
+   ],
+   [
+    "mud",
+    "hopscotch"
+   ],
+   [
+    "garden",
+    "fountain"
+   ],
+   [
+    "hopscotch",
+    "fountain"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Coach Cherry",
+    "color": "#ef4444"
+   },
+   {
+    "name": "Mr. Blueberry",
+    "color": "#3b82f6"
+   },
+   {
+    "name": "Ms. Peapod",
+    "color": "#22c55e"
+   },
+   {
+    "name": "Mrs. Lavender",
+    "color": "#a855f7"
+   }
+  ],
+  "evidence": [
+   {
+    "type": "empty",
+    "spot": "office",
+    "text": "The Office is locked at recess. Nobody was inside.",
+    "icon": "🔒"
+   },
+   {
+    "type": "empty",
+    "spot": "steps",
+    "text": "Year 2 drew chalk on the Front Steps all recess, and no grown-ups came near.",
+    "icon": "🌈"
+   },
+   {
+    "type": "occupied",
+    "spot": "mud",
+    "text": "Kids saw a grown-up stomping in the mud. Someone was in the Mud Patch.",
+    "icon": "🥾"
+   }
+  ],
+  "hide_spots": [
+   "office"
+  ],
+  "statements": {
+   "Coach Cherry": [
+    {
+     "text": "I was right next to the Water Fountain.",
+     "t": "nextto",
+     "spot": "fountain"
+    }
+   ],
+   "Mr. Blueberry": [
+    {
+     "text": "I was at a place with three or more paths.",
+     "t": "crossroads"
+    }
+   ],
+   "Ms. Peapod": [
     {
      "text": "Mr. Blueberry was right next to me.",
      "t": "near",
      "who": "Mr. Blueberry"
     }
    ],
-   "Mr. Blueberry": [
-    {
-     "text": "I was at a crossroads (3 or more paths).",
-     "t": "crossroads"
-    }
-   ],
-   "Ms. Peapod": [
-    {
-     "text": "I was right next to the Front Door.",
-     "t": "nextto",
-     "spot": "door"
-    }
-   ],
    "Mrs. Lavender": [
     {
-     "text": "Ms. Peapod and I were exactly two paths apart.",
-     "t": "two",
-     "who": "Ms. Peapod"
+     "text": "I was right next to the Bike Shed.",
+     "t": "nextto",
+     "spot": "bikeshed"
     }
    ]
   },
   "solution": {
    "positions": {
-    "Coach Cherry": "toilets",
-    "Mr. Blueberry": "staff",
-    "Ms. Peapod": "office",
+    "Coach Cherry": "garden",
+    "Mr. Blueberry": "hopscotch",
+    "Ms. Peapod": "mud",
     "Mrs. Lavender": "kitchen"
    },
    "fibber": null,
@@ -370,21 +418,18 @@ window.BOOK = [
  },
  {
   "id": "duck3",
-  "title": "Chapter 3: The Wobbly Trophies",
+  "title": "Chapter 3: 12:30, The Gold Paint",
   "theme": "school",
   "roles": [],
   "level": 2,
   "kinds": [
+   "closer",
    "deadend",
-   "crossroads",
    "nextto",
    "notat",
-   "near",
-   "two",
-   "far",
-   "closer"
+   "two"
   ],
-  "story": "On Thursday at 8:30, every trophy in Principal Plumpton's cabinet was full of green jelly. Four grown-ups were in school early. Who was right next to the Trophy Cabinet?",
+  "story": "The fake duck was painted with the Art Room's gold paint. At 12:30 most kids were eating outside. Who was right next to the Art Room?",
   "spots": [
    {
     "id": "stage",
@@ -394,16 +439,16 @@ window.BOOK = [
     "y": 10
    },
    {
-    "id": "cabinet",
-    "name": "Trophy Cabinet",
-    "icon": "🏆",
+    "id": "art",
+    "name": "Art Room",
+    "icon": "🎨",
     "x": 48,
     "y": 8
    },
    {
-    "id": "music",
-    "name": "Music Room",
-    "icon": "🎵",
+    "id": "changing",
+    "name": "Changing Room",
+    "icon": "👟",
     "x": 84,
     "y": 12
    },
@@ -436,9 +481,9 @@ window.BOOK = [
     "y": 66
    },
    {
-    "id": "art",
-    "name": "Art Room",
-    "icon": "🎨",
+    "id": "music",
+    "name": "Music Room",
+    "icon": "🎵",
     "x": 38,
     "y": 74
    },
@@ -463,12 +508,12 @@ window.BOOK = [
     "hall"
    ],
    [
-    "cabinet",
+    "art",
     "hall"
    ],
    [
-    "cabinet",
-    "music"
+    "art",
+    "changing"
    ],
    [
     "hall",
@@ -480,14 +525,14 @@ window.BOOK = [
    ],
    [
     "hall",
-    "art"
+    "music"
    ],
    [
-    "music",
+    "changing",
     "lostprop"
    ],
    [
-    "music",
+    "changing",
     "kitchen"
    ],
    [
@@ -496,10 +541,10 @@ window.BOOK = [
    ],
    [
     "gym",
-    "art"
+    "music"
    ],
    [
-    "art",
+    "music",
     "staff"
    ],
    [
@@ -532,69 +577,66 @@ window.BOOK = [
   "evidence": [
    {
     "type": "empty",
-    "spot": "cabinet",
-    "icon": "🟢",
-    "text": "Green jelly had splatted all over the floor, with no footprints in it. Nobody was at the Trophy Cabinet."
-   },
-   {
-    "type": "occupied",
-    "spot": "gym",
-    "icon": "🏀",
-    "text": "A basketball was still bouncing. Someone was in the Gym."
+    "spot": "art",
+    "text": "Priya found the Art Room empty at 12:30. Nobody was in the Art Room.",
+    "icon": "🍱"
    },
    {
     "type": "empty",
     "spot": "hall",
-    "icon": "🖌️",
-    "text": "A party banner lay drying on the floor, and the wet paint had no footprints. Nobody was in the Hall."
+    "text": "The Hall is locked at lunch. Nobody was in the Hall.",
+    "icon": "🔒"
+   },
+   {
+    "type": "occupied",
+    "spot": "gym",
+    "text": "Kids heard a basketball bouncing at 12:30. Someone was in the Gym.",
+    "icon": "🏀"
    }
   ],
-  "want_at": {
-   "Mrs. Lavender": "kitchen",
-   "Ms. Peapod": "music"
-  },
   "hide_spots": [
-   "cabinet"
+   "art"
   ],
   "statements": {
    "Coach Cherry": [
     {
-     "text": "Ms. Peapod was far from me (3 or more paths).",
-     "t": "far",
-     "who": "Ms. Peapod"
+     "text": "I was closer to the Art Room than Ms. Peapod was.",
+     "t": "closer",
+     "who": "Ms. Peapod",
+     "spot": "art"
     }
    ],
    "Mr. Blueberry": [
     {
-     "text": "I was right next to the Gym.",
-     "t": "nextto",
-     "spot": "gym"
+     "text": "I was at a dead end.",
+     "t": "deadend"
     }
    ],
    "Ms. Peapod": [
     {
-     "text": "Mrs. Lavender was right next to me.",
-     "t": "near",
+     "text": "I wasn't at the Library.",
+     "t": "notat",
+     "spot": "library"
+    },
+    {
+     "text": "Mrs. Lavender and I were exactly two paths apart.",
+     "t": "two",
      "who": "Mrs. Lavender"
     }
    ],
    "Mrs. Lavender": [
     {
-     "text": "Mr. Blueberry and I were exactly two paths apart.",
-     "t": "two",
-     "who": "Mr. Blueberry"
-    },
-    {
-     "text": "I was at a crossroads (3 or more paths).",
-     "t": "crossroads"
+     "text": "I was right next to the Staff Room.",
+     "t": "nextto",
+     "spot": "staff"
     }
    ]
   },
   "solution": {
    "positions": {
-    "Coach Cherry": "gym",
-    "Mr. Blueberry": "art",
-    "Ms. Peapod": "music",
+    "Coach Cherry": "changing",
+    "Mr. Blueberry": "stage",
+    "Ms. Peapod": "gym",
     "Mrs. Lavender": "kitchen"
    },
    "fibber": null,
@@ -603,23 +645,22 @@ window.BOOK = [
  },
  {
   "id": "duck4",
-  "title": "Chapter 4: The Last Quack",
+  "title": "Chapter 4: 11:00, The Swap",
   "theme": "school",
   "roles": [],
   "level": 2,
   "kinds": [
    "crossroads",
-   "nextto",
    "near",
-   "two",
-   "closer"
+   "nextto",
+   "notat"
   ],
-  "story": "At 3:00 on Friday, the party net opened and three thousand rubber ducks fell on everyone except Mrs. Lavender. Five grown-ups were in the dark Hall. Who was holding the Duck Net Rope?",
+  "story": "At 11:00 the whole school was in the Gym decorating ducks, and the Hall was empty. Somebody swapped the Golden Duck. Who was at the Trophy Cabinet?",
   "spots": [
    {
-    "id": "rope",
-    "name": "Duck Net Rope",
-    "icon": "🪢",
+    "id": "cabinet",
+    "name": "Trophy Cabinet",
+    "icon": "🏆",
     "x": 8,
     "y": 8
    },
@@ -645,23 +686,23 @@ window.BOOK = [
     "y": 14
    },
    {
-    "id": "cabinet",
-    "name": "Trophy Cabinet",
-    "icon": "🏆",
+    "id": "halldoors",
+    "name": "Hall Doors",
+    "icon": "🚪",
     "x": 10,
     "y": 42
    },
    {
-    "id": "balloons",
-    "name": "Balloon Arch",
-    "icon": "🎈",
+    "id": "hall",
+    "name": "Hall",
+    "icon": "🪑",
     "x": 36,
     "y": 42
    },
    {
-    "id": "cake",
-    "name": "Cake Table",
-    "icon": "🎂",
+    "id": "corridor",
+    "name": "Corridor",
+    "icon": "🚶",
     "x": 62,
     "y": 44
    },
@@ -673,23 +714,23 @@ window.BOOK = [
     "y": 48
    },
    {
-    "id": "lights",
-    "name": "Light Switch",
-    "icon": "💡",
+    "id": "library",
+    "name": "Library",
+    "icon": "📚",
     "x": 12,
     "y": 80
    },
    {
-    "id": "door",
-    "name": "Hall Doors",
-    "icon": "🚪",
+    "id": "gym",
+    "name": "Gym",
+    "icon": "🏀",
     "x": 38,
     "y": 86
    },
    {
-    "id": "coats",
-    "name": "Coat Pegs",
-    "icon": "🧥",
+    "id": "art",
+    "name": "Art Room",
+    "icon": "🎨",
     "x": 64,
     "y": 86
    },
@@ -703,7 +744,7 @@ window.BOOK = [
   ],
   "paths": [
    [
-    "rope",
+    "cabinet",
     "stage"
    ],
    [
@@ -715,51 +756,51 @@ window.BOOK = [
     "music"
    ],
    [
-    "rope",
-    "cabinet"
+    "cabinet",
+    "halldoors"
    ],
    [
     "stage",
-    "balloons"
+    "hall"
    ],
    [
     "piano",
-    "cake"
+    "corridor"
    ],
    [
     "music",
     "kitchen"
    ],
    [
-    "cabinet",
-    "balloons"
+    "halldoors",
+    "hall"
    ],
    [
-    "balloons",
-    "cake"
+    "hall",
+    "corridor"
    ],
    [
-    "cake",
+    "corridor",
     "kitchen"
    ],
    [
-    "cabinet",
-    "lights"
+    "halldoors",
+    "library"
    ],
    [
-    "balloons",
-    "door"
+    "hall",
+    "gym"
    ],
    [
-    "lights",
-    "door"
+    "library",
+    "gym"
    ],
    [
-    "door",
-    "coats"
+    "gym",
+    "art"
    ],
    [
-    "coats",
+    "art",
     "office"
    ],
    [
@@ -783,92 +824,71 @@ window.BOOK = [
    {
     "name": "Mrs. Lavender",
     "color": "#a855f7"
-   },
-   {
-    "name": "Principal Plumpton",
-    "color": "#f59f00"
    }
   ],
   "evidence": [
    {
     "type": "occupied",
-    "spot": "rope",
-    "icon": "✨",
-    "text": "Shiny grown-up shoe prints in the party glitter. Someone was at the Duck Net Rope."
-   },
-   {
-    "type": "empty",
     "spot": "cabinet",
-    "icon": "🟢",
-    "text": "The floor was still sticky with jelly, with no footprints. Nobody was at the Trophy Cabinet."
+    "text": "A drop of gold paint with half a grown-up shoe print in it. Someone was at the Trophy Cabinet.",
+    "icon": "🟡"
    },
    {
     "type": "empty",
-    "spot": "kitchen",
-    "icon": "🚫",
-    "text": "The door was taped shut: NO PEEKING, MRS. LAVENDER! Nobody was in the Kitchen."
+    "spot": "hall",
+    "text": "The Hall was locked at 11:00. Nobody was in the Hall.",
+    "icon": "🔒"
+   },
+   {
+    "type": "occupied",
+    "spot": "gym",
+    "text": "A grown-up dressed as a duck handed out googly eyes. Someone was in the Gym.",
+    "icon": "🦆"
    }
   ],
-  "want_at": {
-   "Principal Plumpton": "rope"
-  },
   "hide_spots": [
-   "rope"
+   "cabinet"
   ],
   "statements": {
-   "Mrs. Lavender": [
-    {
-     "text": "I was right next to the Light Switch.",
-     "t": "nextto",
-     "spot": "lights"
-    }
-   ],
    "Coach Cherry": [
     {
-     "text": "I was right next to the Trophy Cabinet.",
-     "t": "nextto",
-     "spot": "cabinet"
+     "text": "I was at a place with three or more paths.",
+     "t": "crossroads"
     }
    ],
    "Mr. Blueberry": [
     {
-     "text": "Coach Cherry and I were exactly two paths apart.",
-     "t": "two",
-     "who": "Coach Cherry"
+     "text": "I wasn't at the Library.",
+     "t": "notat",
+     "spot": "library"
     },
     {
-     "text": "I was at a crossroads (3 or more paths).",
-     "t": "crossroads"
+     "text": "I was right next to the Gym.",
+     "t": "nextto",
+     "spot": "gym"
     }
    ],
    "Ms. Peapod": [
-    {
-     "text": "Mr. Blueberry and I were exactly two paths apart.",
-     "t": "two",
-     "who": "Mr. Blueberry"
-    },
-    {
-     "text": "I was closer to the Music Room than Principal Plumpton was.",
-     "t": "closer",
-     "who": "Principal Plumpton",
-     "spot": "music"
-    }
-   ],
-   "Principal Plumpton": [
     {
      "text": "I was right next to the Stage.",
      "t": "nextto",
      "spot": "stage"
     }
+   ],
+   "Mrs. Lavender": [
+    {
+     "text": "Coach Cherry was right next to me.",
+     "t": "near",
+     "who": "Coach Cherry"
+    }
    ]
   },
   "solution": {
    "positions": {
-    "Coach Cherry": "lights",
-    "Mr. Blueberry": "balloons",
-    "Ms. Peapod": "piano",
-    "Mrs. Lavender": "door",
-    "Principal Plumpton": "rope"
+    "Coach Cherry": "gym",
+    "Mr. Blueberry": "art",
+    "Ms. Peapod": "cabinet",
+    "Mrs. Lavender": "library"
    },
    "fibber": null,
    "muddler": null

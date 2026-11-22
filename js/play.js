@@ -17,16 +17,18 @@ const params = new URLSearchParams(location.search);
 const story = window.STORIES.find(s => s.id === params.get("s") && !s.soon) || window.STORIES[0];
 
 // ---------- the book's pages ----------
-// Story text is always the same size. A page written in stories.js that doesn't fit the screen's page
-// flows onto the next page (at a paragraph break when it can), so the number of pages depends on the screen.
+// Story text is always the same size. Pages in stories.js are written to fit a phone held sideways.
+// A bigger screen puts several of them on one page (only at those page breaks), and a page that still
+// doesn't fit flows onto the next page (at a paragraph break when it can).
 let pages = [];
-function buildPages(split = (ch, paras) => [paras]) {
+const oneEach = ch => ch.pages.map((pg, i) => ({ i, text: pg.text, end: i === ch.pages.length - 1 }));
+function buildPages(split = (ch, paras) => [paras], group = oneEach) {
   const out = [];
   if (story.chapters.some(ch => ch.pages.length)) out.push({ kind: "title" });
   story.chapters.forEach((ch, ci) => {
-    ch.pages.forEach((pg, i) => {
-      const head = i === 0, last = i === ch.pages.length - 1 && !!(ch.puzzle && PUZZLES[ch.puzzle]);
-      const parts = split(ch, pg.text, head, last);
+    group(ch).forEach(({ i, text, end }) => {
+      const head = i === 0, last = end && !!(ch.puzzle && PUZZLES[ch.puzzle]);
+      const parts = split(ch, text, head, last);
       parts.forEach((paras, part) => out.push({ kind: "story", ch, ci, i, part, paras,
         head: head && part === 0, last: last && part === parts.length - 1 }));
     });
@@ -138,6 +140,15 @@ function paginate() {
       if (best) return best.parts;
     }
     return parts;
+  }, ch => {   // join whole pages while they fit together
+    const groups = [];
+    ch.pages.forEach((pg, i) => {
+      const end = i === ch.pages.length - 1, puzzle = !!(ch.puzzle && PUZZLES[ch.puzzle]);
+      const g = groups[groups.length - 1];
+      if (g && fits(ch, [...g.text, ...pg.text], g.i === 0, end && puzzle)) { g.text = [...g.text, ...pg.text]; g.end = end; return; }
+      groups.push({ i, text: pg.text, end });
+    });
+    return groups;
   });
   probe.remove();
 }
@@ -172,7 +183,7 @@ function afterTurn() {
   store.set("wwW:at:" + story.id, at);
   history.replaceState(null, "", `?s=${story.id}&p=${at}`);
   const ch = p.ch;
-  $("chapterName").textContent = ch ? ch.title + (p.kind === "puzzle" ? " · the map" : "") : p.kind === "end" ? "The end (for now)" : "";
+  $("chapterName").textContent = ch ? ch.title + (p.kind === "puzzle" ? " · the map" : "") : p.kind === "end" ? "The end" : "";
   const u = leafOf(at), last = u === leaves.length - 1;
   $("prev").disabled = u === 0;
   const locked = !last && lockedAt(pageOf(u + 1));
@@ -256,8 +267,8 @@ function buildSheet(i) {
     el.innerHTML = storyHTML(p.ch, p.paras, p.head, p.last, i);
   } else {
     const tut = story.id === "tutorial", main = window.STORIES.find(s => !s.soon && s.id !== "tutorial");
-    el.innerHTML = `<h2>${tut ? "You're ready!" : "To be continued…"}</h2>
-      <p>${tut ? "Now try a real mystery." : "Thursday's prank is on its way. Come back soon for the next chapter."}</p>
+    el.innerHTML = `<h2>${tut ? "You're ready!" : "Case closed!"}</h2>
+      <p>${tut ? "Now try a real mystery." : "More mysteries are on their way. Come back soon!"}</p>
       <div class="cover-actions">${tut && main ? `<a class="btn primary" href="play.html?s=${main.id}">Open ${main.title}</a>` : ""}
       <a class="btn" href="./">Back to the bookshelf</a>${story.pdf ? `<a class="btn" href="${story.pdf}" download>⬇ Printable PDF</a>` : ""}</div>`;
   }
