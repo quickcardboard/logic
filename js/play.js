@@ -193,8 +193,6 @@ const q = sel => solverEl.querySelector(sel);
 function openPuzzle(pc) {
   if (c !== pc) { c = pc; st = stateOf(c); selected = null; focus = null; map.setCase(c); }
   q("#question").textContent = c.story;
-  document.querySelectorAll("#help .r-fib").forEach(e => e.hidden = !c.roles.includes("fibber"));
-  document.querySelectorAll("#help .r-mud").forEach(e => e.hidden = !c.roles.includes("muddler"));
   setTool("place"); renderSolver();
 }
 

@@ -2,7 +2,7 @@
 
 Hunchkins (working title): deduction puzzles for kids, told as storybooks. Play it at https://quickcardboard.com/logic/ (served by GitHub Pages from `main`).
 
-**Rules.** Every suspect stood on a different spot of the map. Honest suspects only say true things. The **Fibber**'s statements are all false. The **Muddler** (in some cases) gets exactly one statement wrong. The evidence is always true. Place everyone and find the Fibber.
+**Rules.** Every person stood on a different spot of the map. Use what each person says and the clues on the map to work out where everyone was. The children's books have no liars: puzzles get harder through the logic alone (the engine still supports a Fibber and a Muddler, but the books don't use them).
 
 Distances count paths along the map: "right next to" is one path, "far" is three or more.
 
