@@ -73,6 +73,10 @@ export class Map3D {
       plat.position.y = 0.11; plat.receiveShadow = true; plat.castShadow = true; g.add(plat);
       const ring = new THREE.Mesh(new THREE.TorusGeometry(PLATFORM_R + 0.03, 0.07, 12, 72), new THREE.MeshStandardMaterial({ color: "#b98a4e", roughness: 0.5, envMapIntensity: 0.6 }));
       ring.rotation.x = Math.PI / 2; ring.position.y = 0.23; g.add(ring);
+      // a soft halo round the platform, lit in a person's colour once they are placed there
+      const glow = new THREE.Mesh(new THREE.RingGeometry(PLATFORM_R + 0.05, PLATFORM_R + 0.42, 72),
+        new THREE.MeshBasicMaterial({ color: "#ffffff", transparent: true, opacity: 0.75, depthWrite: false }));
+      glow.rotation.x = -Math.PI / 2; glow.position.y = 0.05; glow.visible = false; g.add(glow);
       const p = prop(s.id); p.scale.setScalar(0.82); p.position.set(0, 0.22, -0.2); g.add(p);
       g.traverse(o => { o.userData.spot = s.id; });
       this.world.add(g);
@@ -82,7 +86,7 @@ export class Map3D {
       const cross = document.createElement("div"); cross.className = "xmark"; cross.hidden = true;
       const notes = document.createElement("div"); notes.className = "notes";
       this.overlay.append(cross, notes, label);
-      this.spots[s.id] = { g, plat, ring, prop: p, cross, notes, label, crossed: false };
+      this.spots[s.id] = { g, plat, ring, glow, prop: p, cross, notes, label, crossed: false };
     }
     c.evidence.forEach((e, i) => {
       const b = this.spots[e.spot]?.label.querySelector(".badges");
@@ -98,7 +102,7 @@ export class Map3D {
       pawn.visible = false; pawn.userData.who = p.name;
       pawn.traverse(o => { o.userData.who = p.name; });
       this.world.add(pawn);
-      const tag = document.createElement("div"); tag.className = "pawn-tag"; tag.textContent = p.name;
+      const tag = document.createElement("div"); tag.className = "pawn-tag"; tag.textContent = p.name.split(" ").pop()[0]; tag.title = p.name;
       tag.style.setProperty("--c", p.color); this.overlay.appendChild(tag);
       this.pawns[p.name] = { pawn, tag, at: null };
     }
@@ -116,6 +120,7 @@ export class Map3D {
     this.st = st; this.selected = selected;
     const color = Object.fromEntries(this.c.suspects.map(s => [s.name, s.color]));
     const who = {}; for (const n in st.pos) who[st.pos[n]] = n;
+    this.owner = Object.fromEntries(Object.entries(who).map(([id, n]) => [id, color[n]]));
     for (const [id, S] of Object.entries(this.spots)) {
       const crossed = !!st.crossed[id] && !who[id];
       S.cross.hidden = !crossed;
@@ -192,7 +197,12 @@ export class Map3D {
       const hot = id === this.hot || id === this.pressing;
       const k = this.pressing === id ? 1.08 : hot ? 1.04 : 1;
       S.g.scale.lerp(new THREE.Vector3(k, k, k), 0.25);
-      S.ring.material.color.set(this.pressing === id ? "#ff4b4b" : hot ? "#1cb0f6" : "#b98a4e");
+      // a place someone stands on glows in their colour
+      const owner = this.owner?.[id];
+      S.ring.material.color.set(this.pressing === id ? "#ff4b4b" : hot ? "#1cb0f6" : owner || "#b98a4e");
+      S.ring.material.emissive.set(owner && this.pressing !== id && !hot ? owner : "#000000");
+      S.ring.material.emissiveIntensity = 0.55;
+      S.glow.visible = !!owner; if (owner) S.glow.material.color.set(owner);
     }
     for (const P of Object.values(this.pawns)) {
       if (P.pawn.visible) P.pawn.rotation.y = P.pawn.userData.selected ? t / 400 : 0;
@@ -227,8 +237,10 @@ export class Map3D {
     for (const P of Object.values(this.pawns)) {
       P.tag.hidden = !P.pawn.visible;
       if (!P.pawn.visible) continue;
-      const p = this.project(P.pawn.position.clone().add(new THREE.Vector3(0, 1.55, 0)));
-      add(P.tag, p.x, p.y - P.tag.offsetHeight, 0.7);
+      // the initial sits right on the pawn's body, so it can't be mistaken for another place's; words move round it
+      const p = this.project(P.pawn.position.clone().add(new THREE.Vector3(0, 0.75, 0.25)));
+      const h = P.tag.offsetHeight;
+      boxes.push({ node: P.tag, x: p.x, y: p.y - h / 2, w: P.tag.offsetWidth, h, weight: 0, fixed: true });
     }
     for (let it = 0; it < 16; it++) {
       let moved = false;
@@ -246,6 +258,7 @@ export class Map3D {
     }
     for (const B of boxes) {
       if (!B.node) continue;
+      if (B.fixed) { B.node.style.transform = `translate(${B.x.toFixed(1)}px, ${B.y.toFixed(1)}px) translate(-50%, 0)`; continue; }
       B.x = Math.max(B.w / 2 + 2, Math.min(W - B.w / 2 - 2, B.x)); B.y = Math.max(2, Math.min(H - B.h - 2, B.y));
       B.node.style.transform = `translate(${B.x.toFixed(1)}px, ${B.y.toFixed(1)}px) translate(-50%, 0)`;
     }

@@ -57,7 +57,7 @@ while (start > 0 && lockedAt(start)) start--;
 
 // The book turns in "leaves". On a phone each leaf is one page. On a wide screen it is an open spread of two
 // pages, like a real book: story pages pair up, and each map fills a spread of its own.
-const isWide = () => { const v = $("viewport"); return v.clientWidth >= 760 && v.clientWidth >= v.clientHeight * 1.1; };
+const isWide = () => { const v = $("viewport"); return v.clientWidth >= 600 && v.clientWidth >= v.clientHeight * 1.1; };
 let wide = isWide(), leaves = [];
 function buildLeaves() {
   leaves = [];

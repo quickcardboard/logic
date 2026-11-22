@@ -63,7 +63,9 @@ body.app { height: 100dvh; display: flex; flex-direction: column; overflow: hidd
   position: absolute; inset: -9px -9px -9px -9px; border-radius: 22px; background: var(--accent);
   box-shadow: 0 18px 40px rgba(29, 43, 79, .22), inset 0 -4px 0 rgba(0, 0, 0, .12);
 }
-.bk-slot { position: absolute; top: 0; width: var(--W); height: var(--H); overflow: visible; }
+.bk-slot { position: absolute; top: 0; width: var(--W); height: var(--H); overflow: hidden; }   /* keeps the curl's shadows on the page */
+.bk-left { border-radius: 16px 2px 2px 16px; } .bk-right { border-radius: 2px 16px 16px 2px; }
+.bk-body[data-mode="map"] .bk-slot, .bk-body[data-mode="full"] .bk-slot { border-radius: 0; }
 .bk-left { left: 0; } .bk-right { left: var(--W); }
 .pg {
   position: absolute; inset: 0; background: var(--paper); overflow: hidden; color: var(--ink);
@@ -245,7 +247,10 @@ body.app { height: 100dvh; display: flex; flex-direction: column; overflow: hidd
 }
 .xmark::after { transform: translate(-50%, -50%) rotate(-45deg); }
 .spot-label.crossed .name { color: #7a8497; text-decoration: line-through; text-decoration-color: #ff4b4b; text-decoration-thickness: 2px; }
-.pawn-tag { font: 600 14px/1 var(--hand); background: var(--c); color: #fff; padding: 4px 8px 3px; border-radius: 9px; border: 2px solid #fff; white-space: nowrap; }
+.pawn-tag {   /* a placed person: a solid circle with their initial, just above their pawn */
+  width: 26px; height: 26px; border-radius: 50%; background: var(--c); color: #fff; border: 2.5px solid #fff;
+  font: 800 13px/21px var(--body); text-align: center; box-shadow: 0 2px 0 rgba(29, 43, 79, .3);
+}
 
 .toast {
   position: absolute; left: 50%; bottom: 76px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; z-index: 30;
@@ -374,3 +379,49 @@ body.app.contact-page { height: auto; overflow: auto; min-height: 100dvh; displa
 /* wide screens: a map spread is zoomed right in, with no book edges */
 .bk-body[data-mode="map"] .bk-cover { display: none; }
 .bk-body[data-mode="map"] .pg { border-radius: 0; }
+
+/* ---------- phones held sideways (and the installed app): landscape is the main way to play ---------- */
+.rotate-btn { display: none; }
+.rotate-btn.on { background: var(--soft); }
+@media (pointer: coarse) { .rotate-btn { display: inline-grid; place-items: center; } }
+@media (orientation: landscape) and (max-height: 540px) {
+  /* one slim top row holds everything: back, title, contents, help, and the page arrows; the progress bar goes */
+  .topbar { padding: 4px 10px 2px; padding-top: max(4px, env(safe-area-inset-top)); gap: 6px;
+    padding-left: max(10px, env(safe-area-inset-left)); padding-right: calc(max(10px, env(safe-area-inset-right)) + 104px); }
+  .icon-btn { width: 38px; height: 36px; font-size: 18px; border-radius: 12px; }
+  .icon-btn svg { width: 20px; height: 20px; }
+  .story-name { font-size: 17px; }
+  .chapter-name { font-size: 12px; }
+  .flipbar { position: fixed; top: max(4px, env(safe-area-inset-top)); right: max(10px, env(safe-area-inset-right)); padding: 0; gap: 6px; z-index: 6; }
+  .progress { display: none; }
+  .flip-btn { width: 46px; height: 36px; border-radius: 12px; }
+  .flip-btn svg { width: 20px; height: 20px; }
+  .bk-body { --fs: clamp(13px, calc(var(--W) * 0.045), 20px) !important; }
+  .prose { padding: 7% 9% 2%; }
+  .folio { font-size: 12px; padding-bottom: calc(var(--H) * .03); }
+  .sheet.title { padding: 5%; }
+  .kicker { font-size: 10.5px; margin-bottom: 2px; }
+  .cover-text h1 { font-size: calc(var(--fs) * 1.7); margin-bottom: .35em; }
+  .cover-text p { font-size: 13px; line-height: 1.45; margin-bottom: 1em; }
+  .cover-actions .big { font-size: 16px; padding: 8px 18px; }
+  .dock:has(.coach:not([hidden])) .detail { display: none; }   /* the tutorial's coach takes the panel's spare room */
+  /* the map spread: a compact panel, like the phone one */
+  .dock { padding: 10px 12px 8px; gap: 8px; }
+  .question { font-size: 13.5px; line-height: 1.35; padding: 8px 10px; border-radius: 12px; }
+  .person { padding: 5px 2px 6px; gap: 2px; border-radius: 12px; }
+  .person .face { width: 30px; height: 30px; box-shadow: 0 0 0 2.5px var(--c); }
+  .person .pname { font-size: 12.5px; }
+  .person .where { font-size: 10px; }
+  .detail { min-height: 58px; padding: 8px 10px; font-size: 14px; }
+  .detail .clue.on, .says li, .detail .pick { font-size: 14px; }
+  .who { font-size: 15px; }
+  .clue .ico { width: 36px; height: 36px; font-size: 18px; border-width: 2px; }
+  .dock-actions button { padding-top: 7px; padding-bottom: 7px; font-size: 15px; }
+  .map-tools { left: 8px; top: 8px; }
+  .map-tools button { font-size: 13px; padding: 6px 9px; }
+  .spot-label .name { font-size: 12.5px; padding: 3px 6px 2px; }
+  .spot-label .badge { width: 28px; height: 28px; font-size: 15px; border-width: 2px; }
+  .coach { padding: 8px 10px; } .coach p { font-size: 13.5px; line-height: 1.35; margin-bottom: 4px; }
+  .toast { bottom: 12px; }
+  .contents { top: 46px; }
+}

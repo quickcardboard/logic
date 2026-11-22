@@ -1,0 +1,16 @@
+{
+  "name": "Hunchkins",
+  "short_name": "Hunchkins",
+  "description": "Deduction puzzles for kids. Read the story, solve the maps.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#e8f3fc",
+  "theme_color": "#ffc53d",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

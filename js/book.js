@@ -55,7 +55,7 @@ export class Book {
     const vw = this.vp.clientWidth, vh = this.vp.clientHeight;
     if (mode === "full") return { W: vw - 16, H: vh - 10 };
     if (mode === "map") return { W: Math.floor(vw / 2), H: vh };   // a map spread fills the screen, edge to edge
-    if (mode === "spread") { const H = Math.round(vh - 30); return { W: Math.round(Math.min(H * 0.8, (vw - 40) / 2)), H }; }
+    if (mode === "spread") { const H = Math.round(vh - (vh < 500 ? 14 : 30)); return { W: Math.round(Math.min(H * (vh < 500 ? 1 : 0.8), (vw - 40) / 2)), H }; }
     if (this.narrow) { const W = Math.round(vw * 0.84); return { W, H: Math.round(Math.min(vh - 16, W * 1.5)) }; }
     const H = Math.round(vh - 28);
     return { W: Math.round(Math.min(H * 0.92, vw * 0.6)), H };
