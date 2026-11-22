@@ -145,13 +145,13 @@ window.BOOK = [
    {
     "type": "occupied",
     "spot": "cabinet",
-    "text": "A fresh smear of polish on the glass. Someone was at the Trophy Cabinet.",
-    "icon": "✨"
+    "text": "Kevin saw a grown-up polishing the glass at 8:30. Someone was at the Trophy Cabinet.",
+    "icon": "🚌"
    },
    {
     "type": "empty",
     "spot": "office",
-    "text": "The Office stayed locked until 9:00. Nobody was in the Office.",
+    "text": "The Office is locked until 9:00. Nobody was in the Office.",
     "icon": "🔒"
    }
   ],
@@ -161,7 +161,7 @@ window.BOOK = [
   "statements": {
    "Coach Cherry": [
     {
-     "text": "I was at a crossroads (3 or more paths).",
+     "text": "I was at a place with three or more paths.",
      "t": "crossroads"
     },
     {
@@ -357,20 +357,20 @@ window.BOOK = [
    {
     "type": "empty",
     "spot": "office",
-    "text": "The Office door was shut. Nobody was inside.",
-    "icon": "🔑"
+    "text": "The Office is locked at recess. Nobody was inside.",
+    "icon": "🔒"
    },
    {
     "type": "empty",
     "spot": "steps",
-    "text": "A chalk rainbow on the Front Steps, not smudged at all. Nobody was on the steps.",
+    "text": "Year 2 drew chalk on the Front Steps all recess, and no grown-ups came near.",
     "icon": "🌈"
    },
    {
     "type": "occupied",
     "spot": "mud",
-    "text": "Big grown-up boot prints. Someone was in the Mud Patch.",
-    "icon": "👣"
+    "text": "Kids saw a grown-up stomping in the mud. Someone was in the Mud Patch.",
+    "icon": "🥾"
    }
   ],
   "hide_spots": [
@@ -386,7 +386,7 @@ window.BOOK = [
    ],
    "Mr. Blueberry": [
     {
-     "text": "I was at a crossroads (3 or more paths).",
+     "text": "I was at a place with three or more paths.",
      "t": "crossroads"
     }
    ],
@@ -429,7 +429,7 @@ window.BOOK = [
    "notat",
    "two"
   ],
-  "story": "The fake duck was painted with the Art Room's gold paint. At 12:30 the kids were eating outside. Who was right next to the Art Room?",
+  "story": "The fake duck was painted with the Art Room's gold paint. At 12:30 most kids were eating outside. Who was right next to the Art Room?",
   "spots": [
    {
     "id": "stage",
@@ -578,19 +578,19 @@ window.BOOK = [
    {
     "type": "empty",
     "spot": "art",
-    "text": "Gold glitter on the floor, with no footprints in it. Nobody was in the Art Room.",
-    "icon": "✨"
+    "text": "Priya found the Art Room empty at 12:30. Nobody was in the Art Room.",
+    "icon": "🍱"
    },
    {
     "type": "empty",
     "spot": "hall",
-    "text": "A GOOD LUCK, DUCKS! banner lay drying, and the wet paint had no footprints. Nobody was in the Hall.",
-    "icon": "🖌️"
+    "text": "The Hall is locked at lunch. Nobody was in the Hall.",
+    "icon": "🔒"
    },
    {
     "type": "occupied",
     "spot": "gym",
-    "text": "A basketball was still bouncing. Someone was in the Gym.",
+    "text": "Kids heard a basketball bouncing at 12:30. Someone was in the Gym.",
     "icon": "🏀"
    }
   ],
@@ -836,14 +836,14 @@ window.BOOK = [
    {
     "type": "empty",
     "spot": "hall",
-    "text": "Not a single chair out, and nobody in the Hall.",
-    "icon": "🪑"
+    "text": "The Hall was locked at 11:00. Nobody was in the Hall.",
+    "icon": "🔒"
    },
    {
     "type": "occupied",
     "spot": "gym",
-    "text": "A grown-up was handing out googly eyes. Someone was in the Gym.",
-    "icon": "👀"
+    "text": "A grown-up dressed as a duck handed out googly eyes. Someone was in the Gym.",
+    "icon": "🦆"
    }
   ],
   "hide_spots": [
@@ -852,7 +852,7 @@ window.BOOK = [
   "statements": {
    "Coach Cherry": [
     {
-     "text": "I was at a crossroads (3 or more paths).",
+     "text": "I was at a place with three or more paths.",
      "t": "crossroads"
     }
    ],
