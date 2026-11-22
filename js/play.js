@@ -55,18 +55,48 @@ else if (params.get("c")) {   // older links: ?c=<chapter>&m=solve
 start = Math.max(0, Math.min(start, pages.length - 1));
 while (start > 0 && lockedAt(start)) start--;
 
+// The book turns in "leaves". On a phone each leaf is one page. On a wide screen it is an open spread of two
+// pages, like a real book: story pages pair up, and each map fills a spread of its own.
+const isWide = () => { const v = $("viewport"); return v.clientWidth >= 760 && v.clientWidth >= v.clientHeight * 1.1; };
+let wide = isWide(), leaves = [];
+function buildLeaves() {
+  leaves = [];
+  if (!wide) { pages.forEach((_, i) => leaves.push({ L: "prev", R: i, pages: [i] })); return; }
+  let buf = null;   // a story page waiting for a partner on the right
+  const flush = () => { if (buf !== null) leaves.push({ L: buf, R: "blank", pages: [buf] }); buf = null; };
+  pages.forEach((p, i) => {
+    if (p.kind === "title") leaves.push({ L: "cover", R: i, pages: [i] });
+    else if (p.kind === "puzzle") { flush(); leaves.push({ L: "dock", R: "map", pages: [i] }); }
+    else if (p.kind === "end") { if (buf !== null) { leaves.push({ L: buf, R: i, pages: [buf, i] }); buf = null; } else leaves.push({ L: i, R: "back", pages: [i] }); }
+    else if (buf === null) buf = i;
+    else { leaves.push({ L: buf, R: i, pages: [buf, i] }); buf = null; }
+  });
+  flush();
+}
+buildLeaves();
+const leafOf = i => Math.max(0, leaves.findIndex(l => l.pages.includes(i)));
+const pageOf = u => leaves[u].pages[0];
+
 const book = new Book($("viewport"), {
-  count: pages.length,
-  isSpread: i => pages[i].kind === "puzzle",
-  canGo: i => !lockedAt(i),
+  get count() { return leaves.length; },
+  wide: () => wide,
+  isSpread: u => pages[pageOf(u)].kind === "puzzle",
+  canGo: u => !lockedAt(pageOf(u)),
   left: leftPage, right: rightPage,
-  onShow: i => { at = i; afterTurn(); fitText(); },
+  onShow: u => { at = pageOf(u); afterTurn(); fitText(); },
   onLocked: () => toast("🔒 Solve the map to turn the page."),
 });
+// Rotating a tablet (or resizing a window) between the two ways of reading rebuilds the book on the same page.
+addEventListener("resize", () => {
+  if (isWide() === wide || book.turning) return;
+  wide = isWide(); buildLeaves(); book.show(leafOf(at));
+});
 function go(i) {
-  if (i === at + 1 || i === at - 1) return book.turn(i - at);
   if (i < 0 || i >= pages.length || lockedAt(i)) return;
-  book.show(i);
+  const u = leafOf(i), cur = leafOf(at);
+  if (u === cur) return;
+  if (u === cur + 1 || u === cur - 1) return book.turn(u - cur);
+  book.show(u);
 }
 const turn = d => book.turn(d);
 
@@ -76,9 +106,10 @@ function afterTurn() {
   history.replaceState(null, "", `?s=${story.id}&p=${at}`);
   const ch = p.ch;
   $("chapterName").textContent = ch ? ch.title + (p.kind === "puzzle" ? " · the map" : "") : p.kind === "end" ? "The end (for now)" : "";
-  $("prev").disabled = at === 0;
-  const locked = at < pages.length - 1 && lockedAt(at + 1);
-  $("next").disabled = at === pages.length - 1;
+  const u = leafOf(at), last = u === leaves.length - 1;
+  $("prev").disabled = u === 0;
+  const locked = !last && lockedAt(pageOf(u + 1));
+  $("next").disabled = last;
   $("next").classList.toggle("locked", locked);
   $("next").setAttribute("aria-label", locked ? "Solve the map to unlock the next page" : "Next page");
   document.body.classList.toggle("on-puzzle", p.kind === "puzzle");
@@ -107,7 +138,8 @@ function renderProgress() {
   pages.forEach((p, i) => {
     if (p.ci !== lastCi && i) html += `<span class="gap"></span>`;
     lastCi = p.ci;
-    const cls = [p.kind, i === at ? "on" : "", i < at ? "done" : "", lockedAt(i) ? "locked" : ""].join(" ");
+    const here = leaves[leafOf(at)].pages.includes(i);
+    const cls = [p.kind, here ? "on" : "", i < at && !here ? "done" : "", lockedAt(i) ? "locked" : ""].join(" ");
     html += `<i class="${cls}"></i>`;
   });
   $("progress").innerHTML = html;
@@ -130,18 +162,26 @@ function renderContents() {
 // Each spread has a left and a right page. Reading, the right page is the current one and the left page is
 // the one before it. A map fills the whole spread: suspects and clues on the left, the map on the right
 // (on a phone, the map and the panel share one tall page).
-function leftPage(i) {
-  const p = pages[i];
-  if (p.kind === "puzzle") { openPuzzle(p.c); return book.narrow ? paper("endpaper") : mountDock(); }
-  if (i === 0) return paper("endpaper");   // the inside cover: plain, since it runs off the screen
+function leftPage(u) {
+  const L = leaves[u].L;
+  if (L === "dock") { openPuzzle(pages[pageOf(u)].c); return mountDock(); }
+  if (L === "cover") return paper("endpaper");
+  if (L !== "prev") return buildSheet(L);
+  // one page at a time: the left page is the one before, running off the screen
+  const i = pageOf(u), p = pages[i];
+  if (p.kind === "puzzle" || i === 0) return paper("endpaper");
   const prev = pages[i - 1];
   if (prev.kind === "puzzle") return paper("solved", `<div><b>✓</b><p>${prev.ch.title.replace(/^Chapter \d+: /, "")}</p><p class="small">Map solved</p></div>`);
   return buildSheet(i - 1);
 }
-function rightPage(i) {
-  const p = pages[i];
-  if (p.kind === "puzzle") { openPuzzle(p.c); return book.narrow ? mountFull() : mountMap(); }
-  return buildSheet(i);
+function rightPage(u) {
+  const R = leaves[u].R;
+  if (R === "map") { openPuzzle(pages[pageOf(u)].c); return mountMap(); }
+  if (R === "blank") return paper("blank");
+  if (R === "back") return paper("endpaper");
+  const p = pages[R];
+  if (p.kind === "puzzle") { openPuzzle(p.c); return mountFull(); }
+  return buildSheet(R);
 }
 function paper(cls, html = "") { const e = document.createElement("article"); e.className = "pg " + cls; e.innerHTML = html; return e; }
 
@@ -411,5 +451,5 @@ function renderCoach() {
   }
 }
 
-book.show(start);
+book.show(leafOf(start));
 document.fonts?.ready.then(fitText);

@@ -46,11 +46,15 @@ export class Book {
   }
 
   // ---------- size and camera ----------
+  // Wide screens (desktop, landscape tablets) show the open book: two pages side by side, turned like a real book.
+  // Phones and portrait tablets show one page at a time, with the previous page running off the left edge.
+  get wide() { return this.o.wide(); }
   get narrow() { return this.vp.clientWidth < 760; }
-  mode(i) { return this.o.isSpread(i) ? (this.narrow ? "full" : "spread") : "page"; }
+  mode(i) { return this.wide ? "spread" : this.o.isSpread(i) ? "full" : "page"; }
   dims(mode) {
     const vw = this.vp.clientWidth, vh = this.vp.clientHeight;
     if (mode === "full") return { W: vw - 16, H: vh - 10 };
+    if (mode === "spread") { const H = Math.round(vh - 30); return { W: Math.round(Math.min(H * 0.8, (vw - 40) / 2)), H }; }
     if (this.narrow) { const W = Math.round(vw * 0.84); return { W, H: Math.round(Math.min(vh - 16, W * 1.5)) }; }
     const H = Math.round(vh - 28);
     return { W: Math.round(Math.min(H * 0.92, vw * 0.6)), H };
@@ -213,7 +217,7 @@ export class Book {
         if (!e.target.closest(".bk-edge")) return;
       }
       const p = local(e);
-      if (this.mode(this.at) !== "page" && !e.target.closest(".bk-edge")) return;
+      if ((this.mode(this.at) === "full" || this.o.isSpread(this.at)) && !e.target.closest(".bk-edge")) return;
       down = { x: e.clientX, y: e.clientY, p, id: e.pointerId, t: performance.now(), dir: p[0] >= this.W ? 1 : -1, started: false, last: [e.clientX, performance.now()], vx: 0 };
     });
     addEventListener("pointermove", e => {
@@ -243,9 +247,13 @@ export class Book {
       if (!d.started) {
         // a tap near the outer edge of a page turns it, like an ebook
         const p = d.p, W = this.W;
-        if (this.mode(this.at) === "page" && !e.target.closest("button, a")) {
+        const m = this.mode(this.at);
+        if (m === "page" && !e.target.closest("button, a")) {
           if (p[0] > W * 1.72) this.turn(1);                  // outer part of the right page: forward
           else if (p[0] >= 0 && p[0] < W * 1.2) this.turn(-1); // the left page, or the inner edge of the right one: back
+        } else if (m === "spread" && !this.o.isSpread(this.at) && !e.target.closest("button, a")) {
+          if (p[0] > W * 1.5) this.turn(1);                   // outer half of the right page: forward
+          else if (p[0] < W * 0.5) this.turn(-1);             // outer half of the left page: back
         }
         return;
       }
