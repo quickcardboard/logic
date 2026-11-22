@@ -22,21 +22,23 @@ window.STORIES = [
           { text: [
             "Mo Pickles and Zara Quinn sat in the cafeteria behind a small cardboard sign that said \"Mo and Zara Consulting Services\". Below the title, the price of $10 had been crossed out and replaced with \"Free\"."] },
           { text: [
-            "They are detectives. They have a magnifying glass, a notebook, and a hamster called Sergeant Nibbles. They have solved zero cases."] },
+            "They are detectives. They have a magnifying glass, a notebook, and a hamster called Sergeant Nibbles. They have solved zero cases.",
+            "\"Today is going to be different,\" said Zara, chewing her PB and J."] },
           { text: [
-            "\"Today is going to be different,\" said Zara, chewing her PB and J.",
-            "\"Because I'm going to win the race?\" Mo replied, fidgeting with his rubber duck, Speedy McQuack."] },
+            "\"Because I'm going to win the race?\" Mo replied, fidgeting with his rubber duck, Speedy McQuack.",
+            "Today is the most exciting day of the school year. It's the Great Duck Race."] },
           { text: [
-            "Today is the most exciting day of the school year. It's the Great Duck Race. Every kid in school races a rubber duck down Wobbleton Stream. The winner gets to hold up the Golden Duck, a trophy made of real gold, as the legend says."] },
+            "Every kid in school races a rubber duck down Wobbleton Stream. The winner gets to hold up the Golden Duck, a trophy made of real gold, as the legend says."] },
           { text: [
             "This year is the fiftieth race. So this year, the winner gets to keep the Golden Duck forever.",
             "\"Today, that Golden Duck is MINE!\" said Mo confidently."] },
           { text: [
-            "At 2:30, the whole school squeezed into the Hall to begin the festivities. Principal Plumpton had just got back from a meeting in town. He had just fetched the trophy cabinet key from its hook in the Office. He unlocked the Trophy Cabinet in front of the crowd and reached in for the Golden Duck."] },
+            "At 2:30, the whole school squeezed into the Hall to begin the festivities. Principal Plumpton had just got back from a meeting in town."] },
           { text: [
-            "He lifted out the Golden Duck. Everybody cheered.",
-            "SQUEAK."] },
+            "He had just fetched the trophy cabinet key from its hook in the Office. He unlocked the Trophy Cabinet in front of the crowd and reached in for the Golden Duck.",
+            "He lifted out the Golden Duck. Everybody cheered."] },
           { text: [
+            "SQUEAK.",
             "The principal looked down. It wasn't gold. It was an ordinary rubber duck, painted gold. The paint was still sticky."] },
           { text: [
             "\"Someone has STOLEN the Golden Duck!\" squeaked the principal. \"No Golden Duck, no race!\"",
@@ -59,10 +61,11 @@ window.STORIES = [
             "Coach Cherry blew his whistle. TWEEEET! \"I CAN'T REMEMBER, BUT I WAS DEFINITELY AT A PLACE WITH THREE OR MORE PATHS, AND I DEFINITELY WAS NOT IN THE HALL!\""] },
           { text: [
             "Mr. Blueberry the caretaker leaned on his mop. \"I wasn't in the Kitchen. I know I was right next to the Hall.\"",
-            "\"Shhh,\" said Ms. Peapod the librarian. \"I was right next to the Toilets.\"",
-            "Mrs. Lavender the lunch lady hummed. \"I was right next to the Hall, dear.\""] },
+            "\"Shhh,\" said Ms. Peapod the librarian. \"I was right next to the Toilets.\""] },
           { text: [
-            "Mo narrowed his eyes. \"Coach Cherry wants his class to win that duck SO badly. It was HIM!\"",
+            "Mrs. Lavender the lunch lady hummed. \"I was right next to the Hall, dear.\"",
+            "Mo narrowed his eyes. \"Coach Cherry wants his class to win that duck SO badly. It was HIM!\""] },
+          { text: [
             "\"He wants to WIN it, Mo,\" said Zara. \"Not steal it.\""] },
           { text: [
             "Zara found two clues. Kevin's bus had dropped him off at 8:30, and through the front window he saw a grown-up polishing the Trophy Cabinet. \"The sun was in my eyes,\" he said, \"so I couldn't see who.\""] },
@@ -77,29 +80,31 @@ window.STORIES = [
             "Mr. Blueberry had been at the Trophy Cabinet, polishing the glass."] },
           { text: [
             "\"Oh yeah, that's where I was. The Golden Duck was the real one at 8:30,\" he said. \"It shimmered like gold, not gold paint.\"",
-            "\"Could you open the cabinet?\" asked Zara.",
-            "\"Not me. There's only one key, and it hangs on a hook in the Office.\""] },
+            "\"Could you open the cabinet?\" asked Zara."] },
           { text: [
-            "Zara wrote: <i>Real at 8:30. Only one key, in the Office.</i>",
-            "Sergeant Nibbles was promoted to Captain Nibbles for not eating the notebook."] },
+            "\"Not me. There's only one key, and it hangs on a hook in the Office.\"",
+            "Zara wrote: <i>Real at 8:30. Only one key, in the Office.</i>"] },
           { text: [
-            "On the way to the Office, they cut through the library. On the wall hung a very old photo of a tiny girl with big glasses, holding up the Golden Duck and grinning from ear to ear. The name under the photo had been torn off."] },
+            "Sergeant Nibbles was promoted to Captain Nibbles for not eating the notebook.",
+            "On the way to the Office, they cut through the library."] },
           { text: [
-            "\"Who's that?\" asked Mo loudly.",
+            "On the wall hung a very old photo of a tiny girl with big glasses, holding up the Golden Duck and grinning from ear to ear. The name under the photo had been torn off.",
+            "\"Who's that?\" asked Mo loudly."] },
+          { text: [
             "Ms. Peapod looked up from her desk. \"Shhh,\" she said.",
             "The key hook was right by the Office window."] },
           { text: [
-            "\"The thief needed that key,\" said Zara. \"The Office is empty at recess. Let's find out where everyone was at 10:15.\""] },
+            "\"The thief needed that key,\" said Zara. \"The Office is empty at recess. Let's find out where everyone was at 10:15.\"",
+            "\"I WAS RIGHT NEXT TO THE WATER FOUNTAIN!\" said Coach Cherry."] },
           { text: [
-            "\"I WAS RIGHT NEXT TO THE WATER FOUNTAIN!\" said Coach Cherry.",
-            "\"I was at a place with three or more paths,\" said Mr. Blueberry."] },
-          { text: [
+            "\"I was at a place with three or more paths,\" said Mr. Blueberry.",
             "\"Shhh,\" said Ms. Peapod. \"Mr. Blueberry was right next to me.\"",
             "\"I was right next to the Bike Shed, dear,\" said Mrs. Lavender."] },
           { text: [
             "Zara found three clues. Mrs. Dot locks the Office at recess while she has her cup of tea, so nobody was in the Office."] },
           { text: [
-            "Year 2 had spent the whole of recess drawing a giant chalk rainbow on the Front Steps. \"No grown-ups came near us,\" said a girl with chalky hands.",
+            "Year 2 had spent the whole of recess drawing a giant chalk rainbow on the Front Steps. \"No grown-ups came near us,\" said a girl with chalky hands."] },
+          { text: [
             "And the Year 3 kids playing tag had seen a grown-up in big boots stomping about in the Mud Patch."] },
           { text: [
             "\"Who was right next to the Office at recess?\" Zara asked herself. \"They might have seen who took the key.\""] },
@@ -115,9 +120,9 @@ window.STORIES = [
             "\"So the duck was swapped after 10:30,\" said Zara."] },
           { text: [
             "Mo pointed at a little pot on the counter. \"Aha, GOLD PAINT!\"",
-            "\"Edible gold, dear,\" said Mrs. Lavender. \"For the race cake.\""] },
+            "\"Edible gold, dear,\" said Mrs. Lavender. \"For the race cake.\"",
+            "Captain Nibbles was promoted to Major Nibbles for licking it."] },
           { text: [
-            "Captain Nibbles was promoted to Major Nibbles for licking it.",
             "Zara sniffed the fake duck. \"This isn't cake paint. It's the gold paint from the Art Room.\""] },
           { text: [
             "At lunchtime most of the kids had eaten outside in the sunshine, so the school had been quiet. Zara asked the grown-ups where they had been at 12:30."] },
@@ -133,7 +138,8 @@ window.STORIES = [
           { text: [
             "Zara found three clues. Priya had run back to the Art Room at 12:30 for her forgotten lunchbox. \"Nobody was in there,\" she said."] },
           { text: [
-            "Mrs. Dot locks the Hall at lunch, so nobody was in the Hall.",
+            "Mrs. Dot locks the Hall at lunch, so nobody was in the Hall."] },
+          { text: [
             "And the kids eating on the field at 12:30 had heard a basketball going THUMP, THUMP, THUMP through the open Gym window."] },
           { text: [
             "\"Who was right next to the Art Room?\" Zara asked herself. \"They might have seen someone take the gold paint.\""] },
@@ -145,9 +151,9 @@ window.STORIES = [
           { text: [
             "Coach Cherry had been in the Changing Room, right next to the Art Room."] },
           { text: [
-            "\"I SAW IT THROUGH THE DOOR! THE GOLD PAINT POT WAS OPEN!\" he said. \"AND WHEN I WALKED PAST THE TROPHY CABINET AT 12:00, THE GOLDEN DUCK LOOKED... WET!\"",
-            "\"So it was swapped after 10:30, but before 12:00,\" said Zara."] },
+            "\"I SAW IT THROUGH THE DOOR! THE GOLD PAINT POT WAS OPEN!\" he said. \"AND WHEN I WALKED PAST THE TROPHY CABINET AT 12:00, THE GOLDEN DUCK LOOKED... WET!\""] },
           { text: [
+            "\"So it was swapped after 10:30, but before 12:00,\" said Zara.",
             "Major Nibbles was promoted to Colonel Nibbles for sitting very still."] },
           { text: [
             "Zara ran to the school timetable on the wall. \"In lesson time, the Hall always has a class in it,\" she said. \"Except at 11:00. At 11:00, the whole school was in the Gym, decorating ducks for the race.\""] },
@@ -155,36 +161,39 @@ window.STORIES = [
             "\"So the Hall was empty,\" said Mo.",
             "\"Empty,\" said Zara. \"The perfect time to sneak past it to the Trophy Cabinet.\""] },
           { text: [
-            "It was 3:20. Ten minutes left. Zara asked the grown-ups one last time: where were you at 11:00?"] },
+            "It was 3:20. Ten minutes left. Zara asked the grown-ups one last time: where were you at 11:00?",
+            "Coach Cherry blew his whistle. TWEEEET! \"I WAS AT A PLACE WITH THREE OR MORE PATHS!\""] },
           { text: [
-            "Coach Cherry blew his whistle. TWEEEET! \"I WAS AT A PLACE WITH THREE OR MORE PATHS!\"",
-            "Mr. Blueberry wrung out his mop. \"I wasn't in the Library. I was right next to the Gym.\""] },
+            "Mr. Blueberry wrung out his mop. \"I wasn't in the Library. I was right next to the Gym.\"",
+            "\"Coach Cherry was right next to me, dear,\" said Mrs. Lavender."] },
           { text: [
-            "\"Coach Cherry was right next to me, dear,\" said Mrs. Lavender.",
-            "Ms. Peapod straightened her glasses. \"Shhh,\" she whispered. \"I was right next to the Stage.\""] },
+            "Ms. Peapod straightened her glasses. \"Shhh,\" she whispered. \"I was right next to the Stage.\"",
+            "\"It's KEVIN!\" said Mo."] },
           { text: [
-            "\"It's KEVIN!\" said Mo.",
             "\"Kevin was in the Gym with us,\" said Zara. \"Gluing googly eyes on his duck.\"",
             "\"Seventeen googly eyes,\" said Kevin proudly."] },
           { text: [
-            "Zara found three clues. In front of the Trophy Cabinet was a drop of gold paint, with half a grown-up shoe print in it."] },
+            "Zara found three clues. In front of the Trophy Cabinet was a drop of gold paint, with half a grown-up shoe print in it.",
+            "Mrs. Dot locks the Hall whenever no class is booked, so nobody was in the Hall."] },
           { text: [
-            "Mrs. Dot locks the Hall whenever no class is booked, so nobody was in the Hall.",
-            "And every kid in the Gym remembered a grown-up dressed as a duck, handing out googly eyes."] },
-          { text: [
+            "And every kid in the Gym remembered a grown-up dressed as a duck, handing out googly eyes.",
             "Zara thought. \"Who was at the Trophy Cabinet at 11:00?\""] },
+          { text: [
+            ] },
         ],
       },
       {
         id: "ending", title: "The Bandit Unmasked",
         pages: [
           { text: [
-            "Coach Cherry had been in the Gym. Mr. Blueberry was in the Art Room. Mrs. Lavender was in the Library, returning a cookbook."] },
+            "Coach Cherry had been in the Gym. Mr. Blueberry was in the Art Room."] },
           { text: [
-            "That left one grown-up at the Trophy Cabinet.",
-            "Everybody turned to look at Ms. Peapod. On the bottom of her shoe was a smudge of gold paint."] },
+            "Mrs. Lavender was in the Library, returning a cookbook.",
+            "That left one grown-up at the Trophy Cabinet."] },
           { text: [
-            "\"But you said you were right next to the Stage!\" said Mo.",
+            "Everybody turned to look at Ms. Peapod. On the bottom of her shoe was a smudge of gold paint.",
+            "\"But you said you were right next to the Stage!\" said Mo."] },
+          { text: [
             "\"I was,\" said Ms. Peapod quietly. \"The Trophy Cabinet is right next to the Stage.\"",
             "Ms. Peapod smiled guiltily."] },
           { text: [
@@ -193,20 +202,25 @@ window.STORIES = [
             "Zara thought about the old photo in the library. The tiny girl with the big glasses.",
             "\"That's you,\" she said. \"You won the very first Great Duck Race.\""] },
           { text: [
-            "Ms. Peapod nodded. \"I was the shyest girl in the whole school. Nobody ever noticed me. Then my little duck won, and everybody cheered my name.\"",
+            "Ms. Peapod nodded. \"I was the shyest girl in the whole school. Nobody ever noticed me. Then my little duck won, and everybody cheered my name.\""] },
+          { text: [
             "She sniffed. \"If someone takes the Golden Duck home today, it will be gone from our school forever.\""] },
           { text: [
-            "She walked to the library, reached behind the big dictionary, and took out the real Golden Duck. It shone like the sun."] },
+            "She walked to the library, reached behind the big dictionary, and took out the real Golden Duck. It shone like the sun.",
+            "Principal Plumpton looked at it for a long time."] },
           { text: [
-            "Principal Plumpton looked at it for a long time. \"Ms. Peapod is right,\" he said at last. \"The Golden Duck belongs to everyone. From now on, it stays here, and every winner gets their name below it on a plaque.\""] },
+            "\"Ms. Peapod is right,\" he said at last. \"The Golden Duck belongs to everyone. From now on, it stays here, and every winner gets their name below it on a plaque.\""] },
           { text: [
             "\"And Ms. Peapod,\" he added, \"will hand it out.\"",
             "For the first time anyone could remember, Ms. Peapod didn't say \"Shhh.\" She cheered."] },
           { text: [
-            "At 3:30 on the dot, three hundred rubber ducks raced down Wobbleton Stream. Speedy McQuack came last. Kevin's duck, who started the race with seventeen googly eyes, came first, finishing with one eye."] },
+            "At 3:30 on the dot, three hundred rubber ducks raced down Wobbleton Stream."] },
+          { text: [
+            "Speedy McQuack came last. Kevin's duck, who started the race with seventeen googly eyes, came first, finishing with one eye."] },
           { text: [
             "That night, Zara wrote in her notebook: <i>Mo and Zara Consulting Services. Cases solved: one.</i>",
-            "And Colonel Nibbles was promoted to General Nibbles, for being there the whole time.",
+            "And Colonel Nibbles was promoted to General Nibbles, for being there the whole time."] },
+          { text: [
             "THE END"] },
         ],
       },

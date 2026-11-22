@@ -56,7 +56,7 @@ body.app { height: 100dvh; display: flex; flex-direction: column; overflow: hidd
 .viewport[data-mode="map"], .viewport[data-mode="full"] { touch-action: auto; user-select: auto; }
 .bk-body {
   position: absolute; left: 0; top: 0; width: calc(var(--W) * 2); height: var(--H); transform-origin: 0 0;
-  --fs: clamp(15px, calc(var(--W) * 0.036), 24px);
+  --fs: 24px;   /* story text is one fixed size; a page that is too full flows onto the next */
 }
 .bk-body.animate { transition: transform .55s cubic-bezier(.3, .7, .2, 1); }
 .bk-cover { /* the thick board cover peeking out round the pages */
@@ -113,7 +113,7 @@ body.app { height: 100dvh; display: flex; flex-direction: column; overflow: hidd
 
 /* story pages: words only, set like a good children's book */
 .sheet.story { display: flex; flex-direction: column; }
-.prose { flex: 1; min-height: 0; overflow: hidden; padding: 9% 10% 3%; display: flex; flex-direction: column; font-size: var(--fs); }
+.prose { flex: 1; min-height: 0; overflow: hidden; padding: 8% 9% 2%; display: flex; flex-direction: column; font-size: var(--fs); }
 .prose .ch-label { font: 700 .58em var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 .4em; }
 .prose h2 { font-size: 1.6em; line-height: 1.08; margin: 0 0 .7em; color: var(--ink); }
 .prose h2::after { content: ""; display: block; width: 2.4em; height: .22em; border-radius: 3px; background: var(--accent); margin-top: .5em; }
@@ -395,8 +395,8 @@ body.app.contact-page { height: auto; overflow: auto; min-height: 100dvh; displa
   .progress { display: none; }
   .flip-btn { width: 46px; height: 36px; border-radius: 12px; }
   .flip-btn svg { width: 20px; height: 20px; }
-  .bk-body { --fs: clamp(13px, calc(var(--W) * 0.045), 20px) !important; }
-  .prose { padding: 7% 9% 2%; }
+  .bk-body { --fs: 21px !important; }
+  .prose { padding: 6% 8% 2%; }
   .folio { font-size: 12px; padding-bottom: calc(var(--H) * .03); }
   .sheet.title { padding: 5%; }
   .kicker { font-size: 10.5px; margin-bottom: 2px; }
