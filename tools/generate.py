@@ -30,7 +30,7 @@ def library(case, kinds):
     for n in names:
         add = lambda k, text, **kw: k in kinds and lib[n].append(dict(text=text, t=k, **kw))
         add("deadend", "I was at a dead end.")
-        add("crossroads", "I was at a crossroads (3 or more paths).")
+        add("crossroads", "I was at a place with three or more paths.")
         add("alone", "Nobody was right next to me.")
         add("onenear", "Exactly one person was right next to me.")
         for s in spots:

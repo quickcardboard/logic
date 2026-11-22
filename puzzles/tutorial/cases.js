@@ -88,7 +88,7 @@ window.TUTORIAL = [
   "statements": {
    "Mo": [
     {
-     "text": "I was at a crossroads (3 or more paths).",
+     "text": "I was at a place with three or more paths.",
      "t": "crossroads"
     }
    ],
@@ -128,7 +128,7 @@ window.TUTORIAL = [
     }
    },
    {
-    "text": "Mo says: \"I was at a crossroads\". That's a spot where 3 or more paths meet. Only the Hall has that many. Tap Mo's card, choose ✋ Notes & place, then press and hold the Hall to place Mo.",
+    "text": "Mo says: \"I was at a place with three or more paths\". Only the Hall has that many. Tap Mo's card, choose ✋ Notes & place, then press and hold the Hall to place Mo.",
     "until": {
      "at": {
       "Mo": "hall"
