@@ -76,9 +76,9 @@
     page("map", `<h2>${ch.title.replace(/^Chapter \d+: /, "")}: the map</h2><p class="q">${c.story}</p>
       <div class="board">${mapSvg(c)}</div>
       <div class="bottom">
-        <div><h3>What they said</h3>${c.suspects.map(p => `<div class="said"><span class="bw">${art("who:" + p.name) ? art("who:" + p.name) : ""}</span><div><b>${p.name}</b><br>${c.statements[p.name].map(s => "“" + s.text + "”").join("<br>")}</div></div>`).join("")}</div>
+        <div><h3>What they said</h3>${c.suspects.map(p => `<div class="said"><span class="bw">${art("who:" + p.name) ? art("who:" + p.name) : ""}</span><div><b>${p.name}</b><br>${c.statements[p.name].length ? c.statements[p.name].map(s => "“" + s.text + "”").join("<br>") : `<i>${c.notes?.[p.name] || ""}</i>`}</div></div>`).join("")}</div>
         <div><h3>Evidence</h3>${c.evidence.map(e => `<p class="ev">${e.type === "empty" ? "✗" : "●"} ${e.text}</p>`).join("")}
-          <p class="rules">Write each person's first letter in the circle where they stood. Everyone stood in a different place. <b>Right next to</b> = one path away. A <b>dead end</b> has only 1 path.</p>
+          <p class="rules">Write each person's first letter in the circle where they stood. Everyone stood in a different place. <b>Right next to</b> = one path away. A <b>dead end</b> has only 1 path. <b>Far</b> = 3 or more paths.</p>
           <p class="answer">Answer: <span></span></p></div>
       </div>`);
     const name = id => c.spots.find(s => s.id === id).name;

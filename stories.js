@@ -227,6 +227,259 @@ window.STORIES = [
     ],
   },
   {
+    id: "egg",
+    title: "The Runaway Dragon Egg",
+    spine: "#d9480f",
+    ink: "#ffffff",
+    theme: { accent: "#d9480f", accentInk: "#ffffff", soft: "#ffe8d9" },
+    cover: "egg",
+    ages: "Ages 7 to 10",
+    teaser: "On Hatching Day, a dragon egg vanishes from Crumbleton Castle. Nobody stole it: it just keeps getting moved by accident. Two kid detectives and a teacup-sized dragon have until sunset to follow it.",
+    pdf: "pdf/the-runaway-dragon-egg.pdf",
+    chapters: [
+      {
+        id: "prologue", title: "Hatching Day, 3:00: The Empty Cushion",
+        pages: [
+          { text: [
+            "Princess Wren did not want to be a princess. She wanted to be a detective."] },
+          { text: [
+            "Every day after lunch, she and her best friend, Squire Pip, sat behind a cardboard box in the Great Hall."] },
+          { text: [
+            "So far they had solved one case: The Missing Sock. It was on Pip's head."] },
+          { text: [
+            "They also had Toast, a dragon the size of a teacup. He sneezed sparks when he was excited, so Squire Toast was not allowed near the curtains."] },
+          { text: [
+            "Today was Hatching Day. At 8:00 that morning, Grandma Ember had landed in the Courtyard. She was a dragon the size of a bus, carrying an egg as big as a pumpkin, speckled orange and green."] },
+          { text: [
+            "\"My grandbaby,\" she said proudly. \"It hatches at sunset. I'm flying to fetch its mum and dad. Will you keep it warm for the day?\""] },
+          { text: [
+            "\"Of course!\" said the Queen."] },
+          { text: [
+            "\"Careful, it's a wobbly one,\" said Grandma Ember. \"Dragon eggs are as tough as rocks. You could drop one off a tower.\""] },
+          { text: [
+            "She thought for a moment. \"Please don't.\" Then she flapped away, WHOOMPH, and blew everybody's hats off."] },
+          { text: [
+            "The Queen put the egg on a velvet cushion by the fire in the Throne Room, and tucked a big pile of warm towels around it."] },
+          { text: [
+            "\"Nobody touch the egg,\" she said, and shut the door. Then she rode into town to buy three hundred party hats."] },
+          { text: [
+            "All day, the castle got ready for the party. Mother Mulberry the cook baked a Hatching Cake. Lady Bluebell, the royal trumpeter, practiced the sunset fanfare."] },
+          { text: [
+            "Sir Radish built a big Bonfire Pile in the Courtyard, for the dragons to light. And Wizard Fernbeard looked for his crystal ball. He loses it every Tuesday."] },
+          { text: [
+            "At 3:00, the Queen sent Wren and Pip to fetch the egg. The velvet cushion was empty. The egg was gone. So were the towels."] },
+          { text: [
+            "\"GOBLINS!\" yelled Pip. \"Sneaky egg-stealing goblins!\""] },
+          { text: [
+            "\"There's no such thing as goblins, Pip,\" said Wren."] },
+          { text: [
+            "The Queen went very pale. \"Grandma Ember lands at sunset. That's 6:00. What will we tell her?\""] },
+          { text: [
+            "\"We're detectives, Your Majesty,\" said Wren. \"Give us until sunset. We'll follow that egg.\""] },
+        ],
+      },
+      {
+        id: "egg1", title: "Chapter 1: 10:00, The Walking Towels", puzzle: "egg1",
+        pages: [
+          { text: [
+            "\"First question,\" said Wren. \"The towels are gone too. Who took them?\""] },
+          { text: [
+            "Ollie the page boy put up his hand. \"At 10:00, I saw a pile of towels walk out of the Throne Room. It had LEGS!\""] },
+          { text: [
+            "\"A TOWEL MONSTER!\" said Pip."] },
+          { text: [
+            "\"Or a grown-up carrying a lot of towels,\" said Wren. She asked the grown-ups where they had been at 10:00."] },
+          { text: [
+            "Sir Radish twirled his moustache. \"By my mighty moustache! I cannot remember. I did five hundred push-ups this morning, and it is all a blur.\""] },
+          { text: [
+            "Lady Bluebell blew her trumpet. TOOT! \"I was right next to the Armoury.\""] },
+          { text: [
+            "\"Hmmm,\" mumbled Wizard Fernbeard. \"I was right next to the Armoury too. Hmmm. But I wasn't on the Grand Stairs.\""] },
+          { text: [
+            "\"Have you seen my crystal ball?\" he added."] },
+          { text: [
+            "Mother Mulberry wiped her floury hands. \"I was at a place with three or more paths, my little dumplings. But not the Great Hall.\""] },
+          { text: [
+            "Wren found two clues. Ollie had seen the walking towels leave the Throne Room, so someone was in there at 10:00."] },
+          { text: [
+            "And the kids' choir had practiced in the Chapel at 10:00 with the door shut.",
+            "\"No grown-ups came in,\" sang the choir. So nobody was in the Chapel."] },
+          { text: [
+            "\"Who was in the Throne Room at 10:00?\" Wren asked herself."] },
+        ],
+      },
+      {
+        id: "egg2", title: "Chapter 2: 10:30, The Speckled Pumpkin", puzzle: "egg2",
+        pages: [
+          { text: [
+            "Sir Radish had been in the Throne Room."] },
+          { text: [
+            "\"By my mighty moustache! Of course!\" he boomed. \"It's my turn to do the laundry. I fetch the towels every morning at 10:00.\""] },
+          { text: [
+            "\"But the Queen said nobody touch the egg!\" said Pip."] },
+          { text: [
+            "\"I did not touch the egg,\" said Sir Radish. \"I only touched the towels.\""] },
+          { text: [
+            "\"They were VERY heavy today,\" he added. \"I thought it was excellent training.\""] },
+          { text: [
+            "He had carried the towels to the Laundry and tipped them into the big washtub.",
+            "\"Something went BONK and rolled out the door toward the Kitchen. But I was late for sword practice, so I did not look.\""] },
+          { text: [
+            "\"The egg was in the towels!\" said Wren. \"And then it rolled into the Kitchen.\""] },
+          { text: [
+            "Squire Toast was promoted to Sir Toast, for not setting fire to a single towel."] },
+          { text: [
+            "Wren asked the grown-ups where they had been at 10:30."] },
+          { text: [
+            "\"By my mighty moustache! I was at a dead end,\" said Sir Radish. \"But not the Throne Room. I had left by then.\""] },
+          { text: [
+            "TOOT! \"I was right next to the Throne Room,\" said Lady Bluebell."] },
+          { text: [
+            "\"Hmmm,\" said Wizard Fernbeard. \"I was at a dead end, right next to the Pumpkin Patch. My crystal ball was not there. Hmmm.\""] },
+          { text: [
+            "\"I was right next to the Pantry, my little dumplings,\" said Mother Mulberry."] },
+          { text: [
+            "\"A FOX!\" said Pip. \"Foxes LOVE eggs!\""] },
+          { text: [
+            "\"Pip, it's as big as a pumpkin,\" said Wren. \"A fox would need a wheelbarrow.\""] },
+          { text: [
+            "Wren found one clue. The Pantry is locked until lunch, so nobody can nibble the Hatching Cake. Nobody was in the Pantry."] },
+          { text: [
+            "\"Who was in the Kitchen at 10:30?\" Wren asked herself. \"They must have seen the egg roll in.\""] },
+        ],
+      },
+      {
+        id: "egg3", title: "Chapter 3: 12:00, The Crystal Ball", puzzle: "egg3",
+        pages: [
+          { text: [
+            "Mother Mulberry had been in the Kitchen."] },
+          { text: [
+            "\"Oh, my little dumplings!\" she said. \"At 10:30, a giant speckled pumpkin rolled across my Kitchen floor.\""] },
+          { text: [
+            "\"And I said, pumpkins don't belong in my Kitchen. Pumpkins belong in the Pumpkin Patch! So I carried it outside.\""] },
+          { text: [
+            "\"That wasn't a pumpkin,\" said Wren.",
+            "\"Oh, my giddy gravy,\" said Mother Mulberry."] },
+          { text: [
+            "They ran to the Pumpkin Patch. There were pumpkins everywhere. Big ones, small ones, lumpy ones. But not one of them was speckled."] },
+          { text: [
+            "\"The pumpkins ATE it!\" said Pip."] },
+          { text: [
+            "\"Psst,\" said a voice from an apple tree. It was Bean, Pip's little sister. She climbs everything."] },
+          { text: [
+            "\"At 12:00, I saw a grown-up pick up the biggest pumpkin,\" said Bean. \"But my hat fell over my eyes, so I didn't see who.\""] },
+          { text: [
+            "Sir Toast was promoted to Lord Toast, for eating only ONE apple."] },
+          { text: [
+            "Wren asked the grown-ups where they had been at 12:00."] },
+          { text: [
+            "\"By my mighty moustache! I was right next to the Stables,\" said Sir Radish. \"And Wizard Fernbeard and I were exactly two paths apart.\""] },
+          { text: [
+            "TOOT! \"I was right next to the Laundry,\" said Lady Bluebell."] },
+          { text: [
+            "\"I was right next to the Laundry too, my little dumplings,\" said Mother Mulberry. \"But I wasn't at the Well.\""] },
+          { text: [
+            "\"Hmmm,\" said Wizard Fernbeard. \"Where was I? I have been looking for my crystal ball all day. Hmmm.\""] },
+          { text: [
+            "\"Who picked up the speckled pumpkin at 12:00?\" Wren asked herself."] },
+        ],
+      },
+      {
+        id: "egg4", title: "Chapter 4: 2:30, Bonk, Bonk, Bonk", puzzle: "egg4",
+        pages: [
+          { text: [
+            "Wizard Fernbeard had been in the Pumpkin Patch."] },
+          { text: [
+            "\"Hmmm! Yes!\" he said. \"I found my crystal ball in the Pumpkin Patch. Round and warm, just like always.\""] },
+          { text: [
+            "\"Is your crystal ball speckled?\" asked Pip.",
+            "\"Hmmm,\" said the wizard. \"Not usually.\""] },
+          { text: [
+            "He had carried it up to his tower and put it on his table, next to his bubbling cauldron. Then he stared into it."] },
+          { text: [
+            "\"I saw a terrible omen,\" he whispered. \"Something small... and scaly... and HUNGRY.\""] },
+          { text: [
+            "\"Then I fell asleep. A BONK, BONK, BONK woke me up. My cuckoo clock said 2:30. Then I went right back to sleep.\""] },
+          { text: [
+            "They ran up the Wizard's Tower. The table was empty."] },
+          { text: [
+            "But there was a little dent in every single stair, all the way down. BONK, BONK, BONK."] },
+          { text: [
+            "\"The egg wobbled off the table,\" said Wren, \"rolled down the stairs, and went out the tower door.\""] },
+          { text: [
+            "Lord Toast was promoted to Duke Toast, for counting all ninety-nine dents."] },
+          { text: [
+            "It was 4:30. Sunset was at 6:00. Wren asked the grown-ups one last time: where were you at 2:30? Did you notice anything?"] },
+          { text: [
+            "\"Hmmm,\" said Wizard Fernbeard. \"I was at the Wizard's Tower. Snoring.\""] },
+          { text: [
+            "\"By my mighty moustache!\" said Sir Radish. \"I heard a big THUD right next to me. But I was busy, so I did not look.\""] },
+          { text: [
+            "\"And Lady Bluebell was far from me,\" he added. \"Three paths or more!\""] },
+          { text: [
+            "TOOT! \"I was right next to the Courtyard,\" said Lady Bluebell. \"My eyes were shut. I was practicing my fanfare.\""] },
+          { text: [
+            "\"I was right next to the Apple Orchard, my little dumplings,\" said Mother Mulberry. \"I was picking REAL pumpkins for a pie.\""] },
+          { text: [
+            "\"It rolled into the moat,\" said Pip, \"and now a duck is sitting on it!\""] },
+          { text: [
+            "Wren found one clue. Bean had been brushing the ponies in the Stables at 2:30.",
+            "\"Nobody came in,\" said Bean. \"Not a grown-up, and not an egg.\""] },
+          { text: [
+            "\"This time,\" said Wren, \"we put the egg on the map too. Where did the egg stop?\""] },
+        ],
+      },
+      {
+        id: "ending", title: "The Warmest Spot",
+        pages: [
+          { text: [
+            "Wizard Fernbeard had been snoring in his tower. Lady Bluebell had been on the Drawbridge, and Mother Mulberry in the Pumpkin Patch."] },
+          { text: [
+            "Sir Radish had been at the Forge, getting the dent knocked out of his helmet after sword practice."] },
+          { text: [
+            "\"So the THUD was right next to the Forge,\" said Wren. \"At the Bonfire Pile!\""] },
+          { text: [
+            "Everybody ran to the Bonfire Pile and dug into the straw. Sir Radish dug with his helmet. Mother Mulberry dug with a soup ladle."] },
+          { text: [
+            "And there, snug and warm next to the Forge, was the speckled egg."] },
+          { text: [
+            "\"It rolled out of the tower and all the way to the warmest spot in the castle,\" said Wren. \"All by itself.\""] },
+          { text: [
+            "It was 5:59. WHOOMPH! Grandma Ember landed in the Courtyard, with two more dragons behind her. They blew everybody's hats off."] },
+          { text: [
+            "\"Where's my grandbaby?\" she asked."] },
+          { text: [
+            "\"In the Bonfire Pile,\" said Wren. \"It was a wobbly one.\""] },
+          { text: [
+            "Grandma Ember laughed a big smoky laugh. \"A wobbly one always finds the warmest spot.\""] },
+          { text: [
+            "She took a deep breath and puffed. The Bonfire Pile went WHOOSH!",
+            "TOOT-TA-TOOOOT! went Lady Bluebell's sunset fanfare."] },
+          { text: [
+            "CRACK.",
+            "A tiny dragon poked its head out of the egg. It blinked. The very first face it saw was Toast's."] },
+          { text: [
+            "The baby dragon sneezed a spark. Toast sneezed a spark back."] },
+          { text: [
+            "\"Something small, scaly and HUNGRY,\" whispered Wizard Fernbeard. \"My omen!\"",
+            "The baby burped."] },
+          { text: [
+            "Mother Mulberry wheeled out the Hatching Cake. Sir Radish carried the baby around the Courtyard on a velvet cushion, very, very carefully."] },
+          { text: [
+            "And Wizard Fernbeard found his crystal ball. It was in his hat."] },
+          { text: [
+            "That night, Wren wrote in her notebook: <i>Wren and Pip, Royal Detectives. Cases solved: two.</i>"] },
+          { text: [
+            "Everyone in the castle had helped move the egg, by accident. And everyone in the castle had helped find it, on purpose."] },
+          { text: [
+            "And Duke Toast got his best promotion yet. He was now a Big Brother."] },
+          { text: [
+            "THE END"] },
+        ],
+      },
+    ],
+  },
+  {
     id: "tutorial",
     title: "How to Play",
     spine: "#3fa31a",

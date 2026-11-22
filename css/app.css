@@ -172,7 +172,7 @@ body.app { height: 100dvh; display: flex; flex-direction: column; overflow: hidd
 }
 .person .face { width: 52px; height: 52px; border-radius: 50%; background: color-mix(in srgb, var(--c) 18%, var(--paper)); box-shadow: 0 0 0 3px var(--c); flex: none; }
 .face.initial { display: grid; place-items: center; color: #fff; font: 800 20px var(--body); }
-.person .pname { font-size: 14px; font-weight: 600; line-height: 1.1; text-align: center; white-space: normal; overflow-wrap: anywhere; }
+.person .pname { font-size: 14px; font-weight: 600; line-height: 1.1; text-align: center; white-space: normal; overflow-wrap: normal; word-break: normal; }
 .person .where { font: 700 11px var(--body); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .person.sel { border-color: var(--c); background: color-mix(in srgb, var(--c) 12%, var(--paper)); box-shadow: var(--press) var(--c); }
 .person.placed .where { color: var(--good-dark); }
@@ -189,6 +189,7 @@ body.app { height: 100dvh; display: flex; flex-direction: column; overflow: hidd
 .says ul { list-style: none; margin: 0; padding: 0; }
 .says li { position: relative; padding: 3px 6px 3px 24px; border-radius: 8px; cursor: pointer; font-size: 1.02rem; }
 .says li::before { content: "•"; position: absolute; left: 8px; color: var(--muted); }
+.says .note { margin: 2px 0 0; color: var(--muted); font-style: italic; font-size: 1rem; }
 .says li.t::before { content: "✓"; color: var(--good); font-weight: 800; }
 .says li.f::before { content: "✗"; color: var(--bad); font-weight: 800; }
 .says li.f { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--bad) 60%, transparent); }
@@ -280,6 +281,8 @@ dialog ul { padding-left: 20px; margin: 0 0 12px; }
 .pg.full-page .person { padding: 5px 2px 6px; gap: 3px; border-radius: 14px; }
 .pg.full-page .person .face { width: 30px; height: 30px; box-shadow: 0 0 0 2.5px var(--c); }
 .pg.full-page .person .pname { font-size: 12.5px; }
+.people.five .person .pname { font-size: 12px; }
+.people.five .person .where { font-size: 10px; }
 .pg.full-page .person .where { display: none; }
 .pg.full-page .detail { flex: none; height: 112px; min-height: 0; padding: 8px 10px; font-size: 15px; line-height: 1.35; }
 .pg.full-page .detail .clue.on, .pg.full-page .detail .pick, .pg.full-page .says li { font-size: 1em; }
