@@ -136,7 +136,7 @@ export class Map3D {
         P.at = at; P.pawn.visible = !!at;
         if (at) {
           const s = this.spots[at].g.position;
-          P.pawn.position.set(s.x + 0.55, 0.22, s.z + 0.7);
+          P.pawn.position.set(s.x - 0.15, 0.22, s.z + 0.55);
           this.drop(P.pawn);
         }
       }
@@ -217,50 +217,57 @@ export class Map3D {
   placeLabels() {
     const el = this.renderer.domElement, W = el.clientWidth, H = el.clientHeight;
     const v = (S, x, y, z) => this.project(S.g.position.clone().add(new THREE.Vector3(x, y, z)));
-    // Everything laid over the map (place names, pencil notes, name tags over pawns) is a box. Boxes start at
-    // their anchor and are nudged apart until none overlap, so every word stays readable even on a small phone.
-    const boxes = [];
-    const add = (node, cx, top, weight = 1) => boxes.push({ node, x: cx, y: top, w: node.offsetWidth, h: node.offsetHeight, weight });
-    for (const S of Object.values(this.spots)) {
-      const p = v(S, 0, 0, PLATFORM_R + 0.1);
-      add(S.label, p.x, p.y);
-      if (!S.notes.hidden) { const n = v(S, 0, 0.3, PLATFORM_R * 0.5); add(S.notes, n.x, n.y - S.notes.offsetHeight / 2, 0.5); }
-      // the X covers the platform, on top of the model
-      const c = v(S, 0, 0.3, 0), edge = v(S, PLATFORM_R, 0.3, 0);
+    const put = (node, x, top) => { node.style.transform = `translate(${x.toFixed(1)}px, ${top.toFixed(1)}px) translate(-50%, 0)`; };
+    // Things that stay put: each place's model, the pencil notes and the initials of placed people (both sit on
+    // the front of their platform). Each place name then takes the free spot round its own platform that covers
+    // the least, so it always sits next to the place it names.
+    const taken = [], geo = {};
+    for (const [id, S] of Object.entries(this.spots)) {
+      const c = v(S, 0, 0.3, 0), edge = v(S, PLATFORM_R, 0.3, 0), r = Math.max(14, Math.abs(edge.x - c.x));
+      const front = v(S, 0, 0, PLATFORM_R + 0.1), top = v(S, 0, 1.7, -0.35), rim = v(S, 0, 0.3, PLATFORM_R * 0.5);
+      geo[id] = { c, r, front, top, rim };
       S.cross.style.transform = `translate(${c.x}px, ${c.y}px) translate(-50%, -50%)`;
-      const r = Math.max(14, Math.abs(edge.x - c.x));
       S.cross.style.setProperty("--r", r.toFixed(1) + "px");
-      // the place's model is a fixed obstacle: words are pushed off it, so the pictures stay visible
-      const top = v(S, 0, 1.7, -0.35);
-      boxes.push({ node: null, x: c.x, y: top.y, w: r * 1.5, h: c.y + r * 0.2 - top.y, weight: 0 });
+      taken.push({ x: c.x, y: top.y, w: r * 1.5, h: c.y + r * 0.2 - top.y });
+      if (!S.notes.hidden) {
+        const w = S.notes.offsetWidth, h = S.notes.offsetHeight;
+        put(S.notes, rim.x, rim.y - h / 2); taken.push({ x: rim.x, y: rim.y - h / 2, w, h });
+      }
     }
     for (const P of Object.values(this.pawns)) {
-      P.tag.hidden = !P.pawn.visible;
-      if (!P.pawn.visible) continue;
-      // the initial sits right on the pawn's body, so it can't be mistaken for another place's; words move round it
-      const p = this.project(P.pawn.position.clone().add(new THREE.Vector3(0, 0.75, 0.25)));
-      const h = P.tag.offsetHeight;
-      boxes.push({ node: P.tag, x: p.x, y: p.y - h / 2, w: P.tag.offsetWidth, h, weight: 0, fixed: true });
+      P.tag.hidden = !P.pawn.visible || !P.at;
+      if (P.tag.hidden) continue;
+      const w = P.tag.offsetWidth, h = P.tag.offsetHeight;   // beside the pawn's feet, so the pawn stays in full view
+      const q = v(this.spots[P.at], PLATFORM_R * 0.62, 0.3, PLATFORM_R * 0.5);
+      put(P.tag, q.x, q.y - h / 2); taken.push({ x: q.x, y: q.y - h / 2, w, h });
+      const top = this.project(P.pawn.position.clone().add(new THREE.Vector3(0, 1.7, 0)));   // the pawn itself
+      const foot = this.project(P.pawn.position.clone());
+      taken.push({ x: foot.x, y: top.y, w: 26, h: foot.y - top.y });
     }
-    for (let it = 0; it < 16; it++) {
-      let moved = false;
-      for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
-        const a = boxes[i], b = boxes[j];
-        if (!a.weight && !b.weight) continue;
-        const ox = (a.w + b.w) / 2 + 4 - Math.abs(a.x - b.x), oy = (a.h + b.h) / 2 + 3 - Math.abs((a.y + a.h / 2) - (b.y + b.h / 2));
-        if (ox <= 0 || oy <= 0) continue;
-        moved = true;
-        const ka = a.weight / (a.weight + b.weight), kb = 1 - ka;
-        if (oy < ox * 1.4) { const d = oy + 1, s = a.y + a.h / 2 <= b.y + b.h / 2 ? 1 : -1; a.y -= s * d * ka; b.y += s * d * kb; }
-        else { const d = ox + 1, s = a.x <= b.x ? 1 : -1; a.x -= s * d * ka; b.x += s * d * kb; }
+    const overlap = (a, b) => Math.max(0, Math.min(a.x + a.w / 2, b.x + b.w / 2) - Math.max(a.x - a.w / 2, b.x - b.w / 2) + 3) *
+      Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y) + 2);
+    const order = Object.keys(this.spots).sort((a, b) => geo[a].c.y - geo[b].c.y);
+    for (const id of order) {
+      const S = this.spots[id], g = geo[id], w = S.label.offsetWidth, h = S.label.offsetHeight;
+      const cands = [
+        [g.front.x, g.front.y, 0],                          // under the platform (the usual place)
+        [g.c.x + g.r + w / 2 + 2, g.c.y - h / 2, 1],        // to the right
+        [g.c.x - g.r - w / 2 - 2, g.c.y - h / 2, 1],        // to the left
+        [g.front.x + w * 0.35, g.front.y + 2, 1.5],         // under, nudged right
+        [g.front.x - w * 0.35, g.front.y + 2, 1.5],         // under, nudged left
+        [g.c.x, g.top.y - h - 2, 3],                        // above the model
+        [g.front.x, g.front.y + h * 0.8, 2.5],              // a little further under
+      ];
+      let best = null;
+      for (const [x, y, pen] of cands) {
+        const box = { x, y, w, h };
+        let cost = pen * 40;
+        for (const t of taken) cost += overlap(box, t);
+        const out = Math.max(0, w / 2 + 2 - x) + Math.max(0, x + w / 2 + 2 - W) + Math.max(0, 2 - y) + Math.max(0, y + h + 2 - H);
+        cost += out * h * 4;
+        if (!best || cost < best.cost) best = { cost, box };
       }
-      if (!moved) break;
-    }
-    for (const B of boxes) {
-      if (!B.node) continue;
-      if (B.fixed) { B.node.style.transform = `translate(${B.x.toFixed(1)}px, ${B.y.toFixed(1)}px) translate(-50%, 0)`; continue; }
-      B.x = Math.max(B.w / 2 + 2, Math.min(W - B.w / 2 - 2, B.x)); B.y = Math.max(2, Math.min(H - B.h - 2, B.y));
-      B.node.style.transform = `translate(${B.x.toFixed(1)}px, ${B.y.toFixed(1)}px) translate(-50%, 0)`;
+      put(S.label, best.box.x, best.box.y); taken.push(best.box);
     }
   }
 
@@ -352,7 +359,7 @@ export class Map3D {
 }
 
 function makePawn(color) {
-  const g = new THREE.Group();
+  const g = new THREE.Group(); g.scale.setScalar(1.45);   // big enough to read at a glance, in front of the place's model
   const body = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.38, 0.75, 32), mat(color));
   body.position.y = 0.38;
   const base = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.42, 0.1, 32), mat(color));

@@ -17,13 +17,25 @@ const params = new URLSearchParams(location.search);
 const story = window.STORIES.find(s => s.id === params.get("s") && !s.soon) || window.STORIES[0];
 
 // ---------- the book's pages ----------
-const pages = [];
-if (story.chapters.some(ch => ch.pages.length)) pages.push({ kind: "title" });
-story.chapters.forEach((ch, ci) => {
-  ch.pages.forEach((pg, i) => pages.push({ kind: "story", ch, ci, i, pg }));
-  if (ch.puzzle && PUZZLES[ch.puzzle]) pages.push({ kind: "puzzle", ch, ci, c: PUZZLES[ch.puzzle] });
-});
-pages.push({ kind: "end" });
+// Story text is always the same size. A page written in stories.js that doesn't fit the screen's page
+// flows onto the next page (at a paragraph break when it can), so the number of pages depends on the screen.
+let pages = [];
+function buildPages(split = (ch, paras) => [paras]) {
+  const out = [];
+  if (story.chapters.some(ch => ch.pages.length)) out.push({ kind: "title" });
+  story.chapters.forEach((ch, ci) => {
+    ch.pages.forEach((pg, i) => {
+      const head = i === 0, last = i === ch.pages.length - 1 && !!(ch.puzzle && PUZZLES[ch.puzzle]);
+      const parts = split(ch, pg.text, head, last);
+      parts.forEach((paras, part) => out.push({ kind: "story", ch, ci, i, part, paras,
+        head: head && part === 0, last: last && part === parts.length - 1 }));
+    });
+    if (ch.puzzle && PUZZLES[ch.puzzle]) out.push({ kind: "puzzle", ch, ci, c: PUZZLES[ch.puzzle] });
+  });
+  out.push({ kind: "end" });
+  pages = out;
+}
+buildPages();
 
 const blank = () => ({ pos: {}, role: {}, marks: {}, crossed: {}, notes: {} });
 const stateOf = c => Object.assign(blank(), store.get("wwW:" + c.id) || {});
@@ -46,15 +58,8 @@ if (story.pdf) $("pdfLink").href = story.pdf; else $("pdfLink").remove();
 // ---------- the book ----------
 let at = 0;
 const bookmark = store.get("wwW:at:" + story.id);
-let start = 0;
-if (params.has("p")) start = +params.get("p");
-else if (params.get("c")) {   // older links: ?c=<chapter>&m=solve
-  const ci = story.chapters.findIndex(ch => ch.id === params.get("c"));
-  start = params.get("m") === "solve" ? pages.findIndex(p => p.kind === "puzzle" && p.ci === ci) : firstPageOf(ci);
-}
-start = Math.max(0, Math.min(start, pages.length - 1));
-while (start > 0 && lockedAt(start)) start--;
 
+// ---------- the book ----------
 // The book turns in "leaves". On a phone each leaf is one page. On a wide screen it is an open spread of two
 // pages, like a real book: story pages pair up, and each map fills a spread of its own.
 const isWide = () => { const v = $("viewport"); return v.clientWidth >= 600 && v.clientWidth >= v.clientHeight * 1.1; };
@@ -83,13 +88,75 @@ const book = new Book($("viewport"), {
   isSpread: u => pages[pageOf(u)].kind === "puzzle",
   canGo: u => !lockedAt(pageOf(u)),
   left: leftPage, right: rightPage,
-  onShow: u => { at = pageOf(u); afterTurn(); fitText(); },
+  onShow: u => { at = pageOf(u); afterTurn(); },
   onLocked: () => toast("🔒 Solve the map to turn the page."),
 });
-// Rotating a tablet (or resizing a window) between the two ways of reading rebuilds the book on the same page.
+
+// Measure pages with a hidden copy of a story page at this screen's size.
+function paginate() {
+  const { W, H } = book.dims(wide ? "spread" : "page");
+  const probe = document.createElement("div");
+  probe.className = "bk-body probe"; probe.setAttribute("aria-hidden", "true");
+  probe.style.cssText = `--W:${W}px; --H:${H}px; visibility:hidden; pointer-events:none; transform:none;`;
+  probe.innerHTML = `<div class="bk-slot bk-right" style="left:0"><article class="pg sheet story"></article></div>`;
+  $("viewport").append(probe);
+  const sheet = probe.querySelector("article");
+  const fits = (ch, paras, head, last) => {
+    sheet.innerHTML = storyHTML(ch, paras, head, last, 0);
+    const pr = sheet.firstElementChild;
+    return pr.scrollHeight <= pr.clientHeight + 1;
+  };
+  buildPages((ch, paras, head, last) => {
+    const parts = []; let cur = [];
+    const isHead = () => head && !parts.length;
+    for (let k = 0; k < paras.length; k++) {
+      const para = paras[k];
+      if (fits(ch, [...cur, para], isHead(), false)) { cur.push(para); continue; }
+      if (cur.length) { parts.push(cur); cur = []; }
+      if (fits(ch, [para], isHead(), false)) { cur = [para]; continue; }
+      // one long paragraph: break it between words
+      let words = para.split(" ");
+      while (words.length) {
+        let n = words.length;
+        while (n > 1 && !fits(ch, [words.slice(0, n).join(" ")], isHead(), false)) n--;
+        const piece = words.slice(0, n).join(" "); words = words.slice(n);
+        if (words.length) parts.push([piece]); else cur = [piece];
+      }
+    }
+    if (last && !fits(ch, cur, isHead(), true)) { parts.push(cur); cur = []; }   // the "Turn to the map" button
+    parts.push(cur);
+    // Two pages from one: move the break so both pages hold about the same amount, not one line on its own.
+    if (parts.length === 2 && parts[1].length && parts.flat().length === paras.length && paras.length > 2) {
+      const len = list => list.join(" ").length;
+      let best = null;
+      for (let j = 1; j < paras.length; j++) {
+        const a = paras.slice(0, j), b = paras.slice(j);
+        if (!fits(ch, a, head, false) || !fits(ch, b, false, last)) continue;
+        const score = Math.abs(len(a) - len(b));
+        if (!best || score < best.score) best = { score, parts: [a, b] };
+      }
+      if (best) return best.parts;
+    }
+    return parts;
+  });
+  probe.remove();
+}
+const pageKey = p => p ? [p.kind, p.ci, p.i ?? "", p.part ?? ""].join(":") : "";
+function relayout() {   // after a rotate or resize: pages may break differently, so rebuild on the same spot
+  const key = pageKey(pages[at]), was = pages[at];
+  wide = isWide(); paginate(); buildLeaves();
+  let i = pages.findIndex(p => pageKey(p) === key);
+  if (i < 0) i = pages.findIndex(p => p.kind === was?.kind && p.ci === was?.ci && p.i === was?.i);
+  at = Math.max(0, i); book.show(leafOf(at));
+}
+let lastSize = "", resizeT = 0;
 addEventListener("resize", () => {
-  if (isWide() === wide || book.turning) return;
-  wide = isWide(); buildLeaves(); book.show(leafOf(at));
+  clearTimeout(resizeT);
+  resizeT = setTimeout(() => {
+    const { W, H } = book.dims(isWide() ? "spread" : "page"), size = `${isWide()}:${W}x${H}`;
+    if (size === lastSize || book.turning) return;
+    lastSize = size; relayout();
+  }, 150);
 });
 function go(i) {
   if (i < 0 || i >= pages.length || lockedAt(i)) return;
@@ -114,14 +181,6 @@ function afterTurn() {
   $("next").setAttribute("aria-label", locked ? "Solve the map to unlock the next page" : "Next page");
   document.body.classList.toggle("on-puzzle", p.kind === "puzzle");
   renderProgress(); renderContents();
-}
-// Shrink the words on a page that would otherwise run off the bottom.
-function fitText() { document.querySelectorAll(".bk-slot .prose").forEach(fitProse); }
-function fitProse(pr) {
-  if (!pr.isConnected) return;
-  pr.style.fontSize = "";
-  let k = 1;
-  while (pr.scrollHeight > pr.clientHeight + 1 && k > 0.7) { k -= 0.04; pr.style.fontSize = `calc(var(--fs) * ${k.toFixed(2)})`; }
 }
 
 $("prev").onclick = () => turn(-1);
@@ -194,11 +253,7 @@ function buildSheet(i) {
       <div class="cover-actions"><button class="primary big" type="button" data-go="1">Start reading</button>
       ${resume > 1 ? `<button class="big" type="button" data-go="${resume}">Continue: ${pages[resume].ch?.title || "where you were"}</button>` : ""}</div></div>`;
   } else if (p.kind === "story") {
-    const m = p.ch.title.match(/^(Chapter \d+): (.*)$/);
-    const head = p.i > 0 ? "" : m ? `<p class="ch-label">${m[1]}</p><h2>${m[2]}</h2>` : `<h2>${p.ch.title}</h2>`;
-    el.innerHTML = `<div class="prose">${head}${p.pg.text.map(t => `<p>${t}</p>`).join("")}
-      ${p.i === p.ch.pages.length - 1 && p.ch.puzzle ? `<button class="primary" type="button" data-go="${i + 1}">Turn to the map →</button>` : ""}</div>
-      <span class="folio">${i + 1}</span>`;
+    el.innerHTML = storyHTML(p.ch, p.paras, p.head, p.last, i);
   } else {
     const tut = story.id === "tutorial", main = window.STORIES.find(s => !s.soon && s.id !== "tutorial");
     el.innerHTML = `<h2>${tut ? "You're ready!" : "To be continued…"}</h2>
@@ -207,9 +262,14 @@ function buildSheet(i) {
       <a class="btn" href="./">Back to the bookshelf</a>${story.pdf ? `<a class="btn" href="${story.pdf}" download>⬇ Printable PDF</a>` : ""}</div>`;
   }
   el.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(+b.dataset.go));
-  const pr = el.querySelector(".prose");   // fit the words as soon as the page is in the book (also for pages under a turning one)
-  if (pr) requestAnimationFrame(() => fitProse(pr));
   return el;
+}
+function storyHTML(ch, paras, head, last, i) {
+  const m = ch.title.match(/^(Chapter \d+): (.*)$/);
+  const h = !head ? "" : m ? `<p class="ch-label">${m[1]}</p><h2>${m[2]}</h2>` : `<h2>${ch.title}</h2>`;
+  return `<div class="prose">${h}${paras.map(t => `<p>${t}</p>`).join("")}
+    ${last ? `<button class="primary" type="button" data-go="${i + 1}">Turn to the map →</button>` : ""}</div>
+    <span class="folio">${i + 1}</span>`;
 }
 
 // ---------- the puzzle ----------
@@ -451,5 +511,16 @@ function renderCoach() {
   }
 }
 
+// Measure with the real fonts, then open the book at the right page.
+await document.fonts?.ready;
+paginate(); buildLeaves();
+{ const d = book.dims(wide ? "spread" : "page"); lastSize = `${wide}:${d.W}x${d.H}`; }
+let start = 0;
+if (params.has("p")) start = +params.get("p");
+else if (params.get("c")) {   // older links: ?c=<chapter>&m=solve
+  const ci = story.chapters.findIndex(ch => ch.id === params.get("c"));
+  start = params.get("m") === "solve" ? pages.findIndex(p => p.kind === "puzzle" && p.ci === ci) : firstPageOf(ci);
+}
+start = Math.max(0, Math.min(start, pages.length - 1));
+while (start > 0 && lockedAt(start)) start--;
 book.show(leafOf(start));
-document.fonts?.ready.then(fitText);

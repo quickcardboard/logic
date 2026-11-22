@@ -55,7 +55,7 @@ export class Book {
     const vw = this.vp.clientWidth, vh = this.vp.clientHeight;
     if (mode === "full") return { W: vw - 16, H: vh - 10 };
     if (mode === "map") return { W: Math.floor(vw / 2), H: vh };   // a map spread fills the screen, edge to edge
-    if (mode === "spread") { const H = Math.round(vh - (vh < 500 ? 14 : 30)); return { W: Math.round(Math.min(H * (vh < 500 ? 1 : 0.8), (vw - 40) / 2)), H }; }
+    if (mode === "spread") { const H = Math.round(vh - (vh < 500 ? 14 : 30)); return { W: Math.round(Math.min(H * (vh < 500 ? 1.2 : 0.8), (vw - 40) / 2)), H }; }
     if (this.narrow) { const W = Math.round(vw * 0.84); return { W, H: Math.round(Math.min(vh - 16, W * 1.5)) }; }
     const H = Math.round(vh - 28);
     return { W: Math.round(Math.min(H * 0.92, vw * 0.6)), H };
@@ -92,6 +92,7 @@ export class Book {
     if (to < 0 || to >= this.o.count) return;
     if (this.o.canGo(to) !== true) { this.o.onLocked?.(); this.wiggle(dir); return; }
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) { this.show(to); return; }
+    if (this.mode(to) !== this.mode(this.at)) { this.fadeTo(to); return; }
     this.begin(dir, false);
     const { W, H } = this, cy = H, t0 = performance.now(), ms = 720;
     const step = t => {
@@ -100,6 +101,22 @@ export class Book {
       if (k < 1) requestAnimationFrame(step); else this.finish(true);
     };
     requestAnimationFrame(step);
+  }
+  // Between a story page and a map the whole view changes shape, so instead of a page curl the book
+  // gently zooms and fades into the next view.
+  fadeTo(to) {
+    this.turning = { fade: true };
+    const b = this.body, from = this.mode(this.at), into = this.mode(to), toMap = into === "map" || into === "full";
+    const out = b.animate([{ opacity: 1, filter: "blur(0)" }, { opacity: 0, filter: "blur(3px)" }], { duration: 230, easing: "ease-in", fill: "forwards" });
+    const vp = this.vp;
+    vp.animate([{ transform: "scale(1)" }, { transform: `scale(${toMap ? 1.06 : 0.96})` }], { duration: 230, easing: "ease-in" });
+    out.onfinish = () => {
+      this.turning = null;
+      this.show(to);
+      out.cancel();
+      b.animate([{ opacity: 0, filter: "blur(3px)" }, { opacity: 1, filter: "blur(0)" }], { duration: 320, easing: "ease-out" });
+      vp.animate([{ transform: `scale(${toMap ? 0.96 : 1.04})` }, { transform: "scale(1)" }], { duration: 320, easing: "cubic-bezier(.2,.7,.3,1)" });
+    };
   }
   wiggle(dir) {
     this.body.animate([{ translate: "0 0" }, { translate: `${-dir * 10}px 0` }, { translate: `${dir * 6}px 0` }, { translate: "0 0" }], { duration: 320 });
@@ -235,6 +252,7 @@ export class Book {
         const to = this.at + dir;
         if (to < 0 || to >= this.o.count) { down = null; return; }
         down.locked = this.o.canGo(to) !== true;
+        if (!down.locked && this.mode(to) !== this.mode(this.at)) { down = null; this.turn(dir); return; }   // into or out of a map
         down.dir = dir; down.started = true;
         this.begin(dir, down.p[1] < this.H * 0.35);
       }

@@ -114,12 +114,11 @@ body.app { height: 100dvh; display: flex; flex-direction: column; overflow: hidd
 /* story pages: words only, set like a good children's book */
 .sheet.story { display: flex; flex-direction: column; }
 .prose { flex: 1; min-height: 0; overflow: hidden; padding: 9% 10% 3%; display: flex; flex-direction: column; font-size: var(--fs); }
-.prose .ch-label { font: 700 .58em var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: auto 0 .4em; }
+.prose .ch-label { font: 700 .58em var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 .4em; }
 .prose h2 { font-size: 1.6em; line-height: 1.08; margin: 0 0 .7em; color: var(--ink); }
 .prose h2::after { content: ""; display: block; width: 2.4em; height: .22em; border-radius: 3px; background: var(--accent); margin-top: .5em; }
 .prose p { font-size: 1em; line-height: 1.55; margin: 0 0 .75em; color: var(--ink); }
-.prose > :first-child { margin-top: auto; }
-.prose > :last-child { margin-bottom: auto; }
+.prose > :first-child { margin-top: 0; }   /* text starts at the top of every page, like a printed book */
 .prose .primary { align-self: center; margin-top: .6em; margin-bottom: 8px; font-size: .85em; flex: none; }
 .folio { flex: none; padding: 6px 0 calc(var(--H) * .04); text-align: center; font: 600 14px var(--hand); color: var(--muted); }
 
