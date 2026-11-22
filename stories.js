@@ -165,7 +165,7 @@ window.STORIES = [
             "\"But you said you were next to the Stage!\" said Mo.",
             "\"I was,\" said the principal. \"The rope is right next to the Stage.\""] },
           { text: [
-            "Zara opened her notebook. \"On Monday, your office was locked, and you have the key. On Tuesday, the rope went tight as you walked past, because you tugged it. On Wednesday, you swapped the flags the night before, then set off the fire alarm so we would all look up. And the flag rope smelled of your coffee. And on Thursday, only you had the key to the trophy cabinet.\"",
+            "Zara opened her notebook. \"On Monday, your office was locked, and you have the key. On Tuesday, the rope went tight as you walked past, because you tugged it. On Wednesday, you swapped the flags the night before, with your coffee in your hand, and set off the fire alarm so we would all look up. And on Thursday, only you had the key to the trophy cabinet.\"",
             "The principal went very pink. \"And who would ever suspect a man covered in jelly?\""] },
           { text: [
             "He pulled the old photo out of his pocket. Two kids, two rubber ducks. A boy with a VERY big curl, and a girl holding a ladle.",
