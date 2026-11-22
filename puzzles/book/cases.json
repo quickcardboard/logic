@@ -99,16 +99,16 @@
   ],
   "suspects": [
    {
-    "name": "Coach Kowalski",
-    "color": "#2e86de"
+    "name": "Coach Red",
+    "color": "#ef4444"
    },
    {
-    "name": "Mr. Bolt",
-    "color": "#e4572e"
+    "name": "Mr. Blue",
+    "color": "#3b82f6"
    },
    {
-    "name": "Ms. Fig",
-    "color": "#27ae60"
+    "name": "Ms. Green",
+    "color": "#22c55e"
    }
   ],
   "evidence": [
@@ -126,20 +126,20 @@
    }
   ],
   "statements": {
-   "Coach Kowalski": [
+   "Coach Red": [
     {
      "text": "I was right next to the Vegetable Garden.",
      "t": "nextto",
      "spot": "garden"
     }
    ],
-   "Mr. Bolt": [
+   "Mr. Blue": [
     {
      "text": "I was at a crossroads (3 or more paths).",
      "t": "crossroads"
     }
    ],
-   "Ms. Fig": [
+   "Ms. Green": [
     {
      "text": "I wasn't at the Water Fountain.",
      "t": "notat",
@@ -149,9 +149,9 @@
   },
   "solution": {
    "positions": {
-    "Coach Kowalski": "fountain",
-    "Mr. Bolt": "frame",
-    "Ms. Fig": "mud"
+    "Coach Red": "fountain",
+    "Mr. Blue": "frame",
+    "Ms. Green": "mud"
    },
    "fibber": null,
    "muddler": null
@@ -285,20 +285,20 @@
   ],
   "suspects": [
    {
-    "name": "Coach Kowalski",
-    "color": "#e4572e"
+    "name": "Coach Red",
+    "color": "#ef4444"
    },
    {
-    "name": "Mr. Bolt",
-    "color": "#2e86de"
+    "name": "Mr. Blue",
+    "color": "#3b82f6"
    },
    {
-    "name": "Ms. Fig",
-    "color": "#9b59b6"
+    "name": "Ms. Green",
+    "color": "#22c55e"
    },
    {
-    "name": "Gloria",
-    "color": "#27ae60"
+    "name": "Mrs. Purple",
+    "color": "#a855f7"
    }
   ],
   "evidence": [
@@ -322,46 +322,46 @@
    }
   ],
   "want_at": {
-   "Gloria": "kitchen"
+   "Mrs. Purple": "kitchen"
   },
   "hide_spots": [
    "flagpole"
   ],
   "statements": {
-   "Coach Kowalski": [
+   "Coach Red": [
     {
-     "text": "Mr. Bolt was right next to me.",
+     "text": "Mr. Blue was right next to me.",
      "t": "near",
-     "who": "Mr. Bolt"
+     "who": "Mr. Blue"
     }
    ],
-   "Mr. Bolt": [
+   "Mr. Blue": [
     {
      "text": "I was at a crossroads (3 or more paths).",
      "t": "crossroads"
     }
    ],
-   "Ms. Fig": [
+   "Ms. Green": [
     {
      "text": "I was right next to the Front Door.",
      "t": "nextto",
      "spot": "door"
     }
    ],
-   "Gloria": [
+   "Mrs. Purple": [
     {
-     "text": "Ms. Fig and I were exactly two paths apart.",
+     "text": "Ms. Green and I were exactly two paths apart.",
      "t": "two",
-     "who": "Ms. Fig"
+     "who": "Ms. Green"
     }
    ]
   },
   "solution": {
    "positions": {
-    "Coach Kowalski": "toilets",
-    "Mr. Bolt": "staff",
-    "Ms. Fig": "office",
-    "Gloria": "kitchen"
+    "Coach Red": "toilets",
+    "Mr. Blue": "staff",
+    "Ms. Green": "office",
+    "Mrs. Purple": "kitchen"
    },
    "fibber": null,
    "muddler": null

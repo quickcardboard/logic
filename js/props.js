@@ -1,19 +1,22 @@
 // Small low-poly models for map places, built from simple shapes. Each fits in about 2 x 2 units,
 // stands on y = 0 and faces +z (toward the camera).
 import * as THREE from "../vendor/three.module.min.js";
+import { RoundedBoxGeometry } from "../vendor/RoundedBoxGeometry.js";
+import { toy } from "./look.js";
 
-const mats = {};
-export function mat(color) {
-  return mats[color] || (mats[color] = new THREE.MeshStandardMaterial({ color, roughness: 0.85, metalness: 0, flatShading: true }));
-}
+export const mat = color => toy(color);
 function mesh(geo, color, x = 0, y = 0, z = 0) {
   const m = new THREE.Mesh(geo, mat(color));
   m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true;
   return m;
 }
-const box = (w, h, d, color, x, y, z) => mesh(new THREE.BoxGeometry(w, h, d), color, x, y + h / 2, z);
-const cyl = (rt, rb, h, color, x, y, z, seg = 20) => mesh(new THREE.CylinderGeometry(rt, rb, h, seg), color, x, y + h / 2, z);
-const ball = (r, color, x, y, z) => mesh(new THREE.SphereGeometry(r, 16, 12), color, x, y, z);
+// Boxes get softly rounded edges so everything looks like a smooth toy.
+const box = (w, h, d, color, x, y, z) => {
+  const r = Math.min(w, h, d) * 0.3, geo = r > 0.012 ? new RoundedBoxGeometry(w, h, d, 3, Math.min(r, 0.09)) : new THREE.BoxGeometry(w, h, d);
+  return mesh(geo, color, x, y + h / 2, z);
+};
+const cyl = (rt, rb, h, color, x, y, z, seg = 32) => mesh(new THREE.CylinderGeometry(rt, rb, h, Math.max(seg, 24)), color, x, y + h / 2, z);
+const ball = (r, color, x, y, z) => mesh(new THREE.SphereGeometry(r, 28, 20), color, x, y, z);
 function prism(w, h, d, color, x, y, z) {   // a gable roof: triangle across x, length along z
   const shape = new THREE.Shape(); shape.moveTo(-w / 2, 0); shape.lineTo(w / 2, 0); shape.lineTo(0, h); shape.closePath();
   const g = new THREE.ExtrudeGeometry(shape, { depth: d, bevelEnabled: false }); g.translate(0, 0, -d / 2);
@@ -28,8 +31,8 @@ const P = {
     box(1.7, 0.7, 0.05, "#7d6250", 0, 0, 0.42),
     prism(2.3, 0.55, 1.4, "#e8505b", 0, 0.9, -0.15),
     [-0.55, 0, 0.55].map((x, i) => group(
-      mesh(new THREE.TorusGeometry(0.16, 0.035, 6, 16), "#3b2a20", x - 0.17, 0.2, 0.62),
-      mesh(new THREE.TorusGeometry(0.16, 0.035, 6, 16), "#3b2a20", x + 0.17, 0.2, 0.62),
+      mesh(new THREE.TorusGeometry(0.16, 0.035, 10, 24), "#3b2a20", x - 0.17, 0.2, 0.62),
+      mesh(new THREE.TorusGeometry(0.16, 0.035, 10, 24), "#3b2a20", x + 0.17, 0.2, 0.62),
       box(0.36, 0.05, 0.05, ["#4dabf7", "#ff6b6b", "#fcc419"][i], x, 0.32, 0.62)))),
   bellbox: () => group(
     box(0.8, 1.3, 0.7, "#c08a5b", 0, 0, 0),
@@ -41,13 +44,13 @@ const P = {
       box(1.9, 0.3, 0.6, "#a0703f", 0, 0, z),
       box(1.75, 0.05, 0.48, "#6b4630", 0, 0.28, z),
       [-0.65, -0.32, 0, 0.32, 0.65].map(x => group(
-        mesh(new THREE.ConeGeometry(0.06, 0.2, 6), "#ff922b", x, 0.36, z).rotateX(Math.PI),
-        mesh(new THREE.ConeGeometry(0.09, 0.28, 5), "#4fae4f", x, 0.56, z)))))),
+        mesh(new THREE.ConeGeometry(0.06, 0.2, 16), "#ff922b", x, 0.36, z).rotateX(Math.PI),
+        mesh(new THREE.ConeGeometry(0.09, 0.28, 16), "#4fae4f", x, 0.56, z)))))),
   frame: () => group(
     cyl(1.05, 1.05, 0.06, "#f2e2b6", 0, 0, 0, 28),
     [[0.95, "#e8505b"], [0.7, "#4dabf7"], [0.45, "#fcc419"]].map(([r, c]) =>
-      mesh(new THREE.TorusGeometry(r, 0.05, 6, 28, Math.PI), c, 0, 0.05, 0)),
-    [0.35, -0.35].map(z => mesh(new THREE.TorusGeometry(0.95, 0.04, 6, 28, Math.PI), "#69db7c", 0, 0.05, z).rotateY(Math.PI / 2).rotateZ(0))),
+      mesh(new THREE.TorusGeometry(r, 0.05, 12, 40, Math.PI), c, 0, 0.05, 0)),
+    [0.35, -0.35].map(z => mesh(new THREE.TorusGeometry(0.95, 0.04, 12, 40, Math.PI), "#69db7c", 0, 0.05, z).rotateY(Math.PI / 2).rotateZ(0))),
   fountain: () => group(
     cyl(0.95, 1, 0.3, "#cfd8dc", 0, 0, 0),
     cyl(0.82, 0.82, 0.04, "#74c0fc", 0, 0.28, 0),
@@ -55,9 +58,9 @@ const P = {
     cyl(0.45, 0.25, 0.18, "#cfd8dc", 0, 1.05, 0),
     ball(0.12, "#a5d8ff", 0, 1.32, 0), ball(0.07, "#a5d8ff", 0.3, 1.2, 0.1), ball(0.07, "#a5d8ff", -0.25, 1.18, -0.1)),
   mud: () => group(
-    sc(mesh(new THREE.SphereGeometry(1, 10, 6), "#a47148", 0, 0.02, 0), 1, 0.08, 0.75),
-    sc(mesh(new THREE.SphereGeometry(0.35, 10, 6), "#8fb7d4", 0.5, 0.05, 0.25), 1, 0.05, 0.6),
-    [[-0.5, -0.1], [-0.2, 0.15], [0.05, -0.15], [0.3, 0.1]].map(([x, z]) => sc(mesh(new THREE.SphereGeometry(0.1, 8, 6), "#5e3d26", x, 0.08, z), 1.6, 0.4, 0.8))),
+    sc(mesh(new THREE.SphereGeometry(1, 24, 14), "#a47148", 0, 0.02, 0), 1, 0.08, 0.75),
+    sc(mesh(new THREE.SphereGeometry(0.35, 24, 14), "#8fb7d4", 0.5, 0.05, 0.25), 1, 0.05, 0.6),
+    [[-0.5, -0.1], [-0.2, 0.15], [0.05, -0.15], [0.3, 0.1]].map(([x, z]) => sc(mesh(new THREE.SphereGeometry(0.1, 16, 10), "#5e3d26", x, 0.08, z), 1.6, 0.4, 0.8))),
   hopscotch: () => group(
     box(1.4, 0.05, 1.9, "#c9cdd2", 0, 0, 0),
     [[0, 0.6], [0, 0.2], [-0.2, -0.2], [0.2, -0.2], [0, -0.6]].map(([x, z]) => box(0.34, 0.03, 0.32, "#ffffff", x, 0.05, z))),

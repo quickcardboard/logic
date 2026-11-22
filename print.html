@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Print · Who Was Where</title>
+<title>Print · Hunchkins</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;700;800&display=swap">
@@ -63,7 +63,7 @@
   let html = "", n = 1;
   const page = (cls, body) => html += `<section class="sheet ${cls}">${body}<footer class="pn">${n++}</footer></section>`;
   page("cover", `<h1>${story.title}</h1><div class="art bw">${art(story.cover ? "duck" : "")}</div><p>${story.teaser}</p>
-    <p class="hand" style="font-size:20pt">A Who Was Where? mystery. You are the map-reader.</p>`);
+    <p class="hand" style="font-size:20pt">A Hunchkins mystery. You are the map-reader.</p>`);
   const answers = [];
   for (const ch of story.chapters) {
     if (ch.pages.length) {

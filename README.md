@@ -1,6 +1,6 @@
-# Who Was Where?
+# Hunchkins
 
-A network-map deduction puzzle told as a children's storybook. Play it at https://quickcardboard.com/logic/ (served by GitHub Pages from `main`).
+Hunchkins (working title): deduction puzzles for kids, told as storybooks. Play it at https://quickcardboard.com/logic/ (served by GitHub Pages from `main`).
 
 **Rules.** Every suspect stood on a different spot of the map. Honest suspects only say true things. The **Fibber**'s statements are all false. The **Muddler** (in some cases) gets exactly one statement wrong. The evidence is always true. Place everyone and find the Fibber.
 
@@ -9,9 +9,9 @@ Distances count paths along the map: "right next to" is one path, "far" is three
 ## Files
 
 - `index.html` + `js/shelf.js`: the home page, a 3D bookshelf (three.js, vendored in `vendor/`). Click a book for its teaser, then open it. Browsers without WebGL get a plain list.
-- `play.html` + `js/play.js`: reads a story and solves its maps. `play.html?s=<story>&c=<chapter>&m=read|solve`. The map is 3D (`js/map3d.js`, props in `js/props.js`); rule checks and hints are in `js/logic.js`.
+- `play.html` + `js/play.js`: the book. `play.html?s=<story>&p=<page>`. Pages turn with a 3D page flip; each map is its own page, and solving it unlocks the pages after it. The map is 3D (`js/map3d.js`, props in `js/props.js`, shared lighting and materials in `js/look.js`); rule checks and hints are in `js/logic.js`.
 - `css/app.css`: styles for both pages, desktop and phone.
-- `stories.js`: the stories, their chapters, pages of text, and which puzzle each chapter uses.
+- `stories.js`: the stories, their chapters, pages of text, which puzzle each chapter uses, and each book's colour theme.
 - `puzzles/book/`, `puzzles/tutorial/`: maps, suspects and evidence (`cases.src.json`) and the generated puzzles (`cases.js`).
 - `print.html` + `tools/build_pdf.js`: the black-and-white printable book, one PDF per story in `pdf/`.
 - `tools/generate.py`: picks statements so each case has exactly one solution and every statement is needed. `tools/grade.py` rates difficulty; `tools/verify.py` is an independent brute-force check.

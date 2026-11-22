@@ -1,5 +1,7 @@
 // Home page: a 3D bookshelf. Tap a book to pull it out and see a teaser, then open it.
 import * as THREE from "../vendor/three.module.min.js";
+import { RoundedBoxGeometry } from "../vendor/RoundedBoxGeometry.js";
+import { makeRenderer, addLights, toy } from "./look.js";
 
 const $ = id => document.getElementById(id);
 const host = $("shelf3d");
@@ -7,39 +9,33 @@ const STORIES = window.STORIES;
 const ART = window.ART || {};
 const PUZZLE_IDS = new Set([...(window.BOOK || []), ...(window.TUTORIAL || [])].map(c => c.id));
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
+const renderer = makeRenderer();
 host.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-scene.add(new THREE.HemisphereLight("#fff6e8", "#b89878", 1.5));
-const lamp = new THREE.DirectionalLight("#fff1d6", 2.3);
-lamp.position.set(-4, 7, 8); lamp.castShadow = true; lamp.shadow.mapSize.set(2048, 2048);
-Object.assign(lamp.shadow.camera, { left: -8, right: 8, top: 6, bottom: -6 });
-lamp.shadow.radius = 5; lamp.shadow.bias = -0.0008;
-scene.add(lamp);
+addLights(renderer, scene, { sun: [-4, 8, 9], size: 8 });
 
-const M = c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.8 });
+const M = (c, o) => toy(c, o);
 const add = (geo, mat, x, y, z, parent = scene) => {
   const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = m.receiveShadow = true; parent.add(m); return m;
 };
+const rbox = (w, h, d, r = 0.08) => new RoundedBoxGeometry(w, h, d, 4, r);
 
 // ---------- the bookcase ----------
-const wood = M("#c99566"), woodDark = M("#a8774d");
+// A bright toy bookcase: white frame, sky-blue back. Theme-neutral, so any kind of story fits on it.
+const caseMat = M("#ffffff", { rough: 0.45 }), backing = M("#bfe3ff", { rough: 0.8 });
 const CASE_W = 7.2, ROW_Y = 0;
-add(new THREE.BoxGeometry(CASE_W + 0.6, 4.4, 0.2), woodDark, 0, 1.9, -1.1);            // back
-for (const x of [-CASE_W / 2 - 0.15, CASE_W / 2 + 0.15]) add(new THREE.BoxGeometry(0.3, 4.4, 2.2), wood, x, 1.9, 0); // sides
-for (const y of [ROW_Y - 0.15, 2.95]) add(new THREE.BoxGeometry(CASE_W + 0.6, 0.3, 2.2), wood, 0, y, 0);              // shelves
-add(new THREE.BoxGeometry(CASE_W + 1, 0.3, 2.4), woodDark, 0, 4.15, 0);                 // top
-add(new THREE.BoxGeometry(CASE_W + 1, 0.5, 2.4), woodDark, 0, -0.55, 0);                // base
-// a rubber duck and a little plant keep the shelves company
+add(rbox(CASE_W + 0.4, 4.4, 0.2, 0.06), backing, 0, 1.9, -1.1);                                    // back
+for (const x of [-CASE_W / 2 - 0.15, CASE_W / 2 + 0.15]) add(rbox(0.3, 4.7, 2.2, 0.12), caseMat, x, 1.9, 0); // sides
+for (const y of [ROW_Y - 0.15, 2.95]) add(rbox(CASE_W + 0.2, 0.3, 2.2, 0.1), caseMat, 0, y, 0);         // shelves
+add(rbox(CASE_W + 0.9, 0.32, 2.4, 0.14), caseMat, 0, 4.25, 0);                                         // top
+add(rbox(CASE_W + 0.9, 0.5, 2.4, 0.16), M("#ffc53d"), 0, -0.55, 0);                                   // base
+// a few toys on the shelves
 duck(2.7, ROW_Y, 0.3, 0.55);
-duck(-2.2, 3.1, 0.1, 0.42, -0.5);
-plant(1.6, 3.1, 0.2);
-stackOfBooks(-1.2, 3.1, 0);
+planet(-2.4, 3.1, 0.1);
+plant(1.7, 3.1, 0.2);
+stackOfBooks(-0.6, 3.1, 0);
 
 // ---------- books ----------
 const books = [];
@@ -49,21 +45,41 @@ const ready = document.fonts ? document.fonts.load('600 48px "Fredoka"').catch((
 ready.then(async () => {
   for (const [i, s] of STORIES.entries()) {
     const [w, h, d] = sizes[i % sizes.length];
-    const cover = await coverTexture(s, h / d);
-    const spine = spineTexture(s, w / h);
-    const pages = M("#fbf3df"), coverMat = new THREE.MeshStandardMaterial({ map: cover, roughness: 0.7 });
-    const back = M(s.spine), spineMat = new THREE.MeshStandardMaterial({ map: spine, roughness: 0.7 });
-    // box faces: +x, -x, +y, -y, +z, -z. The cover is on +x, the spine faces us on +z.
-    const book = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), [coverMat, back, pages, pages, spineMat, pages]);
-    book.castShadow = book.receiveShadow = true;
+    const book = makeBook(s, w, h, d, await coverTexture(s, h / d), spineTexture(s, w / h));
     const tilt = i === STORIES.length - 1 ? -0.12 : 0;
     book.position.set(x0 + w / 2, ROW_Y + h / 2, 0.15); book.rotation.z = tilt;
-    x0 += w + 0.08;
+    x0 += w + 0.1;
     book.userData = { story: s, home: book.position.clone(), homeRot: book.rotation.clone(), out: 0 };
+    book.traverse(o => { o.userData.book = book; });
     scene.add(book); books.push(book);
   }
   resize();
 });
+
+// A book, not a box: two cover boards, a cream page block set back from the edges, and a rounded spine.
+// The spine faces +z (out of the shelf) and the front cover faces +x.
+function makeBook(s, w, h, d, coverTex, spineTex) {
+  const g = new THREE.Group(), t = 0.05, color = s.spine;
+  const board = M(color, { rough: 0.5 });
+  const coverMat = new THREE.MeshStandardMaterial({ map: coverTex, roughness: 0.5, envMapIntensity: 0.7 });
+  const spineMat = new THREE.MeshStandardMaterial({ map: spineTex, roughness: 0.5, envMapIntensity: 0.7 });
+  // box faces: +x, -x, +y, -y, +z, -z
+  add(new THREE.BoxGeometry(t, h, d - 0.02), [coverMat, board, board, board, board, board], w / 2 - t / 2, 0, -0.01, g);
+  add(new THREE.BoxGeometry(t, h, d - 0.02), board, -w / 2 + t / 2, 0, -0.01, g);
+  add(new THREE.BoxGeometry(w - 2 * t, h - 0.1, d - 0.12), pagesMat(), 0, 0, -0.02, g);
+  const spine = add(new THREE.CylinderGeometry(w / 2, w / 2, h, 32, 1, true, -Math.PI / 2, Math.PI), spineMat, 0, 0, d / 2 - 0.05, g);
+  spine.scale.z = 0.4;
+  return g;
+}
+let _pages = null;
+function pagesMat() {   // fine lines, like the edges of many pages
+  if (_pages) return _pages;
+  const cv = document.createElement("canvas"); cv.width = 64; cv.height = 256;
+  const g = cv.getContext("2d"); g.fillStyle = "#fffaf0"; g.fillRect(0, 0, 64, 256);
+  g.fillStyle = "#e9e0cf"; for (let y = 0; y < 256; y += 4) g.fillRect(0, y, 64, 1);
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+  return (_pages = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.9, envMapIntensity: 0.5 }));
+}
 
 function spineTexture(s, aspect) {
   const H = 1024, W = Math.round(H * aspect), cv = document.createElement("canvas");
@@ -85,7 +101,11 @@ async function coverTexture(s, aspect) {   // aspect = height / depth of the boo
   if (s.cover && ART.covers?.[s.cover]) {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${ART.coverBox}" width="800" height="600">${ART.covers[s.cover]}</svg>`;
     const img = new Image(); img.src = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
-    try { await img.decode(); const iw = W - 80, ih = iw * 0.75; g.fillStyle = "#4a3b30"; g.fillRect(36, 306, iw + 8, ih + 8); g.drawImage(img, 40, 310, iw, ih); } catch {}
+    try {
+      await img.decode(); const iw = W - 80, ih = iw * 0.75;
+      g.save(); g.beginPath(); g.roundRect(40, 310, iw, ih, 36); g.clip(); g.drawImage(img, 40, 310, iw, ih); g.restore();
+      g.strokeStyle = "#ffffff"; g.lineWidth = 12; g.beginPath(); g.roundRect(40, 310, iw, ih, 36); g.stroke();
+    } catch {}
   } else {
     g.fillStyle = "rgba(255,255,255,.35)"; g.font = `600 ${W * 0.5}px "Fredoka", sans-serif`; g.textAlign = "center";
     g.fillText(s.soon ? "?" : "★", W / 2, H * 0.62);
@@ -95,12 +115,20 @@ async function coverTexture(s, aspect) {   // aspect = height / depth of the boo
   const words = s.title.split(" "), lines = [""];
   for (const w of words) { const t = (lines.at(-1) + " " + w).trim(); if (g.measureText(t).width > W - 80 && lines.at(-1)) lines.push(w); else lines[lines.length - 1] = t; }
   lines.forEach((l, i) => g.fillText(l, W / 2, 110 + i * 100));
-  g.font = `500 48px "Fredoka", sans-serif`; g.fillText(s.soon ? "Coming soon" : "Who Was Where?", W / 2, H - 90);
+  g.font = `500 48px "Fredoka", sans-serif`; g.fillText(s.soon ? "Coming soon" : s.ages || "", W / 2, H - 90);
   const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
 }
 
+function planet(x, y, z) {
+  const p = add(new THREE.SphereGeometry(0.42, 40, 28), M("#ff8fab"), x, y + 0.62, z);
+  const ring = add(new THREE.TorusGeometry(0.66, 0.05, 12, 64), M("#ffd166"), x, y + 0.62, z);
+  ring.rotation.set(1.2, 0.3, 0.2);
+  add(new THREE.CylinderGeometry(0.06, 0.06, 0.25, 16), M("#ffffff"), x, y + 0.12, z);
+  add(new THREE.CylinderGeometry(0.3, 0.34, 0.08, 32), M("#ffffff"), x, y + 0.04, z);
+  return p;
+}
 function duck(x, y, z, s, ry = 0.5) {
-  const g = new THREE.Group(), yel = M("#ffd43b");
+  const g = new THREE.Group(), yel = M("#ffd43b", { rough: 0.3 });
   add(new THREE.SphereGeometry(0.5, 20, 16), yel, 0, 0.42, 0, g).scale.set(1.25, 0.85, 1);
   add(new THREE.SphereGeometry(0.33, 20, 16), yel, 0.35, 0.95, 0, g);
   add(new THREE.ConeGeometry(0.12, 0.3, 12), M("#ff922b"), 0.72, 0.92, 0, g).rotation.z = -Math.PI / 2;
@@ -116,8 +144,8 @@ function plant(x, y, z) {
   }
 }
 function stackOfBooks(x, y, z) {
-  ["#4dabf7", "#e8505b", "#b197fc"].forEach((c, i) => {
-    const b = add(new THREE.BoxGeometry(1.3 - i * 0.12, 0.22, 1.0), M(c), x, y + 0.11 + i * 0.22, z);
+  ["#1cb0f6", "#ff4b4b", "#ce82ff"].forEach((c, i) => {
+    const b = add(rbox(1.3 - i * 0.12, 0.22, 1.0, 0.05), M(c), x, y + 0.11 + i * 0.22, z);
     b.rotation.y = (i - 1) * 0.12;
   });
 }
@@ -131,8 +159,8 @@ function resize() {
   const fov = THREE.MathUtils.degToRad(camera.fov);
   // phones (portrait): frame just the books; wide screens: the whole bookcase
   const narrow = camera.aspect < 0.9;
-  const needW = narrow ? 4.2 : CASE_W + 1.6, needH = narrow ? 3.6 : 5.6;
-  view.x = narrow ? -1.95 : 0; view.look.set(view.x, narrow ? 0.4 : 1.7, 0); view.y = narrow ? 0.3 : 1.8;
+  const needW = narrow ? 4.2 : CASE_W + 1.8, needH = narrow ? 3.6 : 6.3;
+  view.x = narrow ? -1.95 : 0; view.look.set(view.x, narrow ? 0.4 : 1.95, 0); view.y = narrow ? 0.3 : 2.1;
   view.dist = Math.max(needH / (2 * Math.tan(fov / 2)), needW / (2 * Math.tan(fov / 2) * camera.aspect));
 }
 new ResizeObserver(resize).observe(host);
@@ -145,7 +173,7 @@ function bookAt(e) {
   const r = renderer.domElement.getBoundingClientRect();
   ptr.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
   ray.setFromCamera(ptr, camera);
-  return ray.intersectObjects(books)[0]?.object || null;
+  return ray.intersectObjects(books, true)[0]?.object.userData.book || null;
 }
 renderer.domElement.addEventListener("pointermove", e => {
   hovered = picked ? null : bookAt(e);
@@ -170,6 +198,8 @@ function pick(b) {
   $("tMeta").textContent = s.soon ? "Coming soon" : [s.ages, maps ? `${maps} map${maps > 1 ? "s" : ""} to solve` : ""].filter(Boolean).join(" · ");
   $("tOpen").hidden = !!s.soon;
   $("tPdf").hidden = !s.pdf; if (s.pdf) $("tPdf").href = s.pdf;
+  $("teaser").style.setProperty("--accent", s.theme?.accent || s.spine);
+  $("teaser").style.setProperty("--accent-ink", s.theme?.accentInk || s.ink || "#fff");
   $("teaser").classList.add("show");
 }
 function putBack() {
