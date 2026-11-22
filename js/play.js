@@ -21,26 +21,77 @@ const story = window.STORIES.find(s => s.id === params.get("s") && !s.soon) || w
 // A bigger screen puts several of them on one page (only at those page breaks), and a page that still
 // doesn't fit flows onto the next page (at a paragraph break when it can).
 let pages = [];
-const oneEach = ch => ch.pages.map((pg, i) => ({ i, text: pg.text, end: i === ch.pages.length - 1 }));
-function buildPages(split = (ch, paras) => [paras], group = oneEach) {
+const oneEach = ch => ch.pages.map((pg, i) => ({ i, n: 1, text: pg.text, end: i === ch.pages.length - 1 }));
+function buildPages(split = (ch, paras) => [paras], group = oneEach, even = false) {
   const out = [];
   if (story.chapters.some(ch => ch.pages.length)) out.push({ kind: "title" });
+  const puzzleOf = ch => ch.puzzle && PUZZLES[ch.puzzle];
+  const partsOf = (ch, g) => split(ch, g.text, g.i === 0, g.end && !!puzzleOf(ch));
+  let section = [];   // the chapters since the last map: on an open book they should fill whole spreads
   story.chapters.forEach((ch, ci) => {
-    group(ch).forEach(({ i, text, end }) => {
-      const head = i === 0, last = end && !!(ch.puzzle && PUZZLES[ch.puzzle]);
-      const parts = split(ch, text, head, last);
-      parts.forEach((paras, part) => out.push({ kind: "story", ch, ci, i, part, paras,
-        head: head && part === 0, last: last && part === parts.length - 1 }));
-    });
-    if (ch.puzzle && PUZZLES[ch.puzzle]) out.push({ kind: "puzzle", ch, ci, c: PUZZLES[ch.puzzle] });
+    const groups = group(ch).map(g => ({ ...g, parts: partsOf(ch, g) }));
+    section.push({ ch, ci, groups });
+    if (!puzzleOf(ch)) return;
+    // An odd number of pages would leave an empty page before the map. Break up a joined page to even it out.
+    const count = () => section.reduce((n, s) => n + s.groups.reduce((m, g) => m + g.parts.length, 0), 0);
+    if (even && count() % 2) {
+      for (const s of [...section].reverse()) {
+        const k = s.groups.findIndex(g => g.n > 1);
+        if (k < 0) continue;
+        const g = s.groups[k], pg = s.ch.pages, cut = g.i + Math.ceil(g.n / 2);
+        const a = { i: g.i, n: cut - g.i, end: false, text: pg.slice(g.i, cut).flatMap(p => p.text) };
+        const b = { i: cut, n: g.i + g.n - cut, end: g.end, text: pg.slice(cut, g.i + g.n).flatMap(p => p.text) };
+        a.parts = partsOf(s.ch, a); b.parts = partsOf(s.ch, b);
+        s.groups.splice(k, 1, a, b);
+        if (count() % 2 === 0) break;
+      }
+      // still odd: give the fullest page's last paragraphs a page of their own
+      if (count() % 2) {
+        let best = null;
+        for (const s of section) for (const g of s.groups) g.parts.forEach((paras, k) => {
+          const len = paras.join(" ").length;
+          if (paras.length > 1 && (!best || len > best.len)) best = { g, k, len };
+        });
+        if (best) {
+          const paras = best.g.parts[best.k], len = list => list.join(" ").length;
+          let j = 1;
+          while (j < paras.length - 1 && len(paras.slice(0, j + 1)) <= len(paras) / 2) j++;
+          best.g.parts.splice(best.k, 1, paras.slice(0, j), paras.slice(j));
+        }
+      }
+    }
+    flushSection();
   });
+  function flushSection() {
+    for (const { ch, ci, groups } of section) {
+      groups.forEach(({ i, end, parts }) => {
+        const head = i === 0, last = end && !!puzzleOf(ch);
+        parts.forEach((paras, part) => out.push({ kind: "story", ch, ci, i, part, paras,
+          head: head && part === 0, last: last && part === parts.length - 1 }));
+      });
+      if (puzzleOf(ch)) out.push({ kind: "puzzle", ch, ci, c: puzzleOf(ch) });
+    }
+    section = [];
+  }
+  flushSection();
   out.push({ kind: "end" });
   pages = out;
 }
 buildPages();
 
 const blank = () => ({ pos: {}, role: {}, marks: {}, crossed: {}, notes: {} });
-const stateOf = c => Object.assign(blank(), store.get("wwW:" + c.id) || {});
+// A saved map from an older version of a story may name places or people this map no longer has: drop those.
+const stateOf = c => {
+  const st = Object.assign(blank(), store.get("wwW:" + c.id) || {});
+  const spots = new Set(c.spots.map(s => s.id)), names = new Set(c.suspects.map(s => s.name));
+  const keep = (o, ok) => Object.fromEntries(Object.entries(o || {}).filter(([k, v]) => ok(k, v)));
+  st.pos = keep(st.pos, (who, at) => names.has(who) && spots.has(at));
+  st.role = keep(st.role, who => names.has(who));
+  st.crossed = keep(st.crossed, at => spots.has(at));
+  st.notes = keep(st.notes, at => spots.has(at));
+  st.marks = keep(st.marks, () => true);
+  return st;
+};
 // Once solved, a map keeps its later pages unlocked even if the player changes it afterwards.
 const solved = c => { const s = store.get("wwW:" + c.id); return !!(s?.solved || s?.everSolved); };
 // A page is locked while any map before it is unsolved.
@@ -145,11 +196,11 @@ function paginate() {
     ch.pages.forEach((pg, i) => {
       const end = i === ch.pages.length - 1, puzzle = !!(ch.puzzle && PUZZLES[ch.puzzle]);
       const g = groups[groups.length - 1];
-      if (g && fits(ch, [...g.text, ...pg.text], g.i === 0, end && puzzle)) { g.text = [...g.text, ...pg.text]; g.end = end; return; }
-      groups.push({ i, text: pg.text, end });
+      if (g && fits(ch, [...g.text, ...pg.text], g.i === 0, end && puzzle)) { g.text = [...g.text, ...pg.text]; g.end = end; g.n++; return; }
+      groups.push({ i, n: 1, text: pg.text, end });
     });
     return groups;
-  });
+  }, wide);
   probe.remove();
 }
 const pageKey = p => p ? [p.kind, p.ci, p.i ?? "", p.part ?? ""].join(":") : "";

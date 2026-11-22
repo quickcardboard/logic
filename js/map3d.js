@@ -28,7 +28,7 @@ export class Map3D {
 
     new ResizeObserver(() => this.resize()).observe(host);
     this.bindPointer();
-    const loop = (t) => { this.tick(t); requestAnimationFrame(loop); };
+    const loop = (t) => { requestAnimationFrame(loop); try { this.tick(t); } catch (e) { console.error(e); } };   // one bad frame never stops the map
     requestAnimationFrame(loop);
   }
 
@@ -235,7 +235,7 @@ export class Map3D {
       }
     }
     for (const P of Object.values(this.pawns)) {
-      P.tag.hidden = !P.pawn.visible || !P.at;
+      P.tag.hidden = !P.pawn.visible || !this.spots[P.at];
       if (P.tag.hidden) continue;
       const w = P.tag.offsetWidth, h = P.tag.offsetHeight;   // beside the pawn's feet, so the pawn stays in full view
       const q = v(this.spots[P.at], PLATFORM_R * 0.62, 0.3, PLATFORM_R * 0.5);
