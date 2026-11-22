@@ -78,7 +78,7 @@ def zara(x, y, s=1):
         f'<path d="M-54 -14 Q-50 -64 0 -62 Q50 -64 54 -14 Q38 -40 8 -38 Q6 -28 0 -24 Q-6 -36 -28 -36 Q-46 -32 -54 -14 Z" {st(3.5, "#4a2f22")}/>',
         f'<circle cx="-20" cy="0" r="13" {st(3, "none")}/><circle cx="20" cy="0" r="13" {st(3, "none")}/><path d="M-7 -2 Q0 -6 7 -2" {st(2.5)}/><path d="M-9 20 Q0 26 9 20" {st(3)}/>', "")
 
-PORTRAITS = {"Mo": mo, "Zara": zara, "Coach Red": coach, "Mr. Blue": bolt, "Ms. Green": fig, "Mrs. Purple": gloria, "Principal Plumpton": plumpton}
+PORTRAITS = {"Mo": mo, "Zara": zara, "Coach Cherry": coach, "Mr. Blueberry": bolt, "Ms. Peapod": fig, "Mrs. Lavender": gloria, "Principal Plumpton": plumpton}
 def duck_cover():
     """Cover for The Rubber Duck Bandit: the principal, a duck on his head, ducks everywhere."""
     sky = '<rect x="-200" y="-150" width="400" height="300" fill="#ffe8a3"/>'

@@ -99,15 +99,15 @@
   ],
   "suspects": [
    {
-    "name": "Coach Red",
+    "name": "Coach Cherry",
     "color": "#ef4444"
    },
    {
-    "name": "Mr. Blue",
+    "name": "Mr. Blueberry",
     "color": "#3b82f6"
    },
    {
-    "name": "Ms. Green",
+    "name": "Ms. Peapod",
     "color": "#22c55e"
    }
   ],
@@ -126,20 +126,20 @@
    }
   ],
   "statements": {
-   "Coach Red": [
+   "Coach Cherry": [
     {
      "text": "I was right next to the Vegetable Garden.",
      "t": "nextto",
      "spot": "garden"
     }
    ],
-   "Mr. Blue": [
+   "Mr. Blueberry": [
     {
      "text": "I was at a crossroads (3 or more paths).",
      "t": "crossroads"
     }
    ],
-   "Ms. Green": [
+   "Ms. Peapod": [
     {
      "text": "I wasn't at the Water Fountain.",
      "t": "notat",
@@ -149,9 +149,9 @@
   },
   "solution": {
    "positions": {
-    "Coach Red": "fountain",
-    "Mr. Blue": "frame",
-    "Ms. Green": "mud"
+    "Coach Cherry": "fountain",
+    "Mr. Blueberry": "frame",
+    "Ms. Peapod": "mud"
    },
    "fibber": null,
    "muddler": null
@@ -285,19 +285,19 @@
   ],
   "suspects": [
    {
-    "name": "Coach Red",
+    "name": "Coach Cherry",
     "color": "#ef4444"
    },
    {
-    "name": "Mr. Blue",
+    "name": "Mr. Blueberry",
     "color": "#3b82f6"
    },
    {
-    "name": "Ms. Green",
+    "name": "Ms. Peapod",
     "color": "#22c55e"
    },
    {
-    "name": "Mrs. Purple",
+    "name": "Mrs. Lavender",
     "color": "#a855f7"
    }
   ],
@@ -322,46 +322,46 @@
    }
   ],
   "want_at": {
-   "Mrs. Purple": "kitchen"
+   "Mrs. Lavender": "kitchen"
   },
   "hide_spots": [
    "flagpole"
   ],
   "statements": {
-   "Coach Red": [
+   "Coach Cherry": [
     {
-     "text": "Mr. Blue was right next to me.",
+     "text": "Mr. Blueberry was right next to me.",
      "t": "near",
-     "who": "Mr. Blue"
+     "who": "Mr. Blueberry"
     }
    ],
-   "Mr. Blue": [
+   "Mr. Blueberry": [
     {
      "text": "I was at a crossroads (3 or more paths).",
      "t": "crossroads"
     }
    ],
-   "Ms. Green": [
+   "Ms. Peapod": [
     {
      "text": "I was right next to the Front Door.",
      "t": "nextto",
      "spot": "door"
     }
    ],
-   "Mrs. Purple": [
+   "Mrs. Lavender": [
     {
-     "text": "Ms. Green and I were exactly two paths apart.",
+     "text": "Ms. Peapod and I were exactly two paths apart.",
      "t": "two",
-     "who": "Ms. Green"
+     "who": "Ms. Peapod"
     }
    ]
   },
   "solution": {
    "positions": {
-    "Coach Red": "toilets",
-    "Mr. Blue": "staff",
-    "Ms. Green": "office",
-    "Mrs. Purple": "kitchen"
+    "Coach Cherry": "toilets",
+    "Mr. Blueberry": "staff",
+    "Ms. Peapod": "office",
+    "Mrs. Lavender": "kitchen"
    },
    "fibber": null,
    "muddler": null

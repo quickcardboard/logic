@@ -22,8 +22,8 @@ window.STORIES = [
             "This is a problem for Mo Pickles and Zara Quinn, because they are detectives. They have a magnifying glass, a notebook and a hamster called Sergeant Nibbles.",
             "They have solved zero cases."] },
           { art: "place:hall", text: [
-            "On Monday, Principal Plumpton called the whole school into the hall. \"This Friday, our lunch lady Mrs. Purple retires after FIFTY YEARS of fish sticks!\"",
-            "Everybody clapped. Mrs. Purple waved her ladle and hummed.",
+            "On Monday, Principal Plumpton called the whole school into the hall. \"This Friday, our lunch lady Mrs. Lavender retires after FIFTY YEARS of fish sticks!\"",
+            "Everybody clapped. Mrs. Lavender waved her ladle and hummed.",
             "Then the principal unlocked his office door with his very own key. He pulled."] },
           { art: "duck", text: [
             "SQUEAK. SQUEAK SQUEAK SQUEAKSQUEAKSQUEAK.",
@@ -49,9 +49,9 @@ window.STORIES = [
             "\"PICKLES! QUINN!\" spluttered the principal. \"FIND! THAT! BANDIT!\""] },
           { art: "place:staff", text: [
             "\"Three grown-ups were on playground duty,\" said Zara. \"One of them might have seen something.\"",
-            "Coach Red blew his whistle. TWEEEET! \"I WAS RIGHT NEXT TO THE VEGETABLE GARDEN!\"",
-            "Mr. Blue leaned on his mop. \"I was at a crossroads. Three paths or more.\"",
-            "Ms. Green put a finger to her lips. \"Shhh. I was not at the Water Fountain.\""] },
+            "Coach Cherry blew his whistle. TWEEEET! \"I WAS RIGHT NEXT TO THE VEGETABLE GARDEN!\"",
+            "Mr. Blueberry leaned on his mop. \"I was at a crossroads. Three paths or more.\"",
+            "Ms. Peapod put a finger to her lips. \"Shhh. I was not at the Water Fountain.\""] },
           { art: "place:mud", text: [
             "\"I've cracked it!\" said Mo. \"It was Kevin Dimbleby!\" \"Kevin was eating crackers next to us,\" said Zara. \"Suspicious crackers,\" said Mo.",
             "Outside, Zara found two clues. The Bell Cupboard padlock still had its cobweb, so nobody had been in there. And there were big grown-up boot prints in the Mud Patch.",
@@ -62,20 +62,20 @@ window.STORIES = [
         id: "duck2", title: "Chapter 2: The Flag Fiasco", puzzle: "duck2",
         pages: [
           { art: "place:frame", text: [
-            "Mr. Blue had been at the Climbing Frame, right next to the Bike Shed. \"Nobody was behind that shed,\" he said. \"The rope went tight all by itself, just as the principal walked past.\"",
+            "Mr. Blueberry had been at the Climbing Frame, right next to the Bike Shed. \"Nobody was behind that shed,\" he said. \"The rope went tight all by itself, just as the principal walked past.\"",
             "Zara wrote it down. Mo decided the Bandit was a ghost.",
             "Sergeant Nibbles was promoted to Captain Nibbles for not getting wet."] },
           { art: "place:flagpole", text: [
-            "On Wednesday, everyone was careful. Kevin checked his chair for ducks. Coach Red checked his whistle for ducks. Mo checked his sandwich for ducks.",
+            "On Wednesday, everyone was careful. Kevin checked his chair for ducks. Coach Cherry checked his whistle for ducks. Mo checked his sandwich for ducks.",
             "At 9:00 exactly, the fire alarm went off. BRRRRING!",
             "Everyone hurried outside. Everyone looked up. The school flag was gone. In its place flapped a giant yellow duck that said QUACK! DAY 3!",
             "\"PICKLES!\" bellowed Principal Plumpton. \"QUINN!\" \"We know, sir,\" said Zara. \"Find that Bandit.\""] },
           { art: "place:kitchen", text: [
             "Four grown-ups were still inside when the alarm rang. Zara wrote down what each one said.",
-            "Coach Red: TWEEEET! \"MR. BLUE WAS RIGHT NEXT TO ME!\" Mr. Blue: \"I was at a crossroads. It's the pipes, you know.\" Ms. Green: \"Shhh. I was right next to the Front Door.\"",
-            "Mrs. Purple hummed and stirred. \"Ms. Green and I were two paths apart, dear.\""] },
+            "Coach Cherry: TWEEEET! \"MR. BLUEBERRY WAS RIGHT NEXT TO ME!\" Mr. Blueberry: \"I was at a crossroads. It's the pipes, you know.\" Ms. Peapod: \"Shhh. I was right next to the Front Door.\"",
+            "Mrs. Lavender hummed and stirred. \"Ms. Peapod and I were two paths apart, dear.\""] },
           { art: "place:hall", text: [
-            "Mo gasped. \"She's HUMMING! The Bandit is MRS. PURPLE!\" \"Mrs. Purple always hums,\" said Zara. \"So do you.\" \"...Hmm,\" said Mo.",
+            "Mo gasped. \"She's HUMMING! The Bandit is MRS. LAVENDER!\" \"Mrs. Lavender always hums,\" said Zara. \"So do you.\" \"...Hmm,\" said Mo.",
             "Zara found three clues. The Hall floor was freshly mopped, with no footprints. The grass by the Flagpole was wet with dew, with no footprints. And in the Toilets, the paper roll was still spinning.",
             "\"Who was right next to the Flagpole?\" she asked you. \"They might have seen who pulled the rope.\""] },
         ],
