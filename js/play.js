@@ -368,7 +368,7 @@ function portrait(name, color) {
 
 function renderPeople() {
   const spotName = Object.fromEntries(c.spots.map(s => [s.id, s.name]));
-  const people = q("#people"); people.innerHTML = "";
+  const people = q("#people"); people.innerHTML = ""; people.classList.toggle("five", c.suspects.length > 4);
   for (const p of c.suspects) {
     const b = document.createElement("button");
     b.type = "button";
@@ -392,7 +392,9 @@ function renderDetail() {
     const says = document.createElement("div");
     says.className = "says item" + (showing === p.name ? " on" : "");
     says.style.setProperty("--c", p.color);
-    says.innerHTML = `<div class="who">${p.name} said:</div>`;
+    const quiet = !c.statements[p.name].length, note = c.notes?.[p.name];
+    says.innerHTML = `<div class="who">${p.name}${quiet && p.egg ? "" : " said:"}</div>` +
+      (quiet && note ? `<p class="note">${note}</p>` : "");
     const ul = document.createElement("ul");
     c.statements[p.name].forEach((s, k) => {
       const li = document.createElement("li"), mk = st.marks[p.name + k] || "";

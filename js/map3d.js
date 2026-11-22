@@ -98,7 +98,7 @@ export class Map3D {
       b.appendChild(btn);
     });
     for (const p of c.suspects) {
-      const pawn = makePawn(p.color);
+      const pawn = p.egg ? makeEgg(p.color) : makePawn(p.color);
       pawn.visible = false; pawn.userData.who = p.name;
       pawn.traverse(o => { o.userData.who = p.name; });
       this.world.add(pawn);
@@ -367,6 +367,19 @@ function makePawn(color) {
   const head = new THREE.Mesh(new THREE.SphereGeometry(0.27, 32, 24), mat("#f6d2b5"));
   head.position.y = 0.98;
   for (const m of [body, base, head]) { m.castShadow = true; g.add(m); }
+  return g;
+}
+
+// The dragon egg is a piece you place too: a speckled egg instead of a person.
+function makeEgg(color) {
+  const g = new THREE.Group(); g.scale.setScalar(1.45);
+  const egg = new THREE.Mesh(new THREE.SphereGeometry(0.34, 40, 28), mat(color));
+  egg.scale.set(1, 1.3, 1); egg.position.y = 0.44; egg.castShadow = true; g.add(egg);
+  for (let i = 0; i < 14; i++) {
+    const a = i * 2.4, y = 0.2 + (i % 5) * 0.11, r = 0.34 * Math.sqrt(Math.max(0, 1 - ((y - 0.44) / 0.44) ** 2));
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 8), mat(i % 2 ? "#2f9e44" : "#e8590c"));
+    dot.position.set(Math.cos(a) * r, y, Math.sin(a) * r); dot.scale.set(1, 1, 0.5); dot.lookAt(0, y, 0); g.add(dot);
+  }
   return g;
 }
 

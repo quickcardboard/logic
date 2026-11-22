@@ -892,5 +892,802 @@
    "fibber": null,
    "muddler": null
   }
+ },
+ {
+  "id": "egg1",
+  "title": "Chapter 1: 10:00, The Walking Towels",
+  "theme": "castle",
+  "roles": [],
+  "level": 1,
+  "kinds": [
+   "crossroads",
+   "deadend",
+   "nextto",
+   "notat"
+  ],
+  "story": "Who carried the pile of towels out of the Throne Room at 10:00?",
+  "spots": [
+   {
+    "id": "throne",
+    "name": "Throne Room",
+    "icon": "👑",
+    "x": 8,
+    "y": 14
+   },
+   {
+    "id": "greathall",
+    "name": "Great Hall",
+    "icon": "🍗",
+    "x": 34,
+    "y": 40
+   },
+   {
+    "id": "chapel",
+    "name": "Chapel",
+    "icon": "🔔",
+    "x": 8,
+    "y": 72
+   },
+   {
+    "id": "stairs",
+    "name": "Grand Stairs",
+    "icon": "🪜",
+    "x": 60,
+    "y": 10
+   },
+   {
+    "id": "armoury",
+    "name": "Armoury",
+    "icon": "🛡️",
+    "x": 90,
+    "y": 22
+   },
+   {
+    "id": "castlekitchen",
+    "name": "Kitchen",
+    "icon": "🍳",
+    "x": 46,
+    "y": 78
+   },
+   {
+    "id": "pantry",
+    "name": "Pantry",
+    "icon": "🧀",
+    "x": 76,
+    "y": 94
+   },
+   {
+    "id": "laundry",
+    "name": "Laundry",
+    "icon": "🧺",
+    "x": 18,
+    "y": 96
+   },
+   {
+    "id": "courtyard",
+    "name": "Courtyard",
+    "icon": "⛲",
+    "x": 82,
+    "y": 62
+   }
+  ],
+  "paths": [
+   [
+    "throne",
+    "greathall"
+   ],
+   [
+    "greathall",
+    "chapel"
+   ],
+   [
+    "greathall",
+    "stairs"
+   ],
+   [
+    "greathall",
+    "castlekitchen"
+   ],
+   [
+    "greathall",
+    "courtyard"
+   ],
+   [
+    "stairs",
+    "armoury"
+   ],
+   [
+    "armoury",
+    "courtyard"
+   ],
+   [
+    "castlekitchen",
+    "pantry"
+   ],
+   [
+    "castlekitchen",
+    "laundry"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Sir Radish",
+    "color": "#ef4444"
+   },
+   {
+    "name": "Lady Bluebell",
+    "color": "#3b82f6"
+   },
+   {
+    "name": "Wizard Fernbeard",
+    "color": "#22c55e"
+   },
+   {
+    "name": "Mother Mulberry",
+    "color": "#a855f7"
+   }
+  ],
+  "evidence": [
+   {
+    "type": "occupied",
+    "spot": "throne",
+    "text": "Ollie the page boy saw a walking pile of towels leave the Throne Room at 10:00. Someone was in the Throne Room.",
+    "icon": "🧺"
+   },
+   {
+    "type": "empty",
+    "spot": "chapel",
+    "text": "The kids' choir practiced in the Chapel at 10:00, and no grown-ups came in. Nobody was in the Chapel.",
+    "icon": "🎵"
+   }
+  ],
+  "hide_spots": [
+   "throne"
+  ],
+  "statements": {
+   "Sir Radish": [],
+   "Lady Bluebell": [
+    {
+     "text": "I was right next to the Armoury.",
+     "t": "nextto",
+     "spot": "armoury"
+    }
+   ],
+   "Wizard Fernbeard": [
+    {
+     "text": "I was right next to the Armoury.",
+     "t": "nextto",
+     "spot": "armoury"
+    },
+    {
+     "text": "I wasn't at the Grand Stairs.",
+     "t": "notat",
+     "spot": "stairs"
+    }
+   ],
+   "Mother Mulberry": [
+    {
+     "text": "I was at a place with three or more paths.",
+     "t": "crossroads"
+    },
+    {
+     "text": "I wasn't at the Great Hall.",
+     "t": "notat",
+     "spot": "greathall"
+    }
+   ]
+  },
+  "solution": {
+   "positions": {
+    "Sir Radish": "throne",
+    "Lady Bluebell": "stairs",
+    "Wizard Fernbeard": "courtyard",
+    "Mother Mulberry": "castlekitchen"
+   },
+   "fibber": null,
+   "muddler": null
+  },
+  "notes": {
+   "Sir Radish": "“I cannot remember! It is all a blur.” (No clue here. Work out where everyone else was first.)"
+  }
+ },
+ {
+  "id": "egg2",
+  "title": "Chapter 2: 10:30, The Speckled Pumpkin",
+  "theme": "castle",
+  "roles": [],
+  "level": 1,
+  "kinds": [
+   "crossroads",
+   "deadend",
+   "nextto",
+   "notat",
+   "near"
+  ],
+  "story": "The egg rolled out of the Laundry toward the Kitchen. Who was in the Kitchen at 10:30?",
+  "spots": [
+   {
+    "id": "throne",
+    "name": "Throne Room",
+    "icon": "👑",
+    "x": 10,
+    "y": 12
+   },
+   {
+    "id": "greathall",
+    "name": "Great Hall",
+    "icon": "🍗",
+    "x": 34,
+    "y": 34
+   },
+   {
+    "id": "courtyard",
+    "name": "Courtyard",
+    "icon": "⛲",
+    "x": 10,
+    "y": 70
+   },
+   {
+    "id": "castlekitchen",
+    "name": "Kitchen",
+    "icon": "🍳",
+    "x": 60,
+    "y": 30
+   },
+   {
+    "id": "pantry",
+    "name": "Pantry",
+    "icon": "🧀",
+    "x": 62,
+    "y": 4
+   },
+   {
+    "id": "laundry",
+    "name": "Laundry",
+    "icon": "🧺",
+    "x": 90,
+    "y": 14
+   },
+   {
+    "id": "well",
+    "name": "Well",
+    "icon": "🪣",
+    "x": 90,
+    "y": 58
+   },
+   {
+    "id": "patch",
+    "name": "Pumpkin Patch",
+    "icon": "🎃",
+    "x": 60,
+    "y": 74
+   },
+   {
+    "id": "henhouse",
+    "name": "Henhouse",
+    "icon": "🐔",
+    "x": 34,
+    "y": 92
+   }
+  ],
+  "paths": [
+   [
+    "throne",
+    "greathall"
+   ],
+   [
+    "greathall",
+    "courtyard"
+   ],
+   [
+    "greathall",
+    "castlekitchen"
+   ],
+   [
+    "castlekitchen",
+    "pantry"
+   ],
+   [
+    "castlekitchen",
+    "laundry"
+   ],
+   [
+    "castlekitchen",
+    "patch"
+   ],
+   [
+    "laundry",
+    "well"
+   ],
+   [
+    "patch",
+    "well"
+   ],
+   [
+    "patch",
+    "henhouse"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Sir Radish",
+    "color": "#ef4444"
+   },
+   {
+    "name": "Lady Bluebell",
+    "color": "#3b82f6"
+   },
+   {
+    "name": "Wizard Fernbeard",
+    "color": "#22c55e"
+   },
+   {
+    "name": "Mother Mulberry",
+    "color": "#a855f7"
+   }
+  ],
+  "evidence": [
+   {
+    "type": "empty",
+    "spot": "pantry",
+    "text": "The Pantry is locked until lunch, so nobody can nibble the Hatching Cake. Nobody was in the Pantry.",
+    "icon": "🔒"
+   }
+  ],
+  "hide_spots": [
+   "castlekitchen"
+  ],
+  "statements": {
+   "Sir Radish": [
+    {
+     "text": "I was at a dead end.",
+     "t": "deadend"
+    },
+    {
+     "text": "I wasn't at the Throne Room.",
+     "t": "notat",
+     "spot": "throne"
+    }
+   ],
+   "Lady Bluebell": [
+    {
+     "text": "I was right next to the Throne Room.",
+     "t": "nextto",
+     "spot": "throne"
+    }
+   ],
+   "Wizard Fernbeard": [
+    {
+     "text": "I was at a dead end.",
+     "t": "deadend"
+    },
+    {
+     "text": "I was right next to the Pumpkin Patch.",
+     "t": "nextto",
+     "spot": "patch"
+    }
+   ],
+   "Mother Mulberry": [
+    {
+     "text": "I was right next to the Pantry.",
+     "t": "nextto",
+     "spot": "pantry"
+    }
+   ]
+  },
+  "solution": {
+   "positions": {
+    "Sir Radish": "courtyard",
+    "Lady Bluebell": "greathall",
+    "Wizard Fernbeard": "henhouse",
+    "Mother Mulberry": "castlekitchen"
+   },
+   "fibber": null,
+   "muddler": null
+  }
+ },
+ {
+  "id": "egg3",
+  "title": "Chapter 3: 12:00, The Crystal Ball",
+  "theme": "castle",
+  "roles": [],
+  "level": 2,
+  "kinds": [
+   "crossroads",
+   "deadend",
+   "nextto",
+   "notat",
+   "near",
+   "two"
+  ],
+  "story": "Who picked up the speckled 'pumpkin' in the Pumpkin Patch at 12:00?",
+  "spots": [
+   {
+    "id": "laundry",
+    "name": "Laundry",
+    "icon": "🧺",
+    "x": 10,
+    "y": 10
+   },
+   {
+    "id": "castlekitchen",
+    "name": "Kitchen",
+    "icon": "🍳",
+    "x": 36,
+    "y": 22
+   },
+   {
+    "id": "well",
+    "name": "Well",
+    "icon": "🪣",
+    "x": 12,
+    "y": 52
+   },
+   {
+    "id": "patch",
+    "name": "Pumpkin Patch",
+    "icon": "🎃",
+    "x": 48,
+    "y": 54
+   },
+   {
+    "id": "henhouse",
+    "name": "Henhouse",
+    "icon": "🐔",
+    "x": 26,
+    "y": 90
+   },
+   {
+    "id": "orchard",
+    "name": "Apple Orchard",
+    "icon": "🍎",
+    "x": 74,
+    "y": 30
+   },
+   {
+    "id": "tower",
+    "name": "Wizard's Tower",
+    "icon": "🔮",
+    "x": 70,
+    "y": 88
+   },
+   {
+    "id": "stables",
+    "name": "Stables",
+    "icon": "🐴",
+    "x": 92,
+    "y": 62
+   },
+   {
+    "id": "courtyard",
+    "name": "Courtyard",
+    "icon": "⛲",
+    "x": 92,
+    "y": 92
+   }
+  ],
+  "paths": [
+   [
+    "castlekitchen",
+    "laundry"
+   ],
+   [
+    "castlekitchen",
+    "patch"
+   ],
+   [
+    "laundry",
+    "well"
+   ],
+   [
+    "patch",
+    "well"
+   ],
+   [
+    "patch",
+    "henhouse"
+   ],
+   [
+    "patch",
+    "orchard"
+   ],
+   [
+    "patch",
+    "tower"
+   ],
+   [
+    "orchard",
+    "stables"
+   ],
+   [
+    "tower",
+    "courtyard"
+   ],
+   [
+    "courtyard",
+    "stables"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Sir Radish",
+    "color": "#ef4444"
+   },
+   {
+    "name": "Lady Bluebell",
+    "color": "#3b82f6"
+   },
+   {
+    "name": "Wizard Fernbeard",
+    "color": "#22c55e"
+   },
+   {
+    "name": "Mother Mulberry",
+    "color": "#a855f7"
+   }
+  ],
+  "evidence": [
+   {
+    "type": "occupied",
+    "spot": "patch",
+    "text": "Bean was up an apple tree at 12:00. She saw a grown-up pick up the biggest pumpkin in the Pumpkin Patch, but her hat was over her eyes.",
+    "icon": "🍎"
+   }
+  ],
+  "hide_spots": [
+   "patch"
+  ],
+  "statements": {
+   "Sir Radish": [
+    {
+     "text": "I was right next to the Stables.",
+     "t": "nextto",
+     "spot": "stables"
+    },
+    {
+     "text": "Wizard Fernbeard and I were exactly two paths apart.",
+     "t": "two",
+     "who": "Wizard Fernbeard"
+    }
+   ],
+   "Lady Bluebell": [
+    {
+     "text": "I was right next to the Laundry.",
+     "t": "nextto",
+     "spot": "laundry"
+    }
+   ],
+   "Wizard Fernbeard": [],
+   "Mother Mulberry": [
+    {
+     "text": "I was right next to the Laundry.",
+     "t": "nextto",
+     "spot": "laundry"
+    },
+    {
+     "text": "I wasn't at the Well.",
+     "t": "notat",
+     "spot": "well"
+    }
+   ]
+  },
+  "solution": {
+   "positions": {
+    "Sir Radish": "courtyard",
+    "Lady Bluebell": "well",
+    "Wizard Fernbeard": "patch",
+    "Mother Mulberry": "castlekitchen"
+   },
+   "fibber": null,
+   "muddler": null
+  },
+  "notes": {
+   "Wizard Fernbeard": "“Where was I? I have been looking for my crystal ball all day.” (No clue here.)"
+  }
+ },
+ {
+  "id": "egg4",
+  "title": "Chapter 4: 2:30, Bonk, Bonk, Bonk",
+  "theme": "castle",
+  "roles": [],
+  "level": 2,
+  "kinds": [
+   "at",
+   "near",
+   "far",
+   "nextto"
+  ],
+  "story": "The egg rolled down the Wizard's Tower stairs and out the door. Place the egg too: where did it stop?",
+  "spots": [
+   {
+    "id": "patch",
+    "name": "Pumpkin Patch",
+    "icon": "🎃",
+    "x": 12,
+    "y": 20
+   },
+   {
+    "id": "well",
+    "name": "Well",
+    "icon": "🪣",
+    "x": 10,
+    "y": 62
+   },
+   {
+    "id": "orchard",
+    "name": "Apple Orchard",
+    "icon": "🍎",
+    "x": 40,
+    "y": 8
+   },
+   {
+    "id": "tower",
+    "name": "Wizard's Tower",
+    "icon": "🔮",
+    "x": 40,
+    "y": 46
+   },
+   {
+    "id": "stables",
+    "name": "Stables",
+    "icon": "🐴",
+    "x": 70,
+    "y": 24
+   },
+   {
+    "id": "courtyard",
+    "name": "Courtyard",
+    "icon": "⛲",
+    "x": 66,
+    "y": 64
+   },
+   {
+    "id": "forge",
+    "name": "Forge",
+    "icon": "⚒️",
+    "x": 92,
+    "y": 50
+   },
+   {
+    "id": "bonfire",
+    "name": "Bonfire Pile",
+    "icon": "🔥",
+    "x": 90,
+    "y": 88
+   },
+   {
+    "id": "drawbridge",
+    "name": "Drawbridge",
+    "icon": "🌉",
+    "x": 40,
+    "y": 92
+   }
+  ],
+  "paths": [
+   [
+    "patch",
+    "tower"
+   ],
+   [
+    "patch",
+    "orchard"
+   ],
+   [
+    "patch",
+    "well"
+   ],
+   [
+    "orchard",
+    "stables"
+   ],
+   [
+    "tower",
+    "courtyard"
+   ],
+   [
+    "courtyard",
+    "bonfire"
+   ],
+   [
+    "courtyard",
+    "stables"
+   ],
+   [
+    "courtyard",
+    "drawbridge"
+   ],
+   [
+    "stables",
+    "forge"
+   ],
+   [
+    "forge",
+    "bonfire"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Sir Radish",
+    "color": "#ef4444"
+   },
+   {
+    "name": "Lady Bluebell",
+    "color": "#3b82f6"
+   },
+   {
+    "name": "Wizard Fernbeard",
+    "color": "#22c55e"
+   },
+   {
+    "name": "Mother Mulberry",
+    "color": "#a855f7"
+   },
+   {
+    "name": "The Egg",
+    "color": "#f4b860",
+    "egg": true
+   }
+  ],
+  "evidence": [
+   {
+    "type": "empty",
+    "spot": "stables",
+    "text": "Bean was brushing the ponies in the Stables at 2:30. No grown-ups came in, and nothing rolled in.",
+    "icon": "🐴"
+   }
+  ],
+  "statements": {
+   "Sir Radish": [
+    {
+     "text": "I heard a big THUD right next to me.",
+     "t": "near",
+     "who": "The Egg"
+    },
+    {
+     "text": "Lady Bluebell was far from me (3 or more paths).",
+     "t": "far",
+     "who": "Lady Bluebell"
+    }
+   ],
+   "Lady Bluebell": [
+    {
+     "text": "I was right next to the Courtyard.",
+     "t": "nextto",
+     "spot": "courtyard"
+    }
+   ],
+   "Wizard Fernbeard": [
+    {
+     "text": "I was at the Wizard's Tower.",
+     "t": "at",
+     "spot": "tower"
+    }
+   ],
+   "Mother Mulberry": [
+    {
+     "text": "I was right next to the Apple Orchard.",
+     "t": "nextto",
+     "spot": "orchard"
+    }
+   ],
+   "The Egg": []
+  },
+  "solution": {
+   "positions": {
+    "Sir Radish": "forge",
+    "Lady Bluebell": "drawbridge",
+    "Wizard Fernbeard": "tower",
+    "Mother Mulberry": "patch",
+    "The Egg": "bonfire"
+   },
+   "fibber": null,
+   "muddler": null
+  },
+  "hide_spots": [
+   "bonfire"
+  ],
+  "notes": {
+   "The Egg": "Eggs can't talk. Place the egg on the map too, on its own spot."
+  }
  }
 ]

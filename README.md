@@ -4,6 +4,8 @@ Hunchkins (working title): deduction puzzles for kids, told as storybooks. Play 
 
 **Rules.** Every person stood on a different spot of the map. Use what each person says and the clues on the map to work out where everyone was. The children's books have no liars: puzzles get harder through the logic alone (the engine still supports a Fibber and a Muddler, but the books don't use them).
 
+A case may also have a piece that isn't a person, like the dragon egg in The Runaway Dragon Egg: a suspect with `"egg": true` and no statements, placed like everyone else. `"notes"` gives a line to show for someone with no clue statements.
+
 Distances count paths along the map: "right next to" is one path, "far" is three or more.
 
 ## Files

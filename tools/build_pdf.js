@@ -3,7 +3,7 @@
 const { chromium } = require("playwright");
 const path = require("path"), fs = require("fs");
 const root = path.dirname(__dirname);
-const stories = [["duck", "pdf/the-rubber-duck-bandit.pdf"]];
+const stories = [["duck", "pdf/the-rubber-duck-bandit.pdf"], ["egg", "pdf/the-runaway-dragon-egg.pdf"]];
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage();
