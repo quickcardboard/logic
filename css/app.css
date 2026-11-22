@@ -212,7 +212,8 @@ body.app { height: 100dvh; display: flex; flex-direction: column; overflow: hidd
 /* labels laid over the 3D map */
 .map-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
 .spot-label, .pawn-tag { position: absolute; left: 0; top: 0; will-change: transform; }
-.spot-label { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px; width: 200px; }
+.xmark { z-index: 1; } .map-overlay .notes { z-index: 2; } .spot-label { z-index: 3; } .pawn-tag { z-index: 4; }
+.spot-label { display: flex; justify-content: center; align-items: center; gap: 4px; width: max-content; }
 .spot-label .name {
   font: 600 15px/1 var(--hand); color: #1d2b4f; background: #fff;
   padding: 5px 9px 4px; border-radius: 10px; white-space: nowrap; box-shadow: 0 0 0 1.5px rgba(29, 43, 79, .25), 0 2px 0 rgba(29, 43, 79, .2);
@@ -226,9 +227,23 @@ body.app { height: 100dvh; display: flex; flex-direction: column; overflow: hidd
 }
 .spot-label .badge.on { background: var(--accent); animation: none; transform: scale(1.1); }
 @keyframes pulse { 50% { transform: scale(1.08); } }
-.spot-label .notes { display: flex; gap: 3px; flex-basis: 100%; justify-content: center; }
-.spot-label .notes:empty { display: none; }
-.spot-label .notes i { width: 22px; height: 22px; border-radius: 50%; background: var(--c); color: #fff; font: 800 12px/18px var(--body); text-align: center; font-style: normal; border: 2px solid #fff; }
+.map-overlay .notes { position: absolute; left: 0; top: 0; display: flex; gap: 2px; will-change: transform; }
+.map-overlay .notes[hidden] { display: none; }
+.map-overlay .notes i {   /* a pencilled "maybe": a dashed ring in the person's colour with their initial */
+  width: 24px; height: 24px; border-radius: 50%; background: #fff; color: var(--c); border: 2.5px dashed var(--c);
+  font: 800 12px/19px var(--body); text-align: center; font-style: normal; box-shadow: 0 2px 0 rgba(29, 43, 79, .25);
+}
+.xmark {   /* crossed out: a big red X over the whole platform, drawn on top of the model */
+  position: absolute; left: 0; top: 0; width: calc(var(--r) * 1.7); height: calc(var(--r) * 1.7); will-change: transform; pointer-events: none;
+}
+.xmark[hidden] { display: none; }
+.xmark::before, .xmark::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 100%; height: max(7px, calc(var(--r) * .2)); border-radius: 99px;
+  background: #ff4b4b; box-shadow: 0 0 0 2.5px #fff, 0 3px 0 2.5px rgba(29, 43, 79, .25);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.xmark::after { transform: translate(-50%, -50%) rotate(-45deg); }
+.spot-label.crossed .name { color: #7a8497; text-decoration: line-through; text-decoration-color: #ff4b4b; text-decoration-thickness: 2px; }
 .pawn-tag { font: 600 14px/1 var(--hand); background: var(--c); color: #fff; padding: 4px 8px 3px; border-radius: 9px; border: 2px solid #fff; white-space: nowrap; }
 
 .toast {
@@ -268,7 +283,7 @@ dialog ul { padding-left: 20px; margin: 0 0 12px; }
 .pg.full-page .dock-actions button { padding-top: 9px; padding-bottom: 9px; font-size: 17px; }
 .pg.full-page .map-tools { left: 8px; top: 8px; }
 .pg.full-page .map-tools button { font-size: 14px; padding: 7px 9px; }
-.pg.full-page .spot-label { width: 150px; }
+.pg.full-page .map-overlay .notes i { width: 20px; height: 20px; font-size: 10.5px; line-height: 15px; border-width: 2px; }
 .pg.full-page .spot-label .name { font-size: 13px; padding: 3px 6px 2px; }
 .pg.full-page .spot-label .badge { width: 28px; height: 28px; font-size: 15px; border-width: 2px; }
 .pg.full-page .coach { top: auto; bottom: 6px; right: 6px; left: 6px; width: auto; padding: 7px 10px 8px; border-width: 2px; }

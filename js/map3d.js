@@ -74,18 +74,15 @@ export class Map3D {
       const ring = new THREE.Mesh(new THREE.TorusGeometry(PLATFORM_R + 0.03, 0.07, 12, 72), new THREE.MeshStandardMaterial({ color: "#b98a4e", roughness: 0.5, envMapIntensity: 0.6 }));
       ring.rotation.x = Math.PI / 2; ring.position.y = 0.23; g.add(ring);
       const p = prop(s.id); p.scale.setScalar(0.82); p.position.set(0, 0.22, -0.2); g.add(p);
-      const cross = new THREE.Group();
-      for (const r of [Math.PI / 4, -Math.PI / 4]) {
-        const bar = new THREE.Mesh(new RoundedBoxGeometry(2.3, 0.16, 0.26, 2, 0.07), toy("#ff4b4b"));
-        bar.rotation.y = r; bar.position.y = 0.75; cross.add(bar);
-      }
-      cross.visible = false; g.add(cross);
       g.traverse(o => { o.userData.spot = s.id; });
       this.world.add(g);
       const label = document.createElement("div"); label.className = "spot-label";
-      label.innerHTML = `<span class="badges"></span><span class="name">${s.name}</span><span class="notes"></span>`;
-      this.overlay.appendChild(label);
-      this.spots[s.id] = { g, plat, ring, prop: p, cross, label, crossed: false };
+      label.innerHTML = `<span class="badges"></span><span class="name">${s.name}</span>`;
+      // a crossed-out place gets a big red X drawn over it, and pencil notes sit as a row of chips on the platform
+      const cross = document.createElement("div"); cross.className = "xmark"; cross.hidden = true;
+      const notes = document.createElement("div"); notes.className = "notes";
+      this.overlay.append(cross, notes, label);
+      this.spots[s.id] = { g, plat, ring, prop: p, cross, notes, label, crossed: false };
     }
     c.evidence.forEach((e, i) => {
       const b = this.spots[e.spot]?.label.querySelector(".badges");
@@ -121,12 +118,12 @@ export class Map3D {
     const who = {}; for (const n in st.pos) who[st.pos[n]] = n;
     for (const [id, S] of Object.entries(this.spots)) {
       const crossed = !!st.crossed[id] && !who[id];
-      S.cross.visible = crossed;
-      S.prop.visible = true;
+      S.cross.hidden = !crossed;
+      S.label.classList.toggle("crossed", crossed);
       S.plat.material.color.set(crossed ? "#c9ced6" : PLATFORM);
       const notes = (st.notes[id] || []).filter(() => !who[id]);
-      S.label.querySelector(".notes").innerHTML = notes.map(n => `<i style="--c:${color[n]}">${n[0]}</i>`).join("");
-      S.label.classList.toggle("has-notes", notes.length > 0);
+      S.notes.innerHTML = notes.map(n => `<i style="--c:${color[n]}" title="${n} (maybe)">${n.split(" ").pop()[0]}</i>`).join("");
+      S.notes.hidden = !notes.length;
     }
     for (const [name, P] of Object.entries(this.pawns)) {
       const at = st.pos[name] || null;
@@ -207,15 +204,43 @@ export class Map3D {
     return { x: (p.x + 1) / 2 * el.clientWidth, y: (1 - p.y) / 2 * el.clientHeight };
   }
   placeLabels() {
+    const el = this.renderer.domElement, W = el.clientWidth, H = el.clientHeight;
+    const v = (S, x, y, z) => this.project(S.g.position.clone().add(new THREE.Vector3(x, y, z)));
+    // Everything laid over the map (place names, pencil notes, name tags over pawns) is a box. Boxes start at
+    // their anchor and are nudged apart until none overlap, so every word stays readable even on a small phone.
+    const boxes = [];
+    const add = (node, cx, top, weight = 1) => boxes.push({ node, x: cx, y: top, w: node.offsetWidth, h: node.offsetHeight, weight });
     for (const S of Object.values(this.spots)) {
-      const p = this.project(S.g.position.clone().add(new THREE.Vector3(0, 0, PLATFORM_R + 0.1)));
-      S.label.style.transform = `translate(${p.x}px, ${p.y}px) translate(-50%, 0)`;
+      const p = v(S, 0, 0, PLATFORM_R + 0.1);
+      add(S.label, p.x, p.y);
+      if (!S.notes.hidden) { const n = v(S, 0, 0.3, PLATFORM_R * 0.5); add(S.notes, n.x, n.y - S.notes.offsetHeight / 2, 0.5); }
+      // the X covers the platform, on top of the model
+      const c = v(S, 0, 0.3, 0), edge = v(S, PLATFORM_R, 0.3, 0);
+      S.cross.style.transform = `translate(${c.x}px, ${c.y}px) translate(-50%, -50%)`;
+      S.cross.style.setProperty("--r", Math.max(14, Math.abs(edge.x - c.x)).toFixed(1) + "px");
     }
     for (const P of Object.values(this.pawns)) {
       P.tag.hidden = !P.pawn.visible;
       if (!P.pawn.visible) continue;
       const p = this.project(P.pawn.position.clone().add(new THREE.Vector3(0, 1.55, 0)));
-      P.tag.style.transform = `translate(${p.x}px, ${p.y}px) translate(-50%, -100%)`;
+      add(P.tag, p.x, p.y - P.tag.offsetHeight, 0.7);
+    }
+    for (let it = 0; it < 16; it++) {
+      let moved = false;
+      for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
+        const a = boxes[i], b = boxes[j];
+        const ox = (a.w + b.w) / 2 + 4 - Math.abs(a.x - b.x), oy = (a.h + b.h) / 2 + 3 - Math.abs((a.y + a.h / 2) - (b.y + b.h / 2));
+        if (ox <= 0 || oy <= 0) continue;
+        moved = true;
+        const ka = a.weight / (a.weight + b.weight), kb = 1 - ka;
+        if (oy < ox * 1.4) { const d = oy + 1, s = a.y + a.h / 2 <= b.y + b.h / 2 ? 1 : -1; a.y -= s * d * ka; b.y += s * d * kb; }
+        else { const d = ox + 1, s = a.x <= b.x ? 1 : -1; a.x -= s * d * ka; b.x += s * d * kb; }
+      }
+      if (!moved) break;
+    }
+    for (const B of boxes) {
+      B.x = Math.max(B.w / 2 + 2, Math.min(W - B.w / 2 - 2, B.x)); B.y = Math.max(2, Math.min(H - B.h - 2, B.y));
+      B.node.style.transform = `translate(${B.x.toFixed(1)}px, ${B.y.toFixed(1)}px) translate(-50%, 0)`;
     }
   }
 
