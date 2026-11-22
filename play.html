@@ -2,75 +2,85 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff7e6">
 <title>Who Was Where</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;700&display=swap">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="css/app.css">
 </head>
-<body>
-<header>
-  <a class="back" href="./">&larr; All stories</a>
-  <h1 id="storyTitle">Who Was Where?</h1>
-  <p class="tag" id="tag">Place every suspect on the map.</p>
-  <nav id="cases"></nav>
+<body class="app">
+<header class="topbar">
+  <a class="icon-btn" href="./" aria-label="Back to the bookshelf" title="Back to the bookshelf">&larr;</a>
+  <div class="tb-title">
+    <span id="storyTitle" class="story-name"></span>
+    <select id="chapterSel" aria-label="Chapter"></select>
+  </div>
+  <div class="seg" id="modeSeg">
+    <button id="modeRead" type="button">📖 <span>Read</span></button>
+    <button id="modeSolve" type="button">🔍 <span>Solve</span></button>
+  </div>
+  <button class="icon-btn" id="helpBtn" type="button" aria-label="How to play" title="How to play">?</button>
 </header>
 
-<main>
-  <section class="board">
-    <div class="maphead">
-      <h2 id="title"></h2>
-      <div class="tools">
-        <button id="toolPlace" class="tool on" title="Tap a spot for a note, hold to place">✋ Notes &amp; place</button>
-        <button id="toolCross" class="tool" title="Cross out a spot you know is empty">✕ Cross out</button>
+<section id="reader" class="reader" hidden>
+  <div class="page-stage" id="stage"><article class="page" id="page"></article></div>
+  <div class="reader-nav">
+    <button id="prev" class="round" type="button" aria-label="Previous page">&#8249;</button>
+    <div id="dots" class="dots"></div>
+    <button id="next" class="round" type="button" aria-label="Next page">&#8250;</button>
+  </div>
+</section>
+
+<section id="solver" class="solver" hidden>
+  <div class="mapbox" id="mapbox">
+    <div class="map-tools seg small">
+      <button id="toolPlace" type="button" title="Tap a place for a maybe, hold to place">✋ Place</button>
+      <button id="toolCross" type="button" title="Cross out places nobody was">✕ Cross out</button>
+    </div>
+    <div id="coach" class="coach" hidden></div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+  <aside class="dock">
+    <p class="question" id="question"></p>
+    <div class="people" id="people"></div>
+    <div class="said" id="said"></div>
+    <div class="clues" id="clues"></div>
+    <div class="dock-actions">
+      <button id="hintBtn" type="button">💡 Hint</button>
+      <button id="check" class="primary" type="button">Check my answer</button>
+      <div class="more">
+        <button id="moreBtn" type="button" aria-label="More" aria-expanded="false">⋯</button>
+        <div class="menu" id="menu" hidden>
+          <button id="reset" type="button">Start this map over</button>
+          <button id="solve" type="button">Show the answer</button>
+          <a id="pdfLink" href="#" download>Download the story as a PDF</a>
+        </div>
       </div>
     </div>
-    <svg id="map" viewBox="-8 -10 116 118" role="img" aria-label="Map of the case"></svg>
-    <p class="hint" id="hint">Select a suspect card. Tap a spot to pencil them in as a maybe. Press and hold a spot to place them there.</p>
-  </section>
+  </aside>
+</section>
 
-  <section class="side">
-    <div id="coach" class="coach" hidden></div>
-    <p id="story" class="story"></p>
-    <details class="rules">
-      <summary>How to play</summary>
-      <ul>
-        <li>Each suspect stood on a <b>different</b> spot.</li>
-        <li><b>Right next to</b> means joined by one path. <b>Two paths apart</b> and <b>far (3 or more)</b> count the fewest paths between two spots.</li>
-        <li><b>Dead end</b> means one path leaves that spot. A <b>crossroads</b> has three or more.</li>
-        <li>Honest suspects tell the truth.</li>
-        <li id="fibberRule">The <b>Fibber</b>'s statements are all false.</li>
-        <li id="muddlerRule">The <b>Muddler</b> is honest but forgetful: exactly one of their statements is false.</li>
-        <li>The evidence is always true.</li>
-        <li><b>Where to start:</b> look for statements about a person's own spot, like "I was at a dead end". Pencil in the few spots that fit, then use statements about other people.</li>
-        <li>Select a suspect, then <b>tap</b> a spot to pencil them in as a maybe, or <b>press and hold</b> to place them. Hold a placed suspect's spot to pick them back up.</li>
-        <li>Tap a statement to mark it true ✓ or false ✗ as you work. That's just for your notes.</li>
-      </ul>
-    </details>
-
-    <h3>Evidence</h3>
-    <ul id="evidence" class="evidence"></ul>
-
-    <h3>Suspects</h3>
-    <div id="suspects"></div>
-
-    <div class="actions">
-      <button id="check" class="primary">Close the case</button>
-      <button id="reset">Start over</button>
-      <button id="hintBtn">💡 Hint</button>
-      <button id="solve">Show solution</button>
-    </div>
-    <p id="verdict" class="verdict" aria-live="polite"></p>
-  </section>
-</main>
-
-<footer>Every case has exactly one answer.</footer>
+<dialog id="help">
+  <h2>How to play</h2>
+  <ul>
+    <li>Everyone stood on a <b>different</b> place.</li>
+    <li><b>Right next to</b> means joined by one path. <b>Two paths apart</b> and <b>far (3 or more)</b> count the fewest paths.</li>
+    <li>A <b>dead end</b> has one path. A <b>crossroads</b> has three or more.</li>
+    <li>The evidence is always true. Honest people tell the truth.</li>
+    <li class="r-fib">The <b>Fibber</b>'s statements are all false.</li>
+    <li class="r-mud">The <b>Muddler</b> gets exactly one statement wrong.</li>
+    <li>Pick a person, then <b>tap</b> a place to pencil them in as a maybe, or <b>press and hold</b> to place them. You can also <b>drag</b> a person onto the map.</li>
+    <li>Tap a statement to tick it ✓ or cross it ✗ while you think.</li>
+  </ul>
+  <form method="dialog"><button class="primary">Got it</button></form>
+</dialog>
 
 <script src="puzzles/tutorial/cases.js"></script>
 <script src="puzzles/book/cases.js"></script>
 <script src="art.js"></script>
 <script src="stories.js"></script>
-<script src="app.js"></script>
+<script type="module" src="js/play.js"></script>
 </body>
 </html>

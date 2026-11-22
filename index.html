@@ -2,56 +2,49 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff7e6">
 <title>Who Was Where</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;700&display=swap">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="css/app.css">
 </head>
-<body class="home">
-<header class="hero">
+<body class="app home3d">
+<header class="home-head">
   <h1>Who Was Where?</h1>
-  <p class="tag">Mystery stories where <b>you</b> are the map-reader. Read the story, then place every suspect on the map.</p>
+  <p>Pick a book from the shelf. Read the story, then solve the map.</p>
 </header>
 
-<main class="library">
-  <section class="practice">
-    <div>
-      <h2>New here? Try the tutorial</h2>
-      <p>A tiny case that shows you, one step at a time, how to read the map, use the evidence and place each person.</p>
-    </div>
-    <a class="btn" href="play.html?s=tutorial">Start the tutorial</a>
-  </section>
+<div id="shelf3d" class="shelf3d" aria-hidden="true"></div>
 
-  <h2 class="shelf-title">The story shelf</h2>
-  <div id="shelf" class="shelf"></div>
+<aside id="teaser" class="teaser" aria-live="polite">
+  <button id="tClose" class="icon-btn close" type="button" aria-label="Put the book back">&times;</button>
+  <h2 id="tTitle"></h2>
+  <p id="tText"></p>
+  <p id="tMeta" class="meta"></p>
+  <div class="t-actions">
+    <button id="tOpen" class="primary big" type="button">Open the book</button>
+    <a id="tPdf" class="btn" href="#" download>⬇ Printable PDF</a>
+  </div>
+</aside>
 
-</main>
-
-<footer>Every case has exactly one answer, and you can check it yourself.</footer>
+<!-- The same books as a plain list, for screen readers and browsers without 3D -->
+<nav class="booklist" id="booklist" aria-label="Stories"></nav>
 
 <script src="art.js"></script>
 <script src="puzzles/book/cases.js"></script>
+<script src="puzzles/tutorial/cases.js"></script>
 <script src="stories.js"></script>
 <script>
   (() => {
-    const shelf = document.getElementById("shelf");
-    const sets = { book: window.BOOK || [] };
-    for (const s of window.STORIES) {
-      const card = document.createElement(s.soon ? "div" : "a");
-      card.className = "book" + (s.soon ? " soon" : "");
-      if (!s.soon) card.href = "play.html?s=" + s.id;
-      const cover = s.cover && window.ART && ART.covers[s.cover]
-        ? `<svg class="cover" viewBox="${ART.coverBox}" aria-hidden="true">${ART.covers[s.cover]}</svg>`
-        : `<div class="cover blank"><span>?</span></div>`;
-      const n = s.set ? sets[s.set].length : 0;
-      card.innerHTML = `${cover}<div class="book-body"><h3>${s.title}</h3><p>${s.blurb}</p>
-        <p class="meta">${s.soon ? "Coming soon" : `${n} chapter${n === 1 ? "" : "s"} ready · ${s.ages}`}</p>
-        ${s.soon ? "" : `<span class="btn">Read and play</span>`}</div>`;
-      shelf.appendChild(card);
-    }
+    const list = document.getElementById("booklist");
+    list.innerHTML = window.STORIES.filter(s => !s.soon).map(s =>
+      `<a href="play.html?s=${s.id}" style="--spine:${s.spine}">${s.title}</a>` + (s.pdf ? `<a class="pdf" href="${s.pdf}" download>PDF</a>` : "")).join("");
+    const gl = (() => { try { return !!document.createElement("canvas").getContext("webgl2"); } catch { return false; } })();
+    if (!gl) document.body.classList.add("no3d");
   })();
 </script>
+<script type="module" src="js/shelf.js"></script>
 </body>
 </html>

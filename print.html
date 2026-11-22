@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Print · Who Was Where</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;700;800&display=swap">
+<style>
+  /* Black-and-white print layout: one story page and one map page per chapter, US Letter. */
+  @page { size: letter; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15pt/1.5 "Nunito", sans-serif; color: #000; background: #fff; }
+  h1, h2, h3, .hand { font-family: "Fredoka", sans-serif; font-weight: 600; }
+  .sheet { width: 8.5in; height: 11in; padding: 0.6in 0.7in 0.7in; page-break-after: always; break-after: page; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+  .bw { filter: grayscale(1) contrast(1.15); }
+  .cover { align-items: center; justify-content: center; text-align: center; gap: 0.2in; }
+  .cover h1 { font-size: 54pt; margin: 0; line-height: 1; }
+  .cover .art svg { width: 5.5in; height: auto; border: 3px solid #000; border-radius: 16px; }
+  .cover p { font-size: 16pt; max-width: 5.5in; }
+  .story h2 { font-size: 30pt; margin: 0 0 0.1in; line-height: 1.05; }
+  .vignette { height: 1.5in; display: flex; justify-content: center; gap: 0.3in; margin-bottom: 0.15in; }
+  .vignette svg { height: 100%; width: auto; }
+  .story p { margin: 0 0 0.11in; }
+  .map h2 { font-size: 26pt; margin: 0; line-height: 1.05; }
+  .map .q { margin: 0.04in 0 0.08in; font-size: 13pt; }
+  .board { flex: 1; min-height: 0; border: 2.5px solid #000; border-radius: 18px; display: flex; }
+  .board svg { width: 100%; height: 100%; }
+  .bottom { display: grid; grid-template-columns: 1.35fr 1fr; gap: 0.18in; margin-top: 0.14in; font-size: 12pt; line-height: 1.35; }
+  .bottom h3 { font-size: 16pt; margin: 0 0 0.03in; }
+  .said { display: flex; gap: 0.08in; align-items: flex-start; margin-bottom: 0.06in; }
+  .said svg { width: 0.5in; height: 0.5in; flex: none; border: 1.5px solid #000; border-radius: 50%; }
+  .said b { font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 14pt; }
+  .ev { margin: 0 0 0.05in; }
+  .rules { font-size: 10.5pt; color: #222; margin-top: 0.06in; }
+  .answer { margin-top: 0.08in; font-size: 13pt; }
+  .answer span { display: inline-block; border-bottom: 2px dotted #000; width: 2.6in; }
+  .answers h2 { font-size: 30pt; margin: 0 0 0.15in; }
+  .answers p { margin: 0 0 0.12in; }
+  footer.pn { position: absolute; bottom: 0.3in; left: 0; right: 0; text-align: center; font-size: 10pt; color: #555; }
+  @media screen { body { background: #ddd; } .sheet { margin: 0.25in auto; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.2); } }
+</style>
+</head>
+<body>
+<div id="book"></div>
+<script src="art.js"></script>
+<script src="puzzles/book/cases.js"></script>
+<script src="puzzles/tutorial/cases.js"></script>
+<script src="stories.js"></script>
+<script>
+(() => {
+  const ART = window.ART, story = STORIES.find(s => s.id === (new URLSearchParams(location.search).get("s") || "duck"));
+  const PUZ = Object.fromEntries([...(window.BOOK || []), ...(window.TUTORIAL || [])].map(c => [c.id, c]));
+  const art = key => {
+    if (!key) return "";
+    const [k, id] = key.includes(":") ? key.split(":") : [key, ""];
+    if (k === "place" && ART.places[id]) return `<svg viewBox="${ART.placeBox}">${ART.places[id]}</svg>`;
+    if (k === "who" && ART.portraits[id]) return `<svg viewBox="${ART.portraitBox}">${ART.portraits[id]}</svg>`;
+    if (k === "duck") return `<svg viewBox="${ART.coverBox}">${ART.covers.duck}</svg>`;
+    return "";
+  };
+  let html = "", n = 1;
+  const page = (cls, body) => html += `<section class="sheet ${cls}">${body}<footer class="pn">${n++}</footer></section>`;
+  page("cover", `<h1>${story.title}</h1><div class="art bw">${art(story.cover ? "duck" : "")}</div><p>${story.teaser}</p>
+    <p class="hand" style="font-size:20pt">A Who Was Where? mystery. You are the map-reader.</p>`);
+  const answers = [];
+  for (const ch of story.chapters) {
+    if (ch.pages.length) {
+      const arts = [...new Set(ch.pages.map(p => p.art).filter(Boolean))].slice(0, 3);
+      page("story", `<h2>${ch.title}</h2><div class="vignette bw">${arts.map(art).join("")}</div>` +
+        ch.pages.flatMap(p => p.text).map(t => `<p>${t}</p>`).join(""));
+    }
+    const c = PUZ[ch.puzzle];
+    if (!c) continue;
+    page("map", `<h2>${ch.title.replace(/^Chapter \d+: /, "")}: the map</h2><p class="q">${c.story}</p>
+      <div class="board">${mapSvg(c)}</div>
+      <div class="bottom">
+        <div><h3>What they said</h3>${c.suspects.map(p => `<div class="said"><span class="bw">${art("who:" + p.name) ? art("who:" + p.name) : ""}</span><div><b>${p.name}</b><br>${c.statements[p.name].map(s => "“" + s.text + "”").join("<br>")}</div></div>`).join("")}</div>
+        <div><h3>Evidence</h3>${c.evidence.map(e => `<p class="ev">${e.type === "empty" ? "✗" : "●"} ${e.text}</p>`).join("")}
+          <p class="rules">Write each person's first letter in the circle where they stood. Everyone stood in a different place. <b>Right next to</b> = one path away. A <b>crossroads</b> has 3 or more paths; a <b>dead end</b> has 1.${c.roles.length ? " The Fibber's statements are all false." : " Everyone tells the truth."}</p>
+          <p class="answer">Answer: <span></span></p></div>
+      </div>`);
+    const name = id => c.spots.find(s => s.id === id).name;
+    answers.push(`<p><b class="hand" style="font-size:17pt">${ch.title}</b><br>${Object.entries(c.solution.positions).map(([p, id]) => `${p}: ${name(id)}`).join(" · ")}${c.solution.fibber ? `<br>The Fibber was ${c.solution.fibber}.` : ""}</p>`);
+  }
+  if (answers.length) page("answers", `<h2>Answers</h2>${answers.join("")}`);
+  document.getElementById("book").innerHTML = html;
+  // Shrink the text on any story page that runs past the bottom margin.
+  document.fonts.ready.then(() => {
+    for (const sh of document.querySelectorAll(".sheet.story")) {
+      let size = 15;
+      while (sh.scrollHeight > sh.clientHeight + 1 && size > 10) { size -= 0.5; sh.style.fontSize = size + "pt"; }
+    }
+    document.body.dataset.ready = "1";
+  });
+
+  // A black-and-white map: grey footpaths, places in circles, an empty circle to write in.
+  function mapSvg(c) {
+    const P = s => [60 + s.x * 8.8, 50 + s.y * 6.0];
+    const at = Object.fromEntries(c.spots.map(s => [s.id, P(s)]));
+    let g = "";
+    for (const [a, b] of c.paths) g += `<line x1="${at[a][0]}" y1="${at[a][1]}" x2="${at[b][0]}" y2="${at[b][1]}" stroke="#000" stroke-width="30" stroke-linecap="round"/>`;
+    for (const [a, b] of c.paths) g += `<line x1="${at[a][0]}" y1="${at[a][1]}" x2="${at[b][0]}" y2="${at[b][1]}" stroke="#eee" stroke-width="24" stroke-linecap="round"/>`;
+    for (const [a, b] of c.paths) g += `<line x1="${at[a][0]}" y1="${at[a][1]}" x2="${at[b][0]}" y2="${at[b][1]}" stroke="#999" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/>`;
+    const ev = Object.fromEntries(c.evidence.map(e => [e.spot, e.type]));
+    for (const s of c.spots) {
+      const [x, y] = at[s.id];
+      g += `<circle cx="${x}" cy="${y}" r="44" fill="#fff" stroke="#000" stroke-width="3"/>`;
+      if (ART.places[s.id]) g += `<svg x="${x - 38}" y="${y - 40}" width="76" height="52" viewBox="${ART.placeBox}" class="bw">${ART.places[s.id]}</svg>`;
+      g += `<circle cx="${x}" cy="${y + 24}" r="15" fill="#fff" stroke="#000" stroke-width="2" stroke-dasharray="4 3"/>`;
+      g += `<text x="${x}" y="${y + 68}" text-anchor="middle" font-family="Fredoka" font-weight="600" font-size="21" stroke="#fff" stroke-width="6" paint-order="stroke">${s.name}</text>`;
+      if (ev[s.id]) g += `<g transform="translate(${x + 38} ${y - 36})"><circle r="13" fill="${ev[s.id] === "empty" ? "#fff" : "#000"}" stroke="#000" stroke-width="2.5"/>${ev[s.id] === "empty" ? '<path d="M-6 -6 L6 6 M6 -6 L-6 6" stroke="#000" stroke-width="3"/>' : ""}</g>`;
+    }
+    const xs = Object.values(at).map(a => a[0]), ys = Object.values(at).map(a => a[1]);
+    const x0 = Math.min(...xs) - 70, y0 = Math.min(...ys) - 70, w = Math.max(...xs) - x0 + 70, h = Math.max(...ys) - y0 + 100;
+    return `<svg viewBox="${x0} ${y0} ${w} ${h}" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
+  }
+})();
+</script>
+</body>
+</html>
