@@ -16,7 +16,7 @@ export function addLights(renderer, scene, { sun = [-6, 14, 9], size = 14 } = {}
   const pm = new THREE.PMREMGenerator(renderer);
   scene.environment = pm.fromScene(new RoomEnvironment(renderer), 0.04).texture;
   pm.dispose();
-  scene.add(new THREE.HemisphereLight("#ffffff", "#cfe3ff", 0.35));
+  scene.add(new THREE.HemisphereLight("#ffffff", "#e6f1ff", 0.7));
   const light = new THREE.DirectionalLight("#fff6e6", 1.25);
   light.position.set(...sun); light.castShadow = true;
   light.shadow.mapSize.set(2048, 2048);

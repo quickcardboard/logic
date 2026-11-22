@@ -35,7 +35,7 @@ const firstPageOf = ci => pages.findIndex(p => p.ci === ci);
 // ---------- theme and top bar ----------
 const theme = story.theme || {};
 const root = document.documentElement.style;
-for (const [k, v] of Object.entries({ accent: theme.accent, "accent-ink": theme.accentInk, soft: theme.soft, sky: theme.sky, paper: theme.paper }))
+for (const [k, v] of Object.entries({ accent: theme.accent, "accent-ink": theme.accentInk, soft: theme.soft }))
   if (v) root.setProperty("--" + k, v);
 $("storyTitle").textContent = story.title;
 document.title = story.title + " · Hunchkins";
@@ -147,25 +147,18 @@ function renderContents() {
 }
 
 // ---------- building a page ----------
-function artFor(key) {
-  if (!key) return "";
-  const [kind, id] = key.includes(":") ? key.split(":") : [key, ""];
-  if (kind === "place" && ART.places[id]) return `<svg viewBox="${ART.placeBox}">${ART.places[id]}</svg>`;
-  if (kind === "duck" && ART.covers?.duck) return `<svg viewBox="${ART.coverBox}" preserveAspectRatio="xMidYMid slice">${ART.covers.duck}</svg>`;
-  return "";
-}
 function buildSheet(i) {
   const p = pages[i], el = document.createElement("article");
   el.className = "sheet " + p.kind;
   if (p.kind === "title") {
     const resume = bookmark > 0 && bookmark < pages.length && !lockedAt(bookmark) ? bookmark : 0;
-    el.innerHTML = `<div class="cover-art">${story.cover && ART.covers?.[story.cover] ? `<svg viewBox="${ART.coverBox}" preserveAspectRatio="xMidYMid slice">${ART.covers[story.cover]}</svg>` : ""}</div>
-      <div class="cover-text"><h1>${story.title}</h1><p>${story.teaser}</p>
+    el.innerHTML = `<div class="cover-text"><p class="kicker">A Hunchkins mystery</p><h1>${story.title}</h1><p>${story.teaser}</p>
       <div class="cover-actions"><button class="primary big" type="button" data-go="1">Start reading</button>
       ${resume > 1 ? `<button class="big" type="button" data-go="${resume}">Continue: ${pages[resume].ch?.title || "where you were"}</button>` : ""}</div></div>`;
   } else if (p.kind === "story") {
-    el.innerHTML = `<div class="art">${artFor(p.pg.art)}</div>
-      <div class="prose">${p.i === 0 ? `<h2>${p.ch.title}</h2>` : ""}${p.pg.text.map(t => `<p>${t}</p>`).join("")}
+    const m = p.ch.title.match(/^(Chapter \d+): (.*)$/);
+    const head = p.i > 0 ? "" : m ? `<p class="ch-label">${m[1]}</p><h2>${m[2]}</h2>` : `<h2>${p.ch.title}</h2>`;
+    el.innerHTML = `<div class="prose">${head}${p.pg.text.map(t => `<p>${t}</p>`).join("")}
       ${p.i === p.ch.pages.length - 1 && p.ch.puzzle ? `<button class="primary big" type="button" data-go="${i + 1}">Turn to the map →</button>` : ""}</div>
       <span class="folio">${i + 1}</span>`;
   } else if (p.kind === "puzzle") {
@@ -173,8 +166,7 @@ function buildSheet(i) {
     el.appendChild(solverEl);
   } else {
     const tut = story.id === "tutorial", main = window.STORIES.find(s => !s.soon && s.id !== "tutorial");
-    el.innerHTML = `<div class="end-art">${tut ? "🎉" : "🦆"}</div>
-      <h2>${tut ? "You're ready!" : "To be continued…"}</h2>
+    el.innerHTML = `<h2>${tut ? "You're ready!" : "To be continued…"}</h2>
       <p>${tut ? "Now try a real mystery." : "Thursday's prank is on its way. Come back soon for the next chapter."}</p>
       <div class="cover-actions">${tut && main ? `<a class="btn primary big" href="play.html?s=${main.id}">Open ${main.title}</a>` : ""}
       <a class="btn big" href="./">Back to the bookshelf</a>${story.pdf ? `<a class="btn big" href="${story.pdf}" download>⬇ Printable PDF</a>` : ""}</div>`;

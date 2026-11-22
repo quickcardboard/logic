@@ -17,6 +17,8 @@
   .bw { filter: grayscale(1) contrast(1.15); }
   .cover { align-items: center; justify-content: center; text-align: center; gap: 0.2in; }
   .cover h1 { font-size: 54pt; margin: 0; line-height: 1; }
+  .cover .kicker { font-size: 12pt; letter-spacing: .15em; text-transform: uppercase; margin: 0; }
+  .cover { border-top: 0.25in solid #000; }
   .cover .art svg { width: 5.5in; height: auto; border: 3px solid #000; border-radius: 16px; }
   .cover p { font-size: 16pt; max-width: 5.5in; }
   .story h2 { font-size: 30pt; margin: 0 0 0.1in; line-height: 1.05; }
@@ -62,13 +64,11 @@
   };
   let html = "", n = 1;
   const page = (cls, body) => html += `<section class="sheet ${cls}">${body}<footer class="pn">${n++}</footer></section>`;
-  page("cover", `<h1>${story.title}</h1><div class="art bw">${art(story.cover ? "duck" : "")}</div><p>${story.teaser}</p>
-    <p class="hand" style="font-size:20pt">A Hunchkins mystery. You are the map-reader.</p>`);
+  page("cover", `<p class="kicker">A Hunchkins mystery</p><h1>${story.title}</h1><p>${story.teaser}</p>`);
   const answers = [];
   for (const ch of story.chapters) {
     if (ch.pages.length) {
-      const arts = [...new Set(ch.pages.map(p => p.art).filter(Boolean))].slice(0, 3);
-      page("story", `<h2>${ch.title}</h2><div class="vignette bw">${arts.map(art).join("")}</div>` +
+      page("story", `<h2>${ch.title}</h2>` +
         ch.pages.flatMap(p => p.text).map(t => `<p>${t}</p>`).join(""));
     }
     const c = PUZ[ch.puzzle];

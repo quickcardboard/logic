@@ -162,14 +162,18 @@ export class Map3D {
     this.fit();
   }
   fit() {
-    const { W, D } = this.size, a = this.camera.aspect;
+    // a wide map on a tall phone screen is turned a quarter turn, so it fills the screen and labels have room
+    const wideMap = this.size.W > this.size.D * 1.1;
+    this.view.turn = this.camera.aspect < 0.95 && wideMap ? Math.PI / 2 : 0;
+    const turned = this.view.turn !== 0;
+    const W = turned ? this.size.D : this.size.W, D = turned ? this.size.W : this.size.D, a = this.camera.aspect;
     const fov = THREE.MathUtils.degToRad(this.camera.fov);
     // distance so the board fits both ways, allowing for the tilt
     const needH = D * Math.sin(this.view.tilt) + 3.2, needW = W + 0.6;
     const dist = Math.max(needH / (2 * Math.tan(fov / 2)), needW / (2 * Math.tan(fov / 2) * a)) * 1.02;
     const t = this.view.tilt, r = this.view.turn;
     this.camera.position.set(Math.sin(r) * Math.cos(t) * dist, Math.sin(t) * dist, Math.cos(r) * Math.cos(t) * dist);
-    this.camera.lookAt(0, 0.3, 0.55);
+    this.camera.lookAt(turned ? 0.55 : 0, 0.3, turned ? 0 : 0.55);
   }
 
   // ---------- frame loop: animations, hover, labels ----------

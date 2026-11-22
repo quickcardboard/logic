@@ -24,7 +24,7 @@ const rbox = (w, h, d, r = 0.08) => new RoundedBoxGeometry(w, h, d, 4, r);
 
 // ---------- the bookcase ----------
 // A bright toy bookcase: white frame, sky-blue back. Theme-neutral, so any kind of story fits on it.
-const caseMat = M("#ffffff", { rough: 0.45 }), backing = M("#bfe3ff", { rough: 0.8 });
+const caseMat = M("#ffffff", { rough: 0.45 }), backing = M("#cfeaff", { rough: 0.9 });
 const CASE_W = 7.2, ROW_Y = 0;
 add(rbox(CASE_W + 0.4, 4.4, 0.2, 0.06), backing, 0, 1.9, -1.1);                                    // back
 for (const x of [-CASE_W / 2 - 0.15, CASE_W / 2 + 0.15]) add(rbox(0.3, 4.7, 2.2, 0.12), caseMat, x, 1.9, 0); // sides
