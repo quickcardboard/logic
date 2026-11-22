@@ -8,6 +8,7 @@ import { makeRenderer, addLights, toy } from "./look.js";
 const SCALE = 0.2;          // map units (0..100) to world units
 const PLATFORM_R = 1.35;
 const LONG_MS = 450;
+const PLATFORM = "#f2d9a6";   // warm sand, so white things (toilets, sinks) stand out
 
 export class Map3D {
   constructor(host, handlers) {
@@ -68,9 +69,9 @@ export class Map3D {
 
     for (const s of c.spots) {
       const g = new THREE.Group(); g.position.set(this.wx(s), 0, this.wz(s));
-      const plat = new THREE.Mesh(new THREE.CylinderGeometry(PLATFORM_R, PLATFORM_R + 0.06, 0.22, 64), new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 0.5, envMapIntensity: 0.7 }));
+      const plat = new THREE.Mesh(new THREE.CylinderGeometry(PLATFORM_R, PLATFORM_R + 0.06, 0.22, 64), new THREE.MeshStandardMaterial({ color: PLATFORM, roughness: 0.6, envMapIntensity: 0.6 }));
       plat.position.y = 0.11; plat.receiveShadow = true; plat.castShadow = true; g.add(plat);
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(PLATFORM_R + 0.03, 0.07, 12, 72), new THREE.MeshStandardMaterial({ color: "#c9d6ea", roughness: 0.4, envMapIntensity: 0.8 }));
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(PLATFORM_R + 0.03, 0.07, 12, 72), new THREE.MeshStandardMaterial({ color: "#b98a4e", roughness: 0.5, envMapIntensity: 0.6 }));
       ring.rotation.x = Math.PI / 2; ring.position.y = 0.23; g.add(ring);
       const p = prop(s.id); p.scale.setScalar(0.82); p.position.set(0, 0.22, -0.2); g.add(p);
       const cross = new THREE.Group();
@@ -122,7 +123,7 @@ export class Map3D {
       const crossed = !!st.crossed[id] && !who[id];
       S.cross.visible = crossed;
       S.prop.visible = true;
-      S.plat.material.color.set(crossed ? "#dfe5ee" : "#ffffff");
+      S.plat.material.color.set(crossed ? "#c9ced6" : PLATFORM);
       const notes = (st.notes[id] || []).filter(() => !who[id]);
       S.label.querySelector(".notes").innerHTML = notes.map(n => `<i style="--c:${color[n]}">${n[0]}</i>`).join("");
       S.label.classList.toggle("has-notes", notes.length > 0);
@@ -166,14 +167,23 @@ export class Map3D {
     const wideMap = this.size.W > this.size.D * 1.1;
     this.view.turn = this.camera.aspect < 0.95 && wideMap ? Math.PI / 2 : 0;
     const turned = this.view.turn !== 0;
-    const W = turned ? this.size.D : this.size.W, D = turned ? this.size.W : this.size.D, a = this.camera.aspect;
-    const fov = THREE.MathUtils.degToRad(this.camera.fov);
-    // distance so the board fits both ways, allowing for the tilt
-    const needH = D * Math.sin(this.view.tilt) + 3.2, needW = W + 0.6;
-    const dist = Math.max(needH / (2 * Math.tan(fov / 2)), needW / (2 * Math.tan(fov / 2) * a)) * 1.02;
-    const t = this.view.tilt, r = this.view.turn;
-    this.camera.position.set(Math.sin(r) * Math.cos(t) * dist, Math.sin(t) * dist, Math.cos(r) * Math.cos(t) * dist);
-    this.camera.lookAt(turned ? 0.55 : 0, 0.3, turned ? 0 : 0.55);
+    // Step the camera back until every corner of the board (and the tallest props near the back) is on screen.
+    // Perspective makes the near edge look wider than the far one, so this is measured rather than guessed.
+    const t = this.view.tilt, r = this.view.turn, hw = this.size.W / 2 + 0.2, hd = this.size.D / 2 + 0.2;
+    const pts = [];
+    for (const x of [-hw, hw]) for (const z of [-hd, hd]) { pts.push(new THREE.Vector3(x, -1.2, z)); pts.push(new THREE.Vector3(x, 1.4, z)); }
+    const look = new THREE.Vector3(turned ? 0.3 : 0, 0.3, turned ? 0 : 0.3), v = new THREE.Vector3();
+    const place = dist => {
+      this.camera.position.set(Math.sin(r) * Math.cos(t) * dist, Math.sin(t) * dist, Math.cos(r) * Math.cos(t) * dist).add(look);
+      this.camera.lookAt(look); this.camera.updateMatrixWorld();
+    };
+    let dist = 4;
+    for (let k = 0; k < 120; k++) {
+      place(dist);
+      const fits = pts.every(p => { v.copy(p).project(this.camera); return Math.abs(v.x) <= 0.97 && v.y <= 0.9 && v.y >= -0.97; });
+      if (fits) break;
+      dist *= 1.03;
+    }
   }
 
   // ---------- frame loop: animations, hover, labels ----------
@@ -184,7 +194,7 @@ export class Map3D {
       const hot = id === this.hot || id === this.pressing;
       const k = this.pressing === id ? 1.08 : hot ? 1.04 : 1;
       S.g.scale.lerp(new THREE.Vector3(k, k, k), 0.25);
-      S.ring.material.color.set(this.pressing === id ? "#ff4b4b" : hot ? "#1cb0f6" : "#c9d6ea");
+      S.ring.material.color.set(this.pressing === id ? "#ff4b4b" : hot ? "#1cb0f6" : "#b98a4e");
     }
     for (const P of Object.values(this.pawns)) {
       if (P.pawn.visible) P.pawn.rotation.y = P.pawn.userData.selected ? t / 400 : 0;
@@ -233,42 +243,76 @@ export class Map3D {
   bindPointer() {
     const el = this.renderer.domElement;
     el.style.touchAction = "none";
-    let timer = null, downId = null, fired = false, start = null;
+    let timer = null, downId = null, fired = false, start = null, drag = null;
     const cancel = () => { clearTimeout(timer); timer = null; this.pressing = null; };
+    const pawnAt = (x, y) => {
+      const r = el.getBoundingClientRect();
+      this.ptr.set((x - r.left) / r.width * 2 - 1, -((y - r.top) / r.height) * 2 + 1);
+      this.ray.setFromCamera(this.ptr, this.camera);
+      const hit = this.ray.intersectObjects(Object.values(this.pawns).map(P => P.pawn).filter(p => p.visible), true)[0];
+      return hit ? hit.object.userData.who : null;
+    };
+    const ground = (x, y) => {
+      const r = el.getBoundingClientRect(), v = new THREE.Vector3();
+      this.ptr.set((x - r.left) / r.width * 2 - 1, -((y - r.top) / r.height) * 2 + 1);
+      this.ray.setFromCamera(this.ptr, this.camera);
+      return this.ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.2), v) ? v : null;
+    };
     el.addEventListener("pointermove", e => {
+      if (drag) {   // carrying a pawn: it follows the pointer, and the place under it lights up
+        if (!drag.moving && Math.hypot(e.clientX - start.x, e.clientY - start.y) > 8) { drag.moving = true; cancel(); }
+        if (drag.moving) {
+          const g = ground(e.clientX, e.clientY), P = this.pawns[drag.who];
+          if (g) P.pawn.position.set(g.x, 0.9, g.z);
+          this.hot = this.spotAt(e.clientX, e.clientY);
+        }
+        return;
+      }
       if (e.pointerType === "mouse") this.hot = this.spotAt(e.clientX, e.clientY);
-      el.style.cursor = this.hot ? "pointer" : "default";
+      el.style.cursor = pawnAt(e.clientX, e.clientY) ? "grab" : this.hot ? "pointer" : "default";
       if (start && Math.hypot(e.clientX - start.x, e.clientY - start.y) > 12) cancel();
     });
     el.addEventListener("pointerdown", e => {
       if (e.button > 0) return;
-      downId = this.spotAt(e.clientX, e.clientY); fired = false; start = { x: e.clientX, y: e.clientY };
+      el.setPointerCapture?.(e.pointerId);
+      start = { x: e.clientX, y: e.clientY }; fired = false;
+      const who = pawnAt(e.clientX, e.clientY);
+      if (who) drag = { who, moving: false };
+      downId = this.spotAt(e.clientX, e.clientY);
       if (!downId) return;
       this.pressing = downId;
       timer = setTimeout(() => {
-        fired = true; cancel();
+        if (drag?.moving) return;
+        fired = true; cancel(); drag = null;
         try { navigator.vibrate && navigator.vibrate(15); } catch {}
         this.on.hold(downId);
       }, LONG_MS);
     });
-    el.addEventListener("pointerup", () => {
+    el.addEventListener("pointerup", e => {
+      if (drag?.moving) {
+        const who = drag.who, id = this.spotAt(e.clientX, e.clientY), P = this.pawns[who];
+        drag = null; this.hot = null; cancel(); start = null;
+        P.at = null;   // re-seat it, even if it lands where it started
+        if (id && this.on.move) this.on.move(who, id); else this.update(this.st, this.selected);
+        return;
+      }
+      drag = null;
       if (timer && !fired && downId) { cancel(); this.on.tap(downId); }
       cancel(); start = null;
     });
-    el.addEventListener("pointerleave", () => { cancel(); this.hot = null; start = null; });
-    el.addEventListener("pointercancel", cancel);
+    el.addEventListener("pointerleave", () => { if (!drag) { cancel(); this.hot = null; start = null; } });
+    el.addEventListener("pointercancel", () => { cancel(); drag = null; this.hot = null; });
     el.addEventListener("contextmenu", e => e.preventDefault());
   }
 }
 
 function makePawn(color) {
   const g = new THREE.Group();
-  const shiny = toy(color, { rough: 0.35, env: 1 });
-  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.38, 0.75, 40), shiny);
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.38, 0.75, 32), mat(color));
   body.position.y = 0.38;
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.42, 0.1, 40), shiny);
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.42, 0.1, 32), mat(color));
   base.position.y = 0.05;
-  const head = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 24), shiny);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.27, 32, 24), mat("#f6d2b5"));
   head.position.y = 0.98;
   for (const m of [body, base, head]) { m.castShadow = true; g.add(m); }
   return g;

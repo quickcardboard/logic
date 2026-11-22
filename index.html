@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body class="app home3d">
+<button class="about-btn" id="aboutBtn" type="button">About</button>
 <header class="home-head">
   <h1>Hunchkins</h1>
   <p>Deduction puzzles for kids. Pick a book, read the story, solve the maps.</p>
@@ -32,6 +33,15 @@
 <!-- The same books as a plain list, for screen readers and browsers without 3D -->
 <nav class="booklist" id="booklist" aria-label="Stories"></nav>
 
+<dialog id="about" class="about">
+  <h2>About Hunchkins</h2>
+  <p>Hunchkins are storybooks for curious kids. Every map in the story is a puzzle: work out who was where, and the answer checks itself on the board.</p>
+  <p>Each book is also a printable PDF, so you can solve it with a pencil.</p>
+  <p class="about-links"><a class="btn" href="contact.html">✉ Contact us</a></p>
+  <p class="copy">© 2026 Thomas Liou. All rights reserved.</p>
+  <form method="dialog"><button class="primary">Close</button></form>
+</dialog>
+
 <script src="art.js"></script>
 <script src="puzzles/book/cases.js"></script>
 <script src="puzzles/tutorial/cases.js"></script>
@@ -43,6 +53,9 @@
       `<a href="play.html?s=${s.id}" style="--spine:${s.spine}">${s.title}</a>` + (s.pdf ? `<a class="pdf" href="${s.pdf}" download>PDF</a>` : "")).join("");
     const gl = (() => { try { return !!document.createElement("canvas").getContext("webgl2"); } catch { return false; } })();
     if (!gl) document.body.classList.add("no3d");
+    const about = document.getElementById("about");
+    document.getElementById("aboutBtn").onclick = () => about.showModal();
+    about.addEventListener("click", e => { if (e.target === about) about.close(); });
   })();
 </script>
 <script type="module" src="js/shelf.js"></script>

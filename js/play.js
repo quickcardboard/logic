@@ -1,7 +1,8 @@
-// The story book: one page at a time, turned with a 3D page flip. Map pages are puzzles,
+// The story book: a board book whose pages curl over like an ebook's (js/book.js). Map pages are puzzles,
 // and solving one unlocks the pages after it.
 import { check, hint } from "./logic.js";
 import { Map3D } from "./map3d.js";
+import { Book } from "./book.js";
 
 const $ = id => document.getElementById(id);
 const store = {
@@ -42,8 +43,8 @@ document.title = story.title + " · Hunchkins";
 $("helpBtn").onclick = () => $("help").showModal();
 if (story.pdf) $("pdfLink").href = story.pdf; else $("pdfLink").remove();
 
-// ---------- turning pages ----------
-let at = -1, sheet = null, flipping = false;
+// ---------- the book ----------
+let at = 0;
 const bookmark = store.get("wwW:at:" + story.id);
 let start = 0;
 if (params.has("p")) start = +params.get("p");
@@ -54,33 +55,20 @@ else if (params.get("c")) {   // older links: ?c=<chapter>&m=solve
 start = Math.max(0, Math.min(start, pages.length - 1));
 while (start > 0 && lockedAt(start)) start--;
 
-function go(i, dir = Math.sign(i - at)) {
-  if (flipping || i === at || i < 0 || i >= pages.length) return;
-  if (i > at && lockedAt(i)) { nudgeLocked(); return; }
-  const next = buildSheet(i), stage = $("stage");
-  const old = sheet; at = i; sheet = next;
-  afterTurn();
-  if (!old || reduceMotion) { stage.replaceChildren(next); settle(next); return; }
-  flipping = true;
-  const leaf = document.createElement("div"); leaf.className = "leaf";
-  const back = document.createElement("div"); back.className = "sheet-back";
-  const shade = document.createElement("div"); shade.className = "under-shade";
-  const ease = "cubic-bezier(.4, .05, .25, 1)", ms = 800;
-  let anim;
-  if (dir > 0) {
-    // the new page waits underneath while the old one turns over to the left
-    stage.replaceChildren(next, shade, leaf); leaf.append(old, back);
-    anim = leaf.animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(-178deg)" }], { duration: ms, easing: ease });
-    shade.animate([{ opacity: 0.35 }, { opacity: 0 }], { duration: ms, easing: ease });
-  } else {
-    // the previous page turns back over the current one
-    stage.replaceChildren(old, shade, leaf); leaf.append(next, back);
-    anim = leaf.animate([{ transform: "rotateY(-178deg)" }, { transform: "rotateY(0deg)" }], { duration: ms, easing: ease });
-    shade.animate([{ opacity: 0 }, { opacity: 0.35 }], { duration: ms, easing: ease });
-  }
-  anim.finished.then(() => { stage.replaceChildren(next); flipping = false; settle(next); });
+const book = new Book($("viewport"), {
+  count: pages.length,
+  isSpread: i => pages[i].kind === "puzzle",
+  canGo: i => !lockedAt(i),
+  left: leftPage, right: rightPage,
+  onShow: i => { at = i; afterTurn(); fitText(); },
+  onLocked: () => toast("🔒 Solve the map to turn the page."),
+});
+function go(i) {
+  if (i === at + 1 || i === at - 1) return book.turn(i - at);
+  if (i < 0 || i >= pages.length || lockedAt(i)) return;
+  book.show(i);
 }
-const turn = d => go(at + d, d);
+const turn = d => book.turn(d);
 
 function afterTurn() {
   const p = pages[at];
@@ -96,13 +84,13 @@ function afterTurn() {
   document.body.classList.toggle("on-puzzle", p.kind === "puzzle");
   renderProgress(); renderContents();
 }
-function settle(el) {
-  if (pages[at].kind === "puzzle") { map.resize(); map.fit(); }
-  el.querySelector(".prose, .sheet-scroll")?.scrollTo(0, 0);
-}
-function nudgeLocked() {
-  toast("🔒 Solve the map to turn the page.");
-  $("next").animate([{ transform: "translateX(0)" }, { transform: "translateX(6px)" }, { transform: "translateX(-6px)" }, { transform: "translateX(0)" }], { duration: 300 });
+// Shrink the words on a page that would otherwise run off the bottom.
+function fitText() { document.querySelectorAll(".bk-slot .prose").forEach(fitProse); }
+function fitProse(pr) {
+  if (!pr.isConnected) return;
+  pr.style.fontSize = "";
+  let k = 1;
+  while (pr.scrollHeight > pr.clientHeight + 1 && k > 0.7) { k -= 0.04; pr.style.fontSize = `calc(var(--fs) * ${k.toFixed(2)})`; }
 }
 
 $("prev").onclick = () => turn(-1);
@@ -112,14 +100,6 @@ document.addEventListener("keydown", e => {
   if (e.key === "ArrowRight") turn(1);
   if (e.key === "ArrowLeft") turn(-1);
 });
-{ // swipe to turn, except on map pages where dragging places people
-  let x0 = null, y0 = 0;
-  $("stage").addEventListener("pointerdown", e => { if (pages[at].kind !== "puzzle") { x0 = e.clientX; y0 = e.clientY; } });
-  $("stage").addEventListener("pointerup", e => {
-    if (x0 !== null && Math.abs(e.clientX - x0) > 50 && Math.abs(e.clientX - x0) > Math.abs(e.clientY - y0)) turn(e.clientX < x0 ? 1 : -1);
-    x0 = null;
-  });
-}
 
 function renderProgress() {
   // one little bar per page, grouped by chapter; map pages are wider
@@ -146,10 +126,28 @@ function renderContents() {
   $("contentsList").querySelectorAll("button").forEach(b => b.onclick = () => { $("contents").hidden = true; go(+b.dataset.p); });
 }
 
-// ---------- building a page ----------
+// ---------- building pages ----------
+// Each spread has a left and a right page. Reading, the right page is the current one and the left page is
+// the one before it. A map fills the whole spread: suspects and clues on the left, the map on the right
+// (on a phone, the map and the panel share one tall page).
+function leftPage(i) {
+  const p = pages[i];
+  if (p.kind === "puzzle") { openPuzzle(p.c); return book.narrow ? paper("endpaper") : mountDock(); }
+  if (i === 0) return paper("endpaper");   // the inside cover: plain, since it runs off the screen
+  const prev = pages[i - 1];
+  if (prev.kind === "puzzle") return paper("solved", `<div><b>✓</b><p>${prev.ch.title.replace(/^Chapter \d+: /, "")}</p><p class="small">Map solved</p></div>`);
+  return buildSheet(i - 1);
+}
+function rightPage(i) {
+  const p = pages[i];
+  if (p.kind === "puzzle") { openPuzzle(p.c); return book.narrow ? mountFull() : mountMap(); }
+  return buildSheet(i);
+}
+function paper(cls, html = "") { const e = document.createElement("article"); e.className = "pg " + cls; e.innerHTML = html; return e; }
+
 function buildSheet(i) {
   const p = pages[i], el = document.createElement("article");
-  el.className = "sheet " + p.kind;
+  el.className = "pg sheet " + p.kind;
   if (p.kind === "title") {
     const resume = bookmark > 0 && bookmark < pages.length && !lockedAt(bookmark) ? bookmark : 0;
     el.innerHTML = `<div class="cover-text"><p class="kicker">A Hunchkins mystery</p><h1>${story.title}</h1><p>${story.teaser}</p>
@@ -159,28 +157,34 @@ function buildSheet(i) {
     const m = p.ch.title.match(/^(Chapter \d+): (.*)$/);
     const head = p.i > 0 ? "" : m ? `<p class="ch-label">${m[1]}</p><h2>${m[2]}</h2>` : `<h2>${p.ch.title}</h2>`;
     el.innerHTML = `<div class="prose">${head}${p.pg.text.map(t => `<p>${t}</p>`).join("")}
-      ${p.i === p.ch.pages.length - 1 && p.ch.puzzle ? `<button class="primary big" type="button" data-go="${i + 1}">Turn to the map →</button>` : ""}</div>
+      ${p.i === p.ch.pages.length - 1 && p.ch.puzzle ? `<button class="primary" type="button" data-go="${i + 1}">Turn to the map →</button>` : ""}</div>
       <span class="folio">${i + 1}</span>`;
-  } else if (p.kind === "puzzle") {
-    openPuzzle(p.c);
-    el.appendChild(solverEl);
   } else {
     const tut = story.id === "tutorial", main = window.STORIES.find(s => !s.soon && s.id !== "tutorial");
     el.innerHTML = `<h2>${tut ? "You're ready!" : "To be continued…"}</h2>
       <p>${tut ? "Now try a real mystery." : "Thursday's prank is on its way. Come back soon for the next chapter."}</p>
-      <div class="cover-actions">${tut && main ? `<a class="btn primary big" href="play.html?s=${main.id}">Open ${main.title}</a>` : ""}
-      <a class="btn big" href="./">Back to the bookshelf</a>${story.pdf ? `<a class="btn big" href="${story.pdf}" download>⬇ Printable PDF</a>` : ""}</div>`;
+      <div class="cover-actions">${tut && main ? `<a class="btn primary" href="play.html?s=${main.id}">Open ${main.title}</a>` : ""}
+      <a class="btn" href="./">Back to the bookshelf</a>${story.pdf ? `<a class="btn" href="${story.pdf}" download>⬇ Printable PDF</a>` : ""}</div>`;
   }
   el.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(+b.dataset.go));
+  const pr = el.querySelector(".prose");   // fit the words as soon as the page is in the book (also for pages under a turning one)
+  if (pr) requestAnimationFrame(() => fitProse(pr));
   return el;
 }
 
-// ---------- the puzzle page ----------
+// ---------- the puzzle ----------
 const solverEl = $("solverTpl").content.firstElementChild.cloneNode(true);
+const mapboxEl = solverEl.querySelector("#mapbox"), dockEl = solverEl.querySelector(".dock");
+const dockPage = paper("dock-page"), mapPage = paper("map-page"), fullPage = paper("full-page");
+// The tutorial coach sits in the panel on a two-page spread (so it never hides the map), and over the map on phones.
+const coachEl = mapboxEl.querySelector("#coach");
+function mountDock() { dockEl.querySelector(".people").after(coachEl); dockPage.append(dockEl); return dockPage; }
+function mountMap() { mapPage.append(mapboxEl); return mapPage; }
+function mountFull() { mapboxEl.append(coachEl); fullPage.append(mapboxEl, dockEl); return fullPage; }
 let c = null, st = null, selected = null, focus = null, tool = "place";
 const save = () => c && store.set("wwW:" + c.id, st);
-const map = new Map3D(solverEl.querySelector("#mapbox"), { tap: tapSpot, hold: placeAt, clue: i => { focus = { clue: i }; renderSolver(); } });
-const q = sel => solverEl.querySelector(sel);
+const map = new Map3D(mapboxEl, { tap: tapSpot, hold: placeAt, move: movePerson, clue: i => { focus = { clue: i }; renderSolver(); } });
+const q = sel => sel === "#mapbox" ? mapboxEl : mapboxEl.querySelector(sel) || dockEl.querySelector(sel);
 
 function openPuzzle(pc) {
   if (c !== pc) { c = pc; st = stateOf(c); selected = null; focus = null; map.setCase(c); }
@@ -306,6 +310,14 @@ function tapSpot(id) {
   }
   markUnsolved(); save(); renderSolver();
 }
+// Dragging a pawn on the map to another place moves that person there.
+function movePerson(name, id) {
+  if (st.pos[name] === id) return;
+  const occupant = occupantOf(id);
+  if (occupant) delete st.pos[occupant];
+  st.pos[name] = id; st.crossed[id] = false; selected = null; focus = { who: name };
+  markUnsolved(); save(); renderSolver();
+}
 function placeAt(id) {
   const occupant = occupantOf(id);
   if (selected) {
@@ -399,4 +411,5 @@ function renderCoach() {
   }
 }
 
-go(start, 0);
+book.show(start);
+document.fonts?.ready.then(fitText);
