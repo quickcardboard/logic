@@ -171,7 +171,20 @@ const P = {
     box(1.7, 0.12, 0.12, "#a0703f", 0, 1.1, -0.3),
     [["#e8505b", -0.55], ["#4dabf7", 0], ["#69db7c", 0.55]].map(([c, x]) => box(0.42, 0.8, 0.2, c, x, 0.25, -0.2)),
     box(1.7, 0.3, 0.5, "#c08a5b", 0, 0, 0.25)),
+  steps: () => group(
+    [0, 1, 2].map(i => box(1.8 - i * 0.3, 0.2, 0.5, "#cfd8dc", 0, i * 0.2, 0.4 - i * 0.4)),
+    [["#e8505b", -0.4], ["#fcc419", 0], ["#4dabf7", 0.4]].map(([c, x]) => box(0.3, 0.02, 0.15, c, x, 0.2, 0.42))),
+  changing: () => group(
+    box(1.8, 1.3, 0.4, "#4dabf7", 0, 0, -0.5),
+    [-0.6, 0, 0.6].map(x => box(0.5, 1.1, 0.03, "#1c7ed6", x, 0.1, -0.29)),
+    box(1.6, 0.35, 0.4, "#c08a5b", 0, 0, 0.35)),
+  corridor: () => group(
+    box(1.9, 0.03, 0.7, "#e9ecef", 0, 0, 0),
+    [-0.6, 0, 0.6].map((x, i) => box(0.35, 0.9, 0.25, ["#e8505b", "#69db7c", "#fcc419"][i], x, 0, -0.5))),
 };
+
+// Spots that share a model
+P.halldoors = P.door;
 
 // Unknown places get a little signpost.
 function fallback() {
