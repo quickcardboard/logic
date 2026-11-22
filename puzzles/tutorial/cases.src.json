@@ -1,0 +1,163 @@
+[
+ {
+  "id": "tutorial",
+  "title": "Tutorial: Who Was Where at 8:30?",
+  "theme": "school",
+  "roles": [],
+  "story": "Before the first case, Zara wants to check you can read a map. Where were Mo and Zara at 8:30?",
+  "spots": [
+   {
+    "id": "library",
+    "name": "Library",
+    "icon": "📚",
+    "x": 50,
+    "y": 8
+   },
+   {
+    "id": "door",
+    "name": "Front Door",
+    "icon": "🚪",
+    "x": 12,
+    "y": 46
+   },
+   {
+    "id": "hall",
+    "name": "Hall",
+    "icon": "🎭",
+    "x": 50,
+    "y": 46
+   },
+   {
+    "id": "class",
+    "name": "Year 4 Classroom",
+    "icon": "✏️",
+    "x": 88,
+    "y": 46
+   },
+   {
+    "id": "office",
+    "name": "Office",
+    "icon": "🗄️",
+    "x": 50,
+    "y": 86
+   }
+  ],
+  "paths": [
+   [
+    "library",
+    "hall"
+   ],
+   [
+    "door",
+    "hall"
+   ],
+   [
+    "hall",
+    "class"
+   ],
+   [
+    "hall",
+    "office"
+   ]
+  ],
+  "suspects": [
+   {
+    "name": "Mo",
+    "color": "#f47c6c"
+   },
+   {
+    "name": "Zara",
+    "color": "#9b7bd4"
+   }
+  ],
+  "evidence": [
+   {
+    "type": "empty",
+    "spot": "library",
+    "icon": "🔒",
+    "text": "The Library was locked. Nobody was in the Library."
+   },
+   {
+    "type": "empty",
+    "spot": "office",
+    "icon": "💡",
+    "text": "The Office light was off. Nobody was in the Office."
+   }
+  ],
+  "statements": {
+   "Mo": [
+    {
+     "text": "I was at a crossroads (3 or more paths).",
+     "t": "crossroads"
+    }
+   ],
+   "Zara": [
+    {
+     "text": "I was right next to Mo.",
+     "t": "near",
+     "who": "Mo"
+    },
+    {
+     "text": "I wasn't at the Front Door.",
+     "t": "notat",
+     "spot": "door"
+    }
+   ]
+  },
+  "solution": {
+   "positions": {
+    "Mo": "hall",
+    "Zara": "class"
+   },
+   "fibber": null,
+   "muddler": null
+  },
+  "tutorial": [
+   {
+    "text": "Welcome, map-reader! Every spot on the map is joined by paths. Each person stood on a different spot. Let's find Mo and Zara. Tap Next.",
+    "until": "next"
+   },
+   {
+    "text": "Start with the evidence. It's always true: nobody was in the Library or the Office. Choose ✕ Cross out, then tap the Library and the Office.",
+    "until": {
+     "crossed": [
+      "library",
+      "office"
+     ]
+    }
+   },
+   {
+    "text": "Mo says: \"I was at a crossroads\". That's a spot where 3 or more paths meet. Only the Hall has that many. Tap Mo's card, choose ✋ Notes & place, then press and hold the Hall to place Mo.",
+    "until": {
+     "at": {
+      "Mo": "hall"
+     }
+    }
+   },
+   {
+    "text": "Zara says: \"I was right next to Mo\", so she was one path from the Hall. Tap Zara's card, then quickly tap the spots right next to the Hall that aren't crossed out. That pencils her in as a maybe.",
+    "until": {
+     "notes": {
+      "Zara": 2
+     }
+    }
+   },
+   {
+    "text": "Zara also says: \"I wasn't at the Front Door.\" So only one maybe is left. Press and hold it to place Zara. (If her card isn't highlighted, tap it first.)",
+    "until": {
+     "at": {
+      "Zara": "class"
+     }
+    }
+   },
+   {
+    "text": "Everyone is placed. Press Close the case to check your answer.",
+    "until": "solved"
+   },
+   {
+    "text": "Case closed! You're ready for the real thing.",
+    "until": "end"
+   }
+  ]
+ }
+]

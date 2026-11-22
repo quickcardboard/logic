@@ -26,7 +26,19 @@ def plumpton(x, y, s=1):
         f'<path d="M-26 12 Q-12 4 0 11 Q12 4 26 12 Q12 19 0 15 Q-12 19 -26 12 Z" {st(2.5, "#7a5134")}/><path d="M-8 26 Q0 29 8 26" {st(3)}/>',
         f'<path d="M-16 24 L0 62 L16 24 Z" {st(3, "#ffffff")}/><path d="M-5 30 L5 30 L3 56 L0 62 L-3 56 Z" {st(2.5, "#e8505b")}/>')
 
-PORTRAITS = {"Coach Kowalski": coach, "Mr. Bolt": bolt, "Ms. Fig": fig, "Gloria": gloria, "Principal Plumpton": plumpton}
+def mo(x, y, s=1):
+    return bust(x, y, s, "#f6d2b5", "#f47c6c", "",
+        f'<path d="M-58 -26 Q-54 -78 0 -80 Q54 -78 58 -26 Z" {st(3.5, "#e9c46a")}/><path d="M-58 -26 L-74 -16 L-50 -20 M58 -26 L74 -16 L50 -20" {st(3, "#e9c46a")}/>'
+        '<path d="M-40 -64 L-18 -32 M-16 -76 L16 -32 M10 -78 L40 -40" stroke="#c9963b" stroke-width="2"/>',
+        f'<path d="M-14 16 Q0 30 14 16 Z" {st(3, "#c2554f")}/>', "")
+
+def zara(x, y, s=1):
+    return bust(x, y, s, "#b9805b", "#ffd166",
+        f'<circle cx="-50" cy="-56" r="24" {st(3.5, "#4a2f22")}/><circle cx="50" cy="-56" r="24" {st(3.5, "#4a2f22")}/>',
+        f'<path d="M-54 -14 Q-50 -64 0 -62 Q50 -64 54 -14 Q38 -40 8 -38 Q6 -28 0 -24 Q-6 -36 -28 -36 Q-46 -32 -54 -14 Z" {st(3.5, "#4a2f22")}/>',
+        f'<circle cx="-20" cy="0" r="13" {st(3, "none")}/><circle cx="20" cy="0" r="13" {st(3, "none")}/><path d="M-7 -2 Q0 -6 7 -2" {st(2.5)}/><path d="M-9 20 Q0 26 9 20" {st(3)}/>', "")
+
+PORTRAITS = {"Mo": mo, "Zara": zara, "Coach Kowalski": coach, "Mr. Bolt": bolt, "Ms. Fig": fig, "Gloria": gloria, "Principal Plumpton": plumpton}
 def duck_cover():
     """Cover for The Rubber Duck Bandit: the principal, a duck on his head, ducks everywhere."""
     sky = '<rect x="-200" y="-150" width="400" height="300" fill="#ffe8a3"/>'

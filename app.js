@@ -1,6 +1,6 @@
 (() => {
-  const SETS = { puzzles: window.CASES || [], book: window.BOOK || [] };
-  let set = "puzzles";
+  const SETS = { tutorial: window.TUTORIAL || [], book: window.BOOK || [] };
+  let set = "book";
   let CASES = SETS[set];
   const $ = (id) => document.getElementById(id);
   const svgNS = "http://www.w3.org/2000/svg";
@@ -62,6 +62,7 @@
 
   function renderNav() {
     const nav = $("cases"); nav.innerHTML = "";
+    if (CASES.length < 2) return;
     CASES.forEach((c, i) => {
       const b = document.createElement("button");
       const lv = c.level || 3;
@@ -185,9 +186,41 @@
       card.querySelector(".top").onclick = () => { selected = selected === p.name ? null : p.name; setTool("place"); renderSide(); };
       box.appendChild(card);
     }
+    renderCoach();
   }
 
   function render() { renderNav(); renderMap(); renderSide(); }
+
+  // ---------- tutorial: one step at a time, each step ends when its goal is met ----------
+  function stepDone(step) {
+    const u = step.until;
+    if (u === "solved") return !!st.solved;
+    if (typeof u !== "object") return false;   // "next" waits for the button, "end" never ends
+    if (u.crossed) return u.crossed.every(id => st.crossed[id]);
+    if (u.at) return Object.entries(u.at).every(([n, id]) => st.pos[n] === id);
+    if (u.notes) return Object.entries(u.notes).every(([n, k]) =>
+      st.pos[n] || Object.values(st.notes).filter(l => l.includes(n)).length >= k);
+    return false;
+  }
+  function renderCoach() {
+    const c = CASES[ci], box = $("coach");
+    if (!c.tutorial) { box.hidden = true; return; }
+    st.tut = st.tut || 0;
+    while (st.tut < c.tutorial.length - 1 && stepDone(c.tutorial[st.tut])) st.tut++;
+    save();
+    const step = c.tutorial[st.tut];
+    box.hidden = false;
+    box.innerHTML = `<p class="step">Step ${st.tut + 1} of ${c.tutorial.length}</p><p>${step.text}</p>`;
+    if (step.until === "next") {
+      const b = document.createElement("button"); b.className = "primary"; b.textContent = "Next";
+      b.onclick = () => { st.tut++; renderCoach(); };
+      box.appendChild(b);
+    }
+    if (step.until === "end") {
+      const l = document.createElement("a"); l.className = "btn"; l.href = "play.html?s=duck";
+      l.textContent = "Start The Rubber Duck Bandit"; box.appendChild(l);
+    }
+  }
 
   // ---------- interaction ----------
   function clearVerdict() { $("verdict").textContent = ""; $("verdict").className = "verdict"; }
@@ -308,7 +341,7 @@
       if (e.type === "empty" && occ.has(e.spot)) ok = false;
       if (e.type === "culprit_near" && fib && net.D[st.pos[fib]][e.spot] > 1) ok = false;
     }
-    if (ok) { v.className = "verdict win"; v.textContent = fib ? `🎉 Case closed! ${fib} was the Fibber. Every statement checks out.` : "🎉 Case closed! Everyone is in the right place."; }
+    if (ok) { st.solved = true; save(); renderCoach(); v.className = "verdict win"; v.textContent = fib ? `🎉 Case closed! ${fib} was the Fibber. Every statement checks out.` : "🎉 Case closed! Everyone is in the right place."; }
     else v.textContent = "Something doesn't add up. Keep investigating.";
   }
 
@@ -327,12 +360,11 @@
   $("hintBtn").onclick = hint;
   $("reset").onclick = () => { st = blank(); selected = null; save(); $("verdict").textContent = ""; render(); };
 
-  // Which story to play comes from the page address: play.html?s=duck or play.html?s=practice.
+  // Which story to play comes from the page address: play.html?s=duck or play.html?s=tutorial.
   const sid = new URLSearchParams(location.search).get("s") || "duck";
-  const story = (window.STORIES || []).find(s => s.id === sid && !s.soon);
-  const which = story ? story.set : "puzzles";
-  $("storyTitle").textContent = story ? story.title : "Practice cases";
-  document.title = (story ? story.title : "Practice cases") + " · Who Was Where";
-  document.body.classList.add(story ? "is-story" : "is-practice");
-  chooseSet(SETS[which].length ? which : "puzzles");
+  const story = sid === "tutorial" ? { title: "Tutorial", set: "tutorial" }
+    : (window.STORIES || []).find(s => s.id === sid && !s.soon) || window.STORIES[0];
+  $("storyTitle").textContent = story.title;
+  document.title = story.title + " · Who Was Where";
+  chooseSet(story.set);
 })();

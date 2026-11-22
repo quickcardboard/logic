@@ -75,12 +75,15 @@ a.book:hover { transform: translateY(-3px) rotate(-.4deg); }
 .book-body .btn { align-self: flex-start; margin-top: auto; }
 .book.soon { opacity: .7; border-style: dashed; box-shadow: none; }
 .practice {
-  margin-top: 32px; display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  margin: 8px 0 24px; display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap;
   background: var(--paper); border: 2.5px dashed var(--line); border-radius: 20px; padding: 16px 20px;
 }
 .practice h2 { margin: 0; font-size: 1.5rem; }
 .practice p { margin: 2px 0 0; color: var(--muted); }
-.practice .btn { background: var(--paper); }
+.practice .btn { background: var(--duck); }
+.coach { background: var(--paper); border: 2.5px solid var(--ink); border-radius: 16px; padding: 12px 14px; margin-bottom: 14px; box-shadow: var(--shadow); }
+.coach p { margin: 0 0 8px; font-size: 1.05rem; }
+.coach .step { font: 1.1rem var(--hand); color: var(--accent); margin-bottom: 2px; }
 
 /* ---------- player ---------- */
 header { text-align: center; padding: 18px 16px 8px; position: relative; }
