@@ -53,7 +53,7 @@ body.app { height: 100dvh; display: flex; flex-direction: column; overflow: hidd
 /* ---------- the book: a board book you turn like an ebook (js/book.js) ---------- */
 .book { flex: 1; min-height: 0; display: flex; flex-direction: column; position: relative; }
 .viewport { flex: 1; min-height: 0; position: relative; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
-.viewport[data-mode="spread"], .viewport[data-mode="full"] { touch-action: auto; user-select: auto; }
+.viewport[data-mode="map"], .viewport[data-mode="full"] { touch-action: auto; user-select: auto; }
 .bk-body {
   position: absolute; left: 0; top: 0; width: calc(var(--W) * 2); height: var(--H); transform-origin: 0 0;
   --fs: clamp(15px, calc(var(--W) * 0.036), 24px);
@@ -87,7 +87,8 @@ body.app { height: 100dvh; display: flex; flex-direction: column; overflow: hidd
 .bk-shade.back { background: linear-gradient(90deg, rgba(20, 30, 55, .22), rgba(255, 255, 255, .35) 5%, rgba(255, 255, 255, 0) 22%, rgba(20, 30, 55, .08) 60%); }
 .bk-edge { position: absolute; top: 0; height: var(--H); width: 40px; z-index: 5; display: none; cursor: grab; touch-action: none; }
 .bk-edge.left { left: -9px; } .bk-edge.right { left: calc(var(--W) * 2 - 31px); }
-.bk-body[data-mode="spread"] .bk-edge, .bk-body[data-mode="full"] .bk-edge { display: block; }
+.bk-body[data-mode="spread"] .bk-edge, .bk-body[data-mode="full"] .bk-edge, .bk-body[data-mode="map"] .bk-edge { display: block; }
+.bk-body[data-mode="map"] .bk-edge.left { left: 0; width: 22px; } .bk-body[data-mode="map"] .bk-edge.right { left: calc(var(--W) * 2 - 22px); width: 22px; }
 .bk-body[data-mode="full"] .bk-edge.left { left: calc(var(--W) - 9px); width: 26px; }
 .bk-body[data-mode="full"] .bk-edge.right { left: calc(var(--W) * 2 - 17px); width: 26px; }
 
@@ -369,3 +370,7 @@ body.app.contact-page { height: auto; overflow: auto; min-height: 100dvh; displa
 .bk-body[data-mode="full"] .bk-cover { display: none; }
 .bk-body[data-mode="full"] .pg { border-radius: 14px; box-shadow: 0 6px 18px rgba(29, 43, 79, .12); }
 .bk-body[data-mode="full"] .bk-left { visibility: hidden; }
+
+/* wide screens: a map spread is zoomed right in, with no book edges */
+.bk-body[data-mode="map"] .bk-cover { display: none; }
+.bk-body[data-mode="map"] .pg { border-radius: 0; }

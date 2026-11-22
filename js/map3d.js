@@ -166,9 +166,10 @@ export class Map3D {
     const turned = this.view.turn !== 0;
     // Step the camera back until every corner of the board (and the tallest props near the back) is on screen.
     // Perspective makes the near edge look wider than the far one, so this is measured rather than guessed.
-    const t = this.view.tilt, r = this.view.turn, hw = this.size.W / 2 + 0.2, hd = this.size.D / 2 + 0.2;
+    // Frame the places (with room for their names), not the whole board: the board's grassy edge may run off.
+    const t = this.view.tilt, r = this.view.turn, hw = this.size.W / 2 - 0.9, back = this.size.D / 2 - 1.6, front = this.size.D / 2 - 0.4;
     const pts = [];
-    for (const x of [-hw, hw]) for (const z of [-hd, hd]) { pts.push(new THREE.Vector3(x, -1.2, z)); pts.push(new THREE.Vector3(x, 1.4, z)); }
+    for (const x of [-hw, hw]) { pts.push(new THREE.Vector3(x, 0, front)); pts.push(new THREE.Vector3(x, 1.8, -back)); }
     const look = new THREE.Vector3(turned ? 0.3 : 0, 0.3, turned ? 0 : 0.3), v = new THREE.Vector3();
     const place = dist => {
       this.camera.position.set(Math.sin(r) * Math.cos(t) * dist, Math.sin(t) * dist, Math.cos(r) * Math.cos(t) * dist).add(look);
@@ -217,7 +218,11 @@ export class Map3D {
       // the X covers the platform, on top of the model
       const c = v(S, 0, 0.3, 0), edge = v(S, PLATFORM_R, 0.3, 0);
       S.cross.style.transform = `translate(${c.x}px, ${c.y}px) translate(-50%, -50%)`;
-      S.cross.style.setProperty("--r", Math.max(14, Math.abs(edge.x - c.x)).toFixed(1) + "px");
+      const r = Math.max(14, Math.abs(edge.x - c.x));
+      S.cross.style.setProperty("--r", r.toFixed(1) + "px");
+      // the place's model is a fixed obstacle: words are pushed off it, so the pictures stay visible
+      const top = v(S, 0, 1.7, -0.35);
+      boxes.push({ node: null, x: c.x, y: top.y, w: r * 1.5, h: c.y + r * 0.2 - top.y, weight: 0 });
     }
     for (const P of Object.values(this.pawns)) {
       P.tag.hidden = !P.pawn.visible;
@@ -229,6 +234,7 @@ export class Map3D {
       let moved = false;
       for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
         const a = boxes[i], b = boxes[j];
+        if (!a.weight && !b.weight) continue;
         const ox = (a.w + b.w) / 2 + 4 - Math.abs(a.x - b.x), oy = (a.h + b.h) / 2 + 3 - Math.abs((a.y + a.h / 2) - (b.y + b.h / 2));
         if (ox <= 0 || oy <= 0) continue;
         moved = true;
@@ -239,6 +245,7 @@ export class Map3D {
       if (!moved) break;
     }
     for (const B of boxes) {
+      if (!B.node) continue;
       B.x = Math.max(B.w / 2 + 2, Math.min(W - B.w / 2 - 2, B.x)); B.y = Math.max(2, Math.min(H - B.h - 2, B.y));
       B.node.style.transform = `translate(${B.x.toFixed(1)}px, ${B.y.toFixed(1)}px) translate(-50%, 0)`;
     }

@@ -50,10 +50,11 @@ export class Book {
   // Phones and portrait tablets show one page at a time, with the previous page running off the left edge.
   get wide() { return this.o.wide(); }
   get narrow() { return this.vp.clientWidth < 760; }
-  mode(i) { return this.wide ? "spread" : this.o.isSpread(i) ? "full" : "page"; }
+  mode(i) { return this.wide ? (this.o.isSpread(i) ? "map" : "spread") : this.o.isSpread(i) ? "full" : "page"; }
   dims(mode) {
     const vw = this.vp.clientWidth, vh = this.vp.clientHeight;
     if (mode === "full") return { W: vw - 16, H: vh - 10 };
+    if (mode === "map") return { W: Math.floor(vw / 2), H: vh };   // a map spread fills the screen, edge to edge
     if (mode === "spread") { const H = Math.round(vh - 30); return { W: Math.round(Math.min(H * 0.8, (vw - 40) / 2)), H }; }
     if (this.narrow) { const W = Math.round(vw * 0.84); return { W, H: Math.round(Math.min(vh - 16, W * 1.5)) }; }
     const H = Math.round(vh - 28);
@@ -64,6 +65,7 @@ export class Book {
     const m = this.mode(this.at), { W, H } = this.dims(m), vw = this.vp.clientWidth, vh = this.vp.clientHeight;
     this.W = W; this.H = H;
     let s = 1, x = vw / 2 - 1.5 * W, y = (vh - H) / 2;
+    if (m === "map") { x = (vw - 2 * W) / 2; y = 0; }
     if (m === "spread") { s = Math.min(1, (vw - 28) / (2 * W), (vh - 14) / H); x = (vw - 2 * W * s) / 2; y = (vh - H * s) / 2; }
     this.s = s;
     this.body.classList.toggle("animate", animate);
