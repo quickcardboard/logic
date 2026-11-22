@@ -188,7 +188,7 @@ window.STORIES = [
             "\"I was,\" said Ms. Peapod quietly. \"The Trophy Cabinet is right next to the Stage.\"",
             "Ms. Peapod smiled guiltily."] },
           { text: [
-            "\"After recess, you took the key from the Office,\" said Zara. \"At 11:00, when everyone was in the Gym, you swapped the ducks. Then you put the key back.\""] },
+            "\"At 11:00, everyone was in the Gym, even Mrs. Dot, who was judging the ducks,\" said Zara. \"So you took the key from the empty Office, swapped the ducks, and put the key back.\""] },
           { text: [
             "Zara thought about the old photo in the library. The tiny girl with the big glasses.",
             "\"That's you,\" she said. \"You won the very first Great Duck Race.\""] },
