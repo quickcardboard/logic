@@ -1,6 +1,6 @@
 # Who Was Where?
 
-A prototype of a network-map deduction puzzle. Play it at https://quickcardboard.com/logic/ (served by GitHub Pages from `main`).
+A prototype of a network-map deduction puzzle. Play it at https://quickcardboard.com/logic (home page: story shelf; play.html?s=duck plays a story, play.html?s=practice the practice cases)/ (served by GitHub Pages from `main`).
 
 **Rules.** Every suspect stood on a different spot of the map. Honest suspects only say true things. The **Fibber**'s statements are all false. The **Muddler** (in some cases) gets exactly one statement wrong. The evidence is always true. Place everyone and find the Fibber.
 

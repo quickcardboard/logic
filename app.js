@@ -54,9 +54,6 @@
   }
 
   // ---------- rendering ----------
-  function renderSets() {
-    for (const k of Object.keys(SETS)) $("set-" + k).classList.toggle("on", k === set);
-  }
   function chooseSet(k) {
     set = k; CASES = SETS[k]; store.set("wwW:set", k);
     const last = store.get("wwW:last:" + k);
@@ -87,7 +84,8 @@
   function renderMap() {
     const c = CASES[ci], svg = $("map"); svg.innerHTML = "";
     const at = Object.fromEntries(c.spots.map(s => [s.id, s]));
-    c.paths.forEach(([a, b]) => el("line", { x1: at[a].x, y1: at[a].y, x2: at[b].x, y2: at[b].y, class: "path" }, svg));
+    for (const cls of ["path-edge", "path"])   // sandy footpaths with a darker edge
+      c.paths.forEach(([a, b]) => el("line", { x1: at[a].x, y1: at[a].y, x2: at[b].x, y2: at[b].y, class: cls }, svg));
     const who = {}; for (const n in st.pos) who[st.pos[n]] = n;
     const color = Object.fromEntries(c.suspects.map(s => [s.name, s.color]));
     const evAt = {}; c.evidence.forEach(e => (evAt[e.spot] = evAt[e.spot] || []).push(e.icon));
@@ -189,7 +187,7 @@
     }
   }
 
-  function render() { renderSets(); renderNav(); renderMap(); renderSide(); }
+  function render() { renderNav(); renderMap(); renderSide(); }
 
   // ---------- interaction ----------
   function clearVerdict() { $("verdict").textContent = ""; $("verdict").className = "verdict"; }
@@ -329,7 +327,12 @@
   $("hintBtn").onclick = hint;
   $("reset").onclick = () => { st = blank(); selected = null; save(); $("verdict").textContent = ""; render(); };
 
-  for (const k of Object.keys(SETS)) $("set-" + k).onclick = () => chooseSet(k);
-  const saved = store.get("wwW:set");
-  chooseSet(saved in SETS && SETS[saved].length ? saved : "puzzles");
+  // Which story to play comes from the page address: play.html?s=duck or play.html?s=practice.
+  const sid = new URLSearchParams(location.search).get("s") || "duck";
+  const story = (window.STORIES || []).find(s => s.id === sid && !s.soon);
+  const which = story ? story.set : "puzzles";
+  $("storyTitle").textContent = story ? story.title : "Practice cases";
+  document.title = (story ? story.title : "Practice cases") + " · Who Was Where";
+  document.body.classList.add(story ? "is-story" : "is-practice");
+  chooseSet(SETS[which].length ? which : "puzzles");
 })();

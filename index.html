@@ -4,68 +4,53 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Who Was Where</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;700&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<header>
+<body class="home">
+<header class="hero">
   <h1>Who Was Where?</h1>
-  <p class="tag" id="tag">Place every suspect on the map. Find the Fibber.</p>
-  <div class="sets"><button id="set-puzzles">Puzzles</button><button id="set-book">Storybook chapters</button></div>
-  <nav id="cases"></nav>
+  <p class="tag">Mystery stories where <b>you</b> are the map-reader. Read the story, then place every suspect on the map.</p>
 </header>
 
-<main>
-  <section class="board">
-    <div class="maphead">
-      <h2 id="title"></h2>
-      <div class="tools">
-        <button id="toolPlace" class="tool on" title="Tap a spot for a note, hold to place">✋ Notes &amp; place</button>
-        <button id="toolCross" class="tool" title="Cross out a spot you know is empty">✕ Cross out</button>
-      </div>
+<main class="library">
+  <h2 class="shelf-title">The story shelf</h2>
+  <div id="shelf" class="shelf"></div>
+
+  <section class="practice">
+    <div>
+      <h2>Practice cases</h2>
+      <p>Stand-alone puzzles with no story, from easy to tricky. Some have a Fibber who lies about everything.</p>
     </div>
-    <svg id="map" viewBox="-8 -10 116 118" role="img" aria-label="Map of the case"></svg>
-    <p class="hint" id="hint">Select a suspect card. Tap a spot to pencil them in as a maybe. Press and hold a spot to place them there.</p>
-  </section>
-
-  <section class="side">
-    <p id="story" class="story"></p>
-    <details class="rules">
-      <summary>How to play</summary>
-      <ul>
-        <li>Each suspect stood on a <b>different</b> spot.</li>
-        <li><b>Right next to</b> means joined by one path. <b>Two paths apart</b> and <b>far (3 or more)</b> count the fewest paths between two spots.</li>
-        <li><b>Dead end</b> means one path leaves that spot. A <b>crossroads</b> has three or more.</li>
-        <li>Honest suspects tell the truth.</li>
-        <li id="fibberRule">The <b>Fibber</b>'s statements are all false.</li>
-        <li id="muddlerRule">The <b>Muddler</b> is honest but forgetful: exactly one of their statements is false.</li>
-        <li>The evidence is always true.</li>
-        <li><b>Where to start:</b> look for statements about a person's own spot, like "I was at a dead end". Pencil in the few spots that fit, then use statements about other people.</li>
-        <li>Select a suspect, then <b>tap</b> a spot to pencil them in as a maybe, or <b>press and hold</b> to place them. Hold a placed suspect's spot to pick them back up.</li>
-        <li>Tap a statement to mark it true ✓ or false ✗ as you work. That's just for your notes.</li>
-      </ul>
-    </details>
-
-    <h3>Evidence</h3>
-    <ul id="evidence" class="evidence"></ul>
-
-    <h3>Suspects</h3>
-    <div id="suspects"></div>
-
-    <div class="actions">
-      <button id="check" class="primary">Close the case</button>
-      <button id="reset">Start over</button>
-      <button id="hintBtn">💡 Hint</button>
-      <button id="solve">Show solution</button>
-    </div>
-    <p id="verdict" class="verdict" aria-live="polite"></p>
+    <a class="btn" href="play.html?s=practice">Try a practice case</a>
   </section>
 </main>
 
-<footer>Prototype. Every case has exactly one solution. ★ easy, ★★ medium, ★★★ hard.</footer>
+<footer>Every case has exactly one answer, and you can check it yourself.</footer>
 
-<script src="puzzles/cases.js"></script>
-<script src="puzzles/book/cases.js"></script>
 <script src="art.js"></script>
-<script src="app.js"></script>
+<script src="puzzles/book/cases.js"></script>
+<script src="stories.js"></script>
+<script>
+  (() => {
+    const shelf = document.getElementById("shelf");
+    const sets = { book: window.BOOK || [] };
+    for (const s of window.STORIES) {
+      const card = document.createElement(s.soon ? "div" : "a");
+      card.className = "book" + (s.soon ? " soon" : "");
+      if (!s.soon) card.href = "play.html?s=" + s.id;
+      const cover = s.cover && window.ART && ART.covers[s.cover]
+        ? `<svg class="cover" viewBox="${ART.coverBox}" aria-hidden="true">${ART.covers[s.cover]}</svg>`
+        : `<div class="cover blank"><span>?</span></div>`;
+      const n = s.set ? sets[s.set].length : 0;
+      card.innerHTML = `${cover}<div class="book-body"><h3>${s.title}</h3><p>${s.blurb}</p>
+        <p class="meta">${s.soon ? "Coming soon" : `${n} chapter${n === 1 ? "" : "s"} ready · ${s.ages}`}</p>
+        ${s.soon ? "" : `<span class="btn">Read and play</span>`}</div>`;
+      shelf.appendChild(card);
+    }
+  })();
+</script>
 </body>
 </html>
